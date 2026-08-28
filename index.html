@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#1a2c3e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Khakra Billing – NYT Style Bill</title>
+    <title>खखरा बिलिंग – एनवाईटी स्टाइल बिल</title>
     <style>
         * {
             margin: 0;
@@ -792,11 +792,11 @@
     </div>
 </div>
 <div class="app-window">
-    <div class="title-bar v5"><span class="title-full">🥙 KHAKRA BILLING — NO GST, CLEAN BILLS</span><span class="title-short">🥙 KHAKRA BILLING</span><span>v5 · Touch & Go <button class="btn btn-warning" onclick="lockApp()" style="padding:3px 14px; margin-left:10px;">🔒 Lock</button></span></div>
+    <div class="title-bar v5"><span class="title-full">🥙 खखरा बिलिंग — जीएसटी नहीं, साफ़ बिल</span><span class="title-short">🥙 खखरा बिलिंग</span><span>v5 · टच और गो <button class="btn btn-warning" onclick="lockApp()" style="padding:3px 14px; margin-left:10px;">🔒 लॉक</button></span></div>
     <div class="menu-bar">
-        <div class="menu-item active" data-tab="billing" onclick="switchTab('billing')">📝 New Bill</div>
-        <div class="menu-item" data-tab="products" onclick="switchTab('products')">📦 Products</div>
-        <div class="menu-item" data-tab="history" onclick="switchTab('history')">📜 History</div>
+        <div class="menu-item active" data-tab="billing" onclick="startNewBill()">📝 नया बिल</div>
+        <div class="menu-item" data-tab="products" onclick="switchTab('products')">📦 उत्पाद</div>
+        <div class="menu-item" data-tab="history" onclick="switchTab('history')">📜 इतिहास</div>
         <div class="menu-item" data-tab="reports" onclick="switchTab('reports')">📒 Ledger & Sales</div>
         <div class="menu-item" data-tab="settings" onclick="switchTab('settings')">⚙️ Settings</div>
     </div>
@@ -805,13 +805,13 @@
         <div id="billing" class="content-pane active">
             <div class="billing-layout">
             <div class="billing-main">
-            <div class="panel customer-panel"><div class="panel-header">🏷️ Customer <span class="optional-tag">optional</span></div><div class="form-row"><div class="form-field"><label class="field-label">Name <span class="optional-tag">walk-in ok</span></label><input id="customerName" class="field-input" autocomplete="name" placeholder="Customer name (optional)"></div><div class="form-field"><label class="field-label">Mobile Number <span class="optional-tag">optional</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="tel" aria-label="Customer mobile number (optional)"></div><div class="field-hint">Optional. Enter to send this bill on WhatsApp in one tap.</div></div><div class="form-field"><label class="field-label">Date & Time</label><input type="datetime-local" id="billDateTime" class="field-input"></div></div><div class="field-label" style="margin-top:6px;">Customer type <span class="optional-tag">sets the rate</span></div><div class="ctype-row" id="customerTypeRow"><button type="button" class="ctype-chip active" id="ctypeWalkin" onclick="setCustomerType('walkin')"><span class="ctype-title">🚶 Walk-in customer</span><span class="ctype-sub">Uses walk-in rates from Products</span></button><button type="button" class="ctype-chip" id="ctypeTrader" onclick="setCustomerType('trader')"><span class="ctype-title">🏪 Retail trader</span><span class="ctype-sub">Uses retail-trader / wholesale rates</span></button></div><div class="field-hint" style="margin-top:2px;color:#0f766e;">Rates change as soon as you pick Walk-in or Retail trader. Leave name blank for walk-in guests — tap products, then hit <strong>Bill Ready</strong>.</div></div>
-            <div class="panel quick-panel"><div class="panel-header">⚡ Quick Add</div><div class="form-row"><div class="form-field"><label>Product</label><select id="quickProduct" class="field-select"></select></div><div class="form-field"><label>Qty</label><input id="quickQty" class="field-input" type="number" value="1" min="1"></div><div><button class="btn btn-primary" onclick="quickAddProduct()" style="margin-top:24px;">+ Add</button></div></div></div>
-            <div class="panel products-panel"><div class="panel-header">🍪 Menu — Tap to add <span id="menuRateLabel" class="rate-badge">Walk-in rate</span></div><div id="catRow" class="cat-row"></div><div id="productGrid" class="product-grid"></div></div>
+            <div class="panel customer-panel"><div class="panel-header">🏷️ ग्राहक <span class="optional-tag">वैकल्पिक</span></div><div class="form-row"><div class="form-field"><label class="field-label">नाम <span class="optional-tag">वॉक-इन ठीक है</span></label><input id="customerName" class="field-input" autocomplete="name" placeholder="ग्राहक का नाम (वैकल्पिक)"></div><div class="form-field"><label class="field-label">मोबाइल नंबर <span class="optional-tag">वैकल्पिक</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल" autocomplete="tel" aria-label="Customer mobile number (optional)"></div><div class="field-hint">वैकल्पिक। इस बिल को एक टैप में व्हाट्सएप पर भेजने के लिए दर्ज करें।</div></div><div class="form-field"><label class="field-label">दिनांक और समय</label><input type="datetime-local" id="billDateTime" class="field-input"></div></div><div class="field-label" style="margin-top:6px;">ग्राहक प्रकार <span class="optional-tag">दर निर्धारित करता है</span></div><div class="ctype-row" id="customerTypeRow"><button type="button" class="ctype-chip active" id="ctypeWalkin" onclick="setCustomerType('walkin')"><span class="ctype-title">🚶 वॉक-इन ग्राहक</span><span class="ctype-sub">उत्पादों से वॉक-इन दरें</span></button><button type="button" class="ctype-chip" id="ctypeTrader" onclick="setCustomerType('trader')"><span class="ctype-title">🏪 खुदरा व्यापारी</span><span class="ctype-sub">खुदरा-व्यापारी / थोक दरें</span></button></div><div class="field-hint" style="margin-top:2px;color:#0f766e;">जैसे ही आप वॉक-इन या खुदरा व्यापारी चुनते हैं, दरें बदल जाती हैं। वॉक-इन मेहमानों के लिए नाम खाली छोड़ें — उत्पाद टैप करें, फिर <strong>बिल तैयार</strong> पर क्लिक करें।</div></div>
+            <div class="panel quick-panel"><div class="panel-header">⚡ Quick Add</div><div class="form-row"><div class="form-field"><label>Product</label><select id="quickProduct" class="field-select"></select></div><div class="form-field"><label>Qty</label><input id="quickQty" class="field-input" type="number" value="1" min="1"></div><div><button class="btn btn-primary" onclick="quickAddProduct()" style="margin-top:24px;">+ जोड़ें</button></div></div></div>
+            <div class="panel products-panel"><div class="panel-header">🍪 मेनू — जोड़ने के लिए टैप करें <span id="menuRateLabel" class="rate-badge">वॉक-इन दर</span></div><div id="catRow" class="cat-row"></div><div id="productGrid" class="product-grid"></div></div>
             </div>
             <div class="billing-side">
-            <div class="panel"><div class="panel-header">🛒 Current Bill</div><div id="billList" class="bill-list"></div></div>
-            <div class="panel"><div class="panel-header">💰 Summary</div><div class="form-row"><div class="form-field"><label>Other Charges (₹)</label><input id="otherCharges" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div><div class="form-field"><label>Discount (%)</label><input id="discountPercent" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div></div><div id="summaryBox" class="summary-box"></div>
+            <div class="panel"><div class="panel-header">🛒 वर्तमान बिल</div><div id="billList" class="bill-list"></div></div>
+            <div class="panel"><div class="panel-header">💰 सारांश</div><div class="form-row"><div class="form-field"><label>अन्य शुल्क (₹)</label><input id="otherCharges" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div><div class="form-field"><label>छूट (%)</label><input id="discountPercent" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div></div><div id="summaryBox" class="summary-box"></div>
             <div class="pay-box">
                 <div class="field-label" style="margin-bottom:8px;">Payment <span class="optional-tag">track dues</span></div>
                 <div class="pay-chips">
@@ -820,21 +820,21 @@
                     <button type="button" class="pay-chip" data-mode="credit" onclick="setPayMode('credit')">Credit / Due</button>
                 </div>
                 <div class="form-row">
-                    <div class="form-field"><label class="field-label">Amount received (₹)</label><input id="amountReceived" class="field-input" type="number" min="0" step="0.01" value="0" oninput="onAmountReceivedInput()"></div>
-                    <div class="form-field"><label class="field-label">Due on this bill</label><div id="dueNowDisplay" class="due-display">₹0.00</div></div>
+                    <div class="form-field"><label class="field-label">प्राप्त राशि (₹)</label><input id="amountReceived" class="field-input" type="number" min="0" step="0.01" value="0" oninput="onAmountReceivedInput()"></div>
+                    <div class="form-field"><label class="field-label">बकाया राशि</label><div id="dueNowDisplay" class="due-display">₹0.00</div></div>
                 </div>
             </div>
-            <div class="btn-group" style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;"><button class="btn btn-whatsapp" onclick="sendCurrentBillWhatsApp()">📱 Send WhatsApp</button><button class="btn btn-success" onclick="saveBill()">💾 Save Bill</button><button class="btn btn-primary" onclick="printCurrentBillAsPDF()">🖨️ Print Bill</button><button class="btn btn-primary" onclick="downloadCurrentBillPDF()">⬇️ Download PDF</button><button class="btn btn-danger" onclick="clearBill()">🗑️ Clear</button></div></div>
+            <div class="btn-group" style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;"><button class="btn btn-whatsapp" onclick="sendCurrentBillWhatsApp()">📱 व्हाट्सएप भेजें</button><button class="btn btn-success" onclick="saveBill()">💾 बिल सहेजें</button><button class="btn btn-primary" onclick="printCurrentBillAsPDF()">🖨️ बिल प्रिंट करें</button><button class="btn btn-primary" onclick="downloadCurrentBillPDF()">⬇️ PDF डाउनलोड करें</button><button class="btn btn-danger" onclick="clearBill()">🗑️ साफ़ करें</button></div></div>
             </div>
             </div>
         </div>
         <!-- Products Tab -->
         <div id="products" class="content-pane">
-            <div class="panel"><div class="panel-header">➕ Add Product <span class="optional-tag">two rates</span></div><div class="form-row"><div class="form-field"><label>Name</label><input id="newProductName" class="field-input"></div><div class="form-field"><label>Walk-in rate (₹)</label><input id="newProductPrice" class="field-input" type="number" step="0.01" min="0" placeholder="Counter / guest price"></div><div class="form-field"><label>Retail trader rate (₹)</label><input id="newProductTraderPrice" class="field-input" type="number" step="0.01" min="0" placeholder="Shop / wholesale price"></div><div class="form-field"><label>Unit</label><select id="newProductUnit" class="field-select"><option>packet</option><option>kg</option><option>piece</option></select></div><div class="form-field"><label>Description</label><input id="newProductDesc" class="field-input"></div><div class="form-field"><label>Expiry Date</label><input id="newProductExpiry" class="field-input" type="date"></div></div><button class="btn btn-success" onclick="addProduct()">➕ Add Product</button> <button class="btn btn-warning" onclick="bulkSetExpiry()" style="margin-left:12px;">📅 Set Expiry for ALL Products</button></div>
-            <div class="panel"><div class="panel-header">📋 Product List — fix walk-in &amp; trader rates</div><div class="field-hint" style="margin:-8px 0 14px;color:#0f766e;">Edit any product to change walk-in (counter) and retail-trader rates. Billing always uses the customer type you select on New Bill.</div><table class="data-table"><thead><tr><th>Name</th><th>Walk-in</th><th>Retail trader</th><th>Unit</th><th>Expiry</th><th>Actions</th></tr></thead><tbody id="productTableBody"></tbody></table></div>
+            <div class="panel"><div class="panel-header">➕ उत्पाद जोड़ें <span class="optional-tag">दो दरें</span></div><div class="form-row"><div class="form-field"><label>नाम</label><input id="newProductName" class="field-input"></div><div class="form-field"><label>वॉक-इन दर (₹)</label><input id="newProductPrice" class="field-input" type="number" step="0.01" min="0" placeholder="काउंटर / मेहमान दर"></div><div class="form-field"><label>खुदरा व्यापारी दर (₹)</label><input id="newProductTraderPrice" class="field-input" type="number" step="0.01" min="0" placeholder="दुकान / थोक दर"></div><div class="form-field"><label>इकाई</label><select id="newProductUnit" class="field-select"><option>packet</option><option>kg</option><option>piece</option></select></div><div class="form-field"><label>विवरण</label><input id="newProductDesc" class="field-input"></div><div class="form-field"><label>समाप्ति तिथि</label><input id="newProductExpiry" class="field-input" type="date"></div></div><button class="btn btn-success" onclick="addProduct()">➕ उत्पाद जोड़ें</button> <button class="btn btn-warning" onclick="setSamePrice()" style="margin-left:8px;">एक क्लिक - समान दर</button> <button class="btn btn-warning" onclick="bulkSetExpiry()" style="margin-left:12px;">📅 सभी उत्पादों की समाप्ति तिथि सेट करें</button></div>
+            <div class="panel"><div class="panel-header">📋 उत्पाद सूची — वॉक-इन और व्यापारी दरें ठीक करें</div><div class="field-hint" style="margin:-8px 0 14px;color:#0f766e;">वॉक-इन (काउंटर) और खुदरा व्यापारी दरें बदलने के लिए किसी भी उत्पाद को संपादित करें। बिल बनाते समय आप जो ग्राहक प्रकार चुनते हैं, उसी दर का उपयोग होता है।</div><table class="data-table"><thead><tr><th>नाम</th><th>वॉक-इन</th><th>खुदरा व्यापारी</th><th>इकाई</th><th>समाप्ति</th><th>कार्रवाई</th></tr></thead><tbody id="productTableBody"></tbody></table></div>
         </div>
         <!-- History Tab -->
-        <div id="history" class="content-pane"><div class="panel"><div class="panel-header">📜 Bill History</div><div class="btn-group" style="margin-bottom:16px;"><button class="btn btn-primary" onclick="loadHistory()">🔄 Refresh</button><button class="btn btn-success" onclick="exportCSV()">📊 CSV</button><button class="btn btn-success" onclick="exportJSON()">📁 JSON</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>Bill #</th><th>Date</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Actions</th></tr></thead><tbody id="historyTableBody"></tbody></table></div><div id="historyCards" class="history-cards"></div></div></div>
+        <div id="history" class="content-pane"><div class="panel"><div class="panel-header">📜 बिल इतिहास</div><div class="btn-group" style="margin-bottom:16px;"><button class="btn btn-primary" onclick="loadHistory()">🔄 रिफ्रेश</button><button class="btn btn-success" onclick="exportCSV()">📊 CSV</button><button class="btn btn-success" onclick="exportJSON()">📁 JSON</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>बिल #</th><th>दिनांक</th><th>ग्राहक</th><th>मोबाइल</th><th>कुल</th><th>कार्रवाई</th></tr></thead><tbody id="historyTableBody"></tbody></table></div><div id="historyCards" class="history-cards"></div></div></div>
         <!-- Reports / Ledger Tab -->
         <div id="reports" class="content-pane">
             <div class="kpi-grid" id="kpiGrid"></div>
@@ -859,7 +859,7 @@
                 <div id="dateSalesSummary"></div>
                 <div class="history-table-wrap" style="margin-top:12px;">
                     <table class="data-table">
-                        <thead><tr><th>Bill #</th><th>Date</th><th>Customer</th><th>Total</th><th>Paid</th><th>Due</th><th></th></tr></thead>
+                        <thead><tr><th>बिल #</th><th>दिनांक</th><th>ग्राहक</th><th>कुल</th><th>Paid</th><th>Due</th><th></th></tr></thead>
                         <tbody id="dateSalesBody"></tbody>
                     </table>
                 </div>
@@ -880,7 +880,7 @@
                 <input id="ledgerSearch" class="field-input ledger-search" placeholder="Search customer name or mobile" oninput="renderCustomerLedger()">
                 <div class="history-table-wrap">
                     <table class="data-table">
-                        <thead><tr><th>Customer</th><th>Mobile</th><th>Bills</th><th>Sales</th><th>Paid</th><th>Due</th><th></th></tr></thead>
+                        <thead><tr><th>ग्राहक</th><th>मोबाइल</th><th>Bills</th><th>Sales</th><th>Paid</th><th>Due</th><th></th></tr></thead>
                         <tbody id="ledgerTableBody"></tbody>
                     </table>
                 </div>
@@ -888,13 +888,13 @@
             </div>
         </div>
         <!-- Settings Tab – No GST -->
-        <div id="settings" class="content-pane"><div class="panel"><div class="panel-header">⚙️ Business Settings</div><div class="form-row"><div class="form-field"><label>Business Name</label><input id="settingsBusinessName" class="field-input"></div><div class="form-field"><label>Phone</label><input id="settingsPhone" class="field-input"></div><div class="form-field"><label>Address</label><input id="settingsAddress" class="field-input"></div><div class="form-field"><label>Currency Symbol</label><input id="settingsCurrency" class="field-input" value="₹"></div><div class="form-field"><label>Default customer type</label><select id="settingsDefaultCustomerType" class="field-select"><option value="walkin">Walk-in customer (counter rates)</option><option value="trader">Retail trader (wholesale rates)</option></select><div class="field-hint">New bills start on this type. You can still switch on the bill screen — rates update immediately.</div></div></div><div class="field-hint" style="margin:-8px 0 16px;">Product rates themselves are fixed on the <strong>Products</strong> tab (walk-in vs retail trader). This setting only picks the default type for a new bill.</div><button class="btn btn-success" onclick="saveSettings()">Save Settings</button> <button class="btn btn-warning" onclick="openChangePin()" style="margin-left:12px;">🔑 Change PIN</button> <button class="btn btn-secondary" onclick="lockApp()" style="margin-left:12px;">🔒 Lock Now</button> <button class="btn btn-danger" onclick="resetApp()">Reset All Data</button></div></div>
+        <div id="settings" class="content-pane"><div class="panel"><div class="panel-header">⚙️ व्यवसाय सेटिंग्स</div><div class="form-row"><div class="form-field"><label>व्यापार नाम</label><input id="settingsBusinessName" class="field-input"></div><div class="form-field"><label>फोन</label><input id="settingsPhone" class="field-input"></div><div class="form-field"><label>पता</label><input id="settingsAddress" class="field-input"></div><div class="form-field"><label>मुद्रा प्रतीक</label><input id="settingsCurrency" class="field-input" value="₹"></div><div class="form-field"><label>डिफ़ॉल्ट ग्राहक प्रकार</label><select id="settingsDefaultCustomerType" class="field-select"><option value="walkin">वॉक-इन ग्राहक (काउंटर दर)</option><option value="trader">खुदरा व्यापारी (थोक दर)</option></select><div class="field-hint">नए बिल इस प्रकार से शुरू होते हैं। आप बिल स्क्रीन पर बदल सकते हैं — दरें तुरंत अपडेट होती हैं।</div></div></div><div class="field-hint" style="margin:-8px 0 16px;">Product rates themselves are fixed on the <strong>Products</strong> tab (walk-in vs retail trader). This setting only picks the default type for a new bill.</div><button class="btn btn-success" onclick="saveSettings()">सेटिंग्स सहेजें</button> <button class="btn btn-warning" onclick="openChangePin()" style="margin-left:12px;">🔑 Change PIN</button> <button class="btn btn-secondary" onclick="lockApp()" style="margin-left:12px;">🔒 Lock Now</button> <button class="btn btn-danger" onclick="resetApp()">Reset All Data</button></div></div>
     </div>
     <div class="status-bar"><div>✅ No GST | Classic billing</div><div id="statusInfo">Total Bills: 0</div><div id="syncStatus" style="font-weight:600;">🔘 Realtime: connecting…</div></div>
 </div>
 
 <nav class="mobile-nav" aria-label="Main">
-    <button type="button" class="mobile-nav-item active" data-tab="billing" onclick="switchTab('billing')"><span class="ico">📝</span><span>Bill</span></button>
+    <button type="button" class="mobile-nav-item active" data-tab="billing" onclick="startNewBill()"><span class="ico">📝</span><span>बिल</span></button>
     <button type="button" class="mobile-nav-item" data-tab="products" onclick="switchTab('products')"><span class="ico">📦</span><span>Products</span></button>
     <button type="button" class="mobile-nav-item" data-tab="history" onclick="switchTab('history')"><span class="ico">📜</span><span>Bills</span></button>
     <button type="button" class="mobile-nav-item" data-tab="reports" onclick="switchTab('reports')"><span class="ico">📒</span><span>Ledger</span></button>
@@ -921,22 +921,25 @@
 <div id="waPhoneModal" class="modal-overlay"><div class="modal-window" style="max-width:440px;"><div class="modal-title-bar"><span>📱 Send bill on WhatsApp</span><span class="modal-close" onclick="closeWaPhoneModal()">×</span></div><div class="modal-content"><p style="font-size:14px;color:#475569;margin-bottom:14px;line-height:1.45;">Mobile number is <strong>optional</strong>. Enter a 10-digit number to send directly, or leave it blank and pick a WhatsApp contact.</p><div class="form-field"><label class="field-label">Customer mobile</label><div class="phone-input-wrap" id="waPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="waPhoneInput" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile (optional)"></div></div><div class="btn-group" style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-whatsapp" onclick="confirmSendWhatsApp()">📱 Send on WhatsApp</button><button class="btn btn-secondary" onclick="closeWaPhoneModal()">Cancel</button></div></div></div></div>
 
 <!-- After save actions -->
-<div id="afterSaveModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>✅ Bill saved</span><span class="modal-close" onclick="afterSaveDone()">×</span></div><div class="modal-content"><p id="afterSaveMsg" style="font-size:15px;color:#0f172a;margin-bottom:16px;font-weight:600;"></p><div class="after-save-actions"><button class="btn btn-whatsapp" id="afterSaveWa" onclick="afterSaveWhatsApp()">📱 Send WhatsApp</button><button class="btn btn-primary" onclick="afterSavePrint()">🖨️ Print Bill</button><button class="btn btn-success" onclick="afterSaveDone()">➕ New Bill</button></div></div></div></div>
+<div id="afterSaveModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>✅ बिल सहेज दिया गया</span><span class="modal-close" onclick="afterSaveDone()">×</span></div><div class="modal-content"><p id="afterSaveMsg" style="font-size:15px;color:#0f172a;margin-bottom:16px;font-weight:600;"></p><div class="after-save-actions"><button class="btn btn-whatsapp" id="afterSaveWa" onclick="afterSaveWhatsApp()">📱 व्हाट्सएप भेजें</button><button class="btn btn-primary" onclick="afterSavePrint()">🖨️ बिल प्रिंट करें</button><button class="btn btn-success" onclick="afterSaveDone()">➕ नया बिल</button></div></div></div></div>
+
+<!-- New Bill Customer Type Modal -->
+<div id="newBillTypeModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>🏷️ नया बिल — ग्राहक प्रकार चुनें</span><span class="modal-close" onclick="closeNewBillTypeModal()">×</span></div><div class="modal-content"><p style="font-size:15px;color:#0f172a;margin-bottom:16px;">बिल बनाने से पहले ग्राहक का प्रकार चुनें।</p><div style="display:flex;gap:12px;margin-bottom:12px;"><button class="btn btn-primary" style="flex:1;" onclick="selectNewBillType('walkin')">🚶 वॉक-इन ग्राहक</button><button class="btn btn-warning" style="flex:1;" onclick="selectNewBillType('trader')">🏪 खुदरा व्यापारी</button></div><div class="btn-group"><button class="btn btn-secondary" onclick="closeNewBillTypeModal()">रद्द करें</button></div></div></div></div>
 
 <!-- Edit Product Modal -->
-<div id="editProductModal" class="modal-overlay"><div class="modal-window"><div class="modal-title-bar"><span>✏️ Edit Product</span><span class="modal-close" onclick="closeEditProductModal()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>Name</label><input id="editProductName" class="field-input"></div><div class="form-field"><label>Walk-in rate (₹)</label><input id="editProductPrice" class="field-input" type="number" step="0.01" min="0"></div><div class="form-field"><label>Retail trader rate (₹)</label><input id="editProductTraderPrice" class="field-input" type="number" step="0.01" min="0"></div><div class="form-field"><label>Unit</label><select id="editProductUnit" class="field-select"><option>packet</option><option>kg</option><option>piece</option></select></div><div class="form-field"><label>Desc</label><input id="editProductDesc" class="field-input"></div><div class="form-field"><label>Expiry</label><input id="editProductExpiry" class="field-input" type="date"></div></div><div class="btn-group"><button class="btn btn-success" onclick="saveProductEdit()">Save</button><button class="btn btn-secondary" onclick="closeEditProductModal()">Cancel</button></div></div></div></div>
+<div id="editProductModal" class="modal-overlay"><div class="modal-window"><div class="modal-title-bar"><span>✏️ उत्पाद संपादित करें</span><span class="modal-close" onclick="closeEditProductModal()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>नाम</label><input id="editProductName" class="field-input"></div><div class="form-field"><label>वॉक-इन दर (₹)</label><input id="editProductPrice" class="field-input" type="number" step="0.01" min="0"></div><div class="form-field"><label>खुदरा व्यापारी दर (₹)</label><input id="editProductTraderPrice" class="field-input" type="number" step="0.01" min="0"></div><div class="form-field"><label>इकाई</label><select id="editProductUnit" class="field-select"><option>packet</option><option>kg</option><option>piece</option></select></div><div class="form-field"><label>विवरण</label><input id="editProductDesc" class="field-input"></div><div class="form-field"><label>समाप्ति</label><input id="editProductExpiry" class="field-input" type="date"></div></div><div class="btn-group"><button class="btn btn-success" onclick="setSameEditPrice()">एक क्लिक - समान दर</button><button class="btn btn-success" onclick="saveProductEdit()">सहेजें</button><button class="btn btn-secondary" onclick="closeEditProductModal()">रद्द करें</button></div></div></div></div>
 
 <!-- Edit Bill Modal with expiry editing -->
-<div id="editBillModal" class="modal-overlay"><div class="modal-window" style="max-width: 950px;"><div class="modal-title-bar"><span>✏️ Edit Bill (Expiry editable)</span><span class="modal-close" onclick="closeEditBillModal()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>Customer</label><input id="editBillCustomer" class="field-input"></div><div class="form-field"><label>Mobile Number <span class="optional-tag">optional</span></label><div class="phone-input-wrap" id="editBillPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="editBillPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="tel"></div></div><div class="form-field"><label>Date/Time</label><input id="editBillDateTime" class="field-input" type="datetime-local"></div><div class="form-field"><label>Customer type (rate)</label><select id="editBillCustomerType" class="field-select" onchange="setEditBillCustomerType(this.value)"><option value="walkin">Walk-in customer</option><option value="trader">Retail trader</option></select></div></div><div class="panel"><div class="panel-header">Bill Items (expiry per item)</div><div id="editBillItemsList" class="bill-list" style="max-height: 280px;"></div><div style="margin-top: 12px; display: flex; gap: 10px; align-items: flex-end;"><select id="editBillProductSelect" class="field-select" style="flex:2"></select><input type="number" id="editBillQty" placeholder="Qty" value="1" style="width:80px; padding:8px;"><input type="date" id="editBillExpiry" class="field-input" style="width:140px;"><button class="btn btn-primary" onclick="addProductToEditBill()">+ Add</button></div></div><div class="form-row"><div class="form-field"><label>Other Charges</label><input id="editBillOtherCharges" class="field-input" value="0" step="0.01"></div><div class="form-field"><label>Discount %</label><input id="editBillDiscount" class="field-input" value="0" step="0.01"></div><div class="form-field"><label>Amount received (₹)</label><input id="editBillPaid" class="field-input" type="number" min="0" step="0.01" value="0"></div></div><div class="btn-group"><button class="btn btn-success" onclick="saveBillEdit()">Save Bill Changes</button><button class="btn btn-secondary" onclick="closeEditBillModal()">Cancel</button></div></div></div></div>
+<div id="editBillModal" class="modal-overlay"><div class="modal-window" style="max-width: 950px;"><div class="modal-title-bar"><span>✏️ बिल संपादित करें (समाप्ति संपादनीय)</span><span class="modal-close" onclick="closeEditBillModal()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>ग्राहक</label><input id="editBillCustomer" class="field-input"></div><div class="form-field"><label>मोबाइल नंबर <span class="optional-tag">वैकल्पिक</span></label><div class="phone-input-wrap" id="editBillPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="editBillPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल" autocomplete="tel"></div></div><div class="form-field"><label>दिनांक/समय</label><input id="editBillDateTime" class="field-input" type="datetime-local"></div><div class="form-field"><label>ग्राहक प्रकार (दर)</label><select id="editBillCustomerType" class="field-select" onchange="setEditBillCustomerType(this.value)"><option value="walkin">वॉक-इन ग्राहक</option><option value="trader">खुदरा व्यापारी</option></select></div></div><div class="panel"><div class="panel-header">बिल आइटम (प्रत्येक आइटम की समाप्ति)</div><div id="editBillItemsList" class="bill-list" style="max-height: 280px;"></div><div style="margin-top: 12px; display: flex; gap: 10px; align-items: flex-end;"><select id="editBillProductSelect" class="field-select" style="flex:2"></select><input type="number" id="editBillQty" placeholder="Qty" value="1" style="width:80px; padding:8px;"><input type="date" id="editBillExpiry" class="field-input" style="width:140px;"><button class="btn btn-primary" onclick="addProductToEditBill()">+ जोड़ें</button></div></div><div class="form-row"><div class="form-field"><label>अन्य शुल्क</label><input id="editBillOtherCharges" class="field-input" value="0" step="0.01"></div><div class="form-field"><label>छूट %</label><input id="editBillDiscount" class="field-input" value="0" step="0.01"></div><div class="form-field"><label>प्राप्त राशि (₹)</label><input id="editBillPaid" class="field-input" type="number" min="0" step="0.01" value="0"></div></div><div class="btn-group"><button class="btn btn-success" onclick="saveBillEdit()">बिल परिवर्तन सहेजें</button><button class="btn btn-secondary" onclick="closeEditBillModal()">Cancel</button></div></div></div></div>
 
 <!-- Customer ledger detail -->
-<div id="ledgerModal" class="modal-overlay"><div class="modal-window" style="max-width:820px;"><div class="modal-title-bar"><span id="ledgerModalTitle">📒 Customer ledger</span><span class="modal-close" onclick="closeLedgerModal()">×</span></div><div class="modal-content"><div id="ledgerModalKpis" class="kpi-grid" style="margin-bottom:14px;"></div><div class="btn-group" style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-warning" id="ledgerPayBtn" onclick="openPayForOpenCustomer()">💰 Record payment</button><button class="btn btn-whatsapp" id="ledgerWaBtn" onclick="whatsappOpenCustomer()">📱 WhatsApp statement</button><button class="btn btn-secondary" onclick="closeLedgerModal()">Close</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>Date</th><th>Particulars</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead><tbody id="ledgerDetailBody"></tbody></table></div></div></div></div>
+<div id="ledgerModal" class="modal-overlay"><div class="modal-window" style="max-width:820px;"><div class="modal-title-bar"><span id="ledgerModalTitle">📒 ग्राहक लेज़र</span><span class="modal-close" onclick="closeLedgerModal()">×</span></div><div class="modal-content"><div id="ledgerModalKpis" class="kpi-grid" style="margin-bottom:14px;"></div><div class="btn-group" style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-warning" id="ledgerPayBtn" onclick="openPayForOpenCustomer()">💰 भुगतान रिकॉर्ड करें</button><button class="btn btn-whatsapp" id="ledgerWaBtn" onclick="whatsappOpenCustomer()">📱 व्हाट्सएप विवरण</button><button class="btn btn-secondary" onclick="closeLedgerModal()">बंद करें</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>दिनांक</th><th>विवरण</th><th>डेबिट</th><th>क्रेडिट</th><th>शेष</th></tr></thead><tbody id="ledgerDetailBody"></tbody></table></div></div></div></div>
 
 <!-- Record payment -->
-<div id="payModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span id="payModalTitle">💰 Record payment</span><span class="modal-close" onclick="closePayModal()">×</span></div><div class="modal-content"><p id="payModalInfo" style="font-size:14px;color:#475569;margin-bottom:14px;"></p><div class="form-row"><div class="form-field"><label class="field-label">Amount (₹)</label><input id="payAmount" class="field-input" type="number" min="0" step="0.01"></div></div><div class="form-row"><div class="form-field"><label class="field-label">Note <span class="optional-tag">optional</span></label><input id="payNote" class="field-input" placeholder="Cash / UPI / part payment"></div></div><div class="btn-group" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-success" onclick="confirmPayment()">Save payment</button><button class="btn btn-secondary" onclick="closePayModal()">Cancel</button></div></div></div></div>
+<div id="payModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span id="payModalTitle">💰 भुगतान रिकॉर्ड करें</span><span class="modal-close" onclick="closePayModal()">×</span></div><div class="modal-content"><p id="payModalInfo" style="font-size:14px;color:#475569;margin-bottom:14px;"></p><div class="form-row"><div class="form-field"><label class="field-label">राशि (₹)</label><input id="payAmount" class="field-input" type="number" min="0" step="0.01"></div></div><div class="form-row"><div class="form-field"><label class="field-label">नोट <span class="optional-tag">वैकल्पिक</span></label><input id="payNote" class="field-input" placeholder="नकद / UPI / आंशिक भुगतान"></div></div><div class="btn-group" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-success" onclick="confirmPayment()">भुगतान सहेजें</button><button class="btn btn-secondary" onclick="closePayModal()">Cancel</button></div></div></div></div>
 
 <!-- Change PIN Modal -->
-<div id="changePinModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>🔑 Change PIN</span><span class="modal-close" onclick="closeChangePin()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>Current PIN</label><input id="chgCur" class="field-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••••"></div></div><div class="form-row"><div class="form-field"><label>New PIN (4–8 digits)</label><input id="chgNew" class="field-input" type="password" inputmode="numeric" maxlength="8" placeholder="••••••"></div><div class="form-field"><label>Confirm New PIN</label><input id="chgNew2" class="field-input" type="password" inputmode="numeric" maxlength="8" placeholder="••••••"></div></div><div style="font-size:12px;color:#64748b;margin:8px 0 14px;">The PIN is stored only as an encrypted hash — never in plain text.</div><div class="btn-group"><button class="btn btn-success" onclick="saveNewPin()">Update PIN</button><button class="btn btn-secondary" onclick="closeChangePin()">Cancel</button></div></div></div></div>
+<div id="changePinModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>🔑 PIN बदलें</span><span class="modal-close" onclick="closeChangePin()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>वर्तमान PIN</label><input id="chgCur" class="field-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••••"></div></div><div class="form-row"><div class="form-field"><label>नया PIN (4–8 अंक)</label><input id="chgNew" class="field-input" type="password" inputmode="numeric" maxlength="8" placeholder="••••••"></div><div class="form-field"><label>नया PIN पुष्टि करें</label><input id="chgNew2" class="field-input" type="password" inputmode="numeric" maxlength="8" placeholder="••••••"></div></div><div style="font-size:12px;color:#64748b;margin:8px 0 14px;">The PIN is stored only as an encrypted hash — never in plain text.</div><div class="btn-group"><button class="btn btn-success" onclick="saveNewPin()">PIN अपडेट करें</button><button class="btn btn-secondary" onclick="closeChangePin()">Cancel</button></div></div></div></div>
 
 <!-- jsPDF (client-side PDF generation for the Print / Download buttons) -->
 <!-- jsPDF (inlined — single-file, works with no extra files) -->
@@ -1420,7 +1423,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     }
     function normalizeCustomerType(t) { return t === 'trader' ? 'trader' : 'walkin'; }
     function getCustomerType() { return normalizeCustomerType(customerType); }
-    function customerTypeLabel(t) { return normalizeCustomerType(t) === 'trader' ? 'Retail trader' : 'Walk-in'; }
+    function customerTypeLabel(t) { return normalizeCustomerType(t) === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन'; }
     function normalizeProduct(pr) {
         const price = Number(pr && pr.price) || 0;
         let traderPrice = (pr && pr.traderPrice != null && pr.traderPrice !== '') ? Number(pr.traderPrice) : price;
@@ -1463,7 +1466,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         updateQuickSelect();
         renderBillList();
         calculateBill();
-        notify(next === 'trader' ? 'Retail trader rates applied' : 'Walk-in rates applied', 'info');
+        notify(next === 'trader' ? 'खुदरा व्यापारी दरें लागू हो गईं' : 'वॉक-इन दरें लागू हो गईं', 'info');
     }
 
     function applySettingsToUI() {
@@ -1565,6 +1568,32 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
     }
 
+    // ===== New Bill customer type prompt =====
+    function startNewBill() {
+        document.getElementById('newBillTypeModal').classList.add('active');
+    }
+    function closeNewBillTypeModal() {
+        document.getElementById('newBillTypeModal').classList.remove('active');
+    }
+    function selectNewBillType(type) {
+        setCustomerType(type, {force:true, silent:true});
+        closeNewBillTypeModal();
+        switchTab('billing');
+        notify(type==='trader' ? 'खुदरा व्यापारी दर लागू हो गई' : 'वॉक-इन दर लागू हो गई', 'info');
+    }
+
+    // ===== One-click same price =====
+    function setSamePrice() {
+        const w = document.getElementById('newProductPrice');
+        const r = document.getElementById('newProductTraderPrice');
+        if (w && r && w.value) { r.value = w.value; notify('दोनों दरें एक जैसी सेट हो गईं', 'success'); }
+    }
+    function setSameEditPrice() {
+        const w = document.getElementById('editProductPrice');
+        const r = document.getElementById('editProductTraderPrice');
+        if (w && r && w.value) { r.value = w.value; notify('दोनों दरें एक जैसी सेट हो गईं', 'success'); }
+    }
+
     // ---- KFC / McDonald's style: emoji menu tiles, category chips, qty badges ----
     let activeCat = 'All';
     function productEmoji(p) {
@@ -1609,20 +1638,20 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function renderProductGrid() {
         let grid = document.getElementById('productGrid');
         if (!grid) return;
-        if (!products.length) { grid.innerHTML = '<div>No products</div>'; return; }
+        if (!products.length) { grid.innerHTML = '<div>कोई उत्पाद नहीं</div>'; return; }
         renderCategoryChips();
         const items = products.map((p, i) => ({ p, i })).filter(x => activeCat === 'All' || categoryOf(x.p) === activeCat);
         const type = getCustomerType();
         const otherType = type === 'trader' ? 'walkin' : 'trader';
         const menuLab = document.getElementById('menuRateLabel');
         if (menuLab) {
-            menuLab.textContent = customerTypeLabel(type) + ' rates';
+            menuLab.textContent = customerTypeLabel(type) + ' दरें';
             menuLab.classList.toggle('trader', type === 'trader');
         }
         grid.innerHTML = items.map(({ p, i }) => {
             const active = getActivePrice(p, type);
             const other = getActivePrice(p, otherType);
-            const otherLbl = otherType === 'trader' ? 'Trader' : 'Walk-in';
+            const otherLbl = otherType === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन';
             const alt = (Math.abs(active - other) > 0.009) ? `<div class="product-price-alt">${otherLbl} ${settings.currency}${other.toFixed(2)}</div>` : '';
             return `<div class="product-tile" data-idx="${i}" onclick="tapAddProduct(${i})"><div class="product-icon">${productEmoji(p)}</div><div class="product-name">${escapeHtml(p.name)}</div><div class="product-price">${settings.currency}${active.toFixed(2)}<span style="font-size:11px;color:#64748b;">/${p.unit}</span></div>${alt}${p.expiry ? `<div class="product-expiry">📅 ${p.expiry}</div>` : ''}<span class="tile-qty" id="tileQty${i}"></span></div>`;
         }).join('');
@@ -1666,17 +1695,17 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function renderProductTable() { let tbody = document.getElementById('productTableBody'); if(!products.length){ tbody.innerHTML='<tr><td colspan="6">No products</td></tr>'; return; } tbody.innerHTML = products.map((p,i)=>{ const n = normalizeProduct(p); return `<tr><td><strong>${escapeHtml(n.name)}</strong><br><small>${escapeHtml(n.description||'')}</small></td><td>${settings.currency}${n.price.toFixed(2)}<div class="muted" style="font-size:11px;color:#64748b;">Walk-in</div></td><td>${settings.currency}${n.traderPrice.toFixed(2)}<div class="muted" style="font-size:11px;color:#64748b;">Retail trader</div></td><td>${n.unit}</td><td>${n.expiry||'—'}</td><td><button class="btn btn-primary" style="padding:4px 12px;" onclick="editProduct(${i})">Edit</button> <button class="btn btn-danger" style="padding:4px 12px;" onclick="deleteProduct(${i})">Del</button></td></tr>`; }).join(''); }
     function updateQuickSelect() { let sel = document.getElementById('quickProduct'); const t = getCustomerType(); sel.innerHTML = '<option value="">-- Select --</option>'+products.map((p,i)=>`<option value="${i}">${p.name} (${settings.currency}${getActivePrice(p, t).toFixed(2)} · ${customerTypeLabel(t)})</option>`).join(''); }
 
-    function addProduct() { let name = document.getElementById('newProductName').value.trim(); let price = parseFloat(document.getElementById('newProductPrice').value); let traderPrice = parseFloat(document.getElementById('newProductTraderPrice').value); if(!name || !(price>0)) return notify('Enter a name and a walk-in rate','error'); if(!(traderPrice>0)) traderPrice = price; products.push(normalizeProduct({ name, price, traderPrice, unit: document.getElementById('newProductUnit').value, description: document.getElementById('newProductDesc').value, expiry: document.getElementById('newProductExpiry').value })); saveAll(); renderAll(); document.getElementById('newProductName').value=''; document.getElementById('newProductPrice').value=''; document.getElementById('newProductTraderPrice').value=''; document.getElementById('newProductDesc').value=''; document.getElementById('newProductExpiry').value=''; notify('Product added with walk-in & trader rates','success'); }
-    function deleteProduct(i) { if(confirm('Delete product?')){ products.splice(i,1); saveAll(); renderAll(); notify('Deleted','success'); } }
+    function addProduct() { let name = document.getElementById('newProductName').value.trim(); let price = parseFloat(document.getElementById('newProductPrice').value); let traderPrice = parseFloat(document.getElementById('newProductTraderPrice').value); if(!name || !(price>0)) return notify('नाम और वॉक-इन दर दर्ज करें','error'); if(!(traderPrice>0)) traderPrice = price; products.push(normalizeProduct({ name, price, traderPrice, unit: document.getElementById('newProductUnit').value, description: document.getElementById('newProductDesc').value, expiry: document.getElementById('newProductExpiry').value })); saveAll(); renderAll(); document.getElementById('newProductName').value=''; document.getElementById('newProductPrice').value=''; document.getElementById('newProductTraderPrice').value=''; document.getElementById('newProductDesc').value=''; document.getElementById('newProductExpiry').value=''; notify('उत्पाद वॉक-इन और व्यापारी दरों के साथ जोड़ा गया','success'); }
+    function deleteProduct(i) { if(confirm('Delete product?')){ products.splice(i,1); saveAll(); renderAll(); notify('हटा दिया गया','success'); } }
     let editProductIdx = null;
     function editProduct(i) { editProductIdx = i; let p = normalizeProduct(products[i]); document.getElementById('editProductName').value = p.name; document.getElementById('editProductPrice').value = p.price; document.getElementById('editProductTraderPrice').value = p.traderPrice; document.getElementById('editProductUnit').value = p.unit; document.getElementById('editProductDesc').value = p.description||''; document.getElementById('editProductExpiry').value = p.expiry||''; document.getElementById('editProductModal').classList.add('active'); }
-    function saveProductEdit() { let newName = document.getElementById('editProductName').value.trim(); let newPrice = parseFloat(document.getElementById('editProductPrice').value); let newTrader = parseFloat(document.getElementById('editProductTraderPrice').value); if(!newName || !(newPrice>0)) return notify('Enter a name and a walk-in rate','error'); if(!(newTrader>0)) newTrader = newPrice; products[editProductIdx] = normalizeProduct({ ...products[editProductIdx], name: newName, price: newPrice, traderPrice: newTrader, unit: document.getElementById('editProductUnit').value, description: document.getElementById('editProductDesc').value, expiry: document.getElementById('editProductExpiry').value }); repriceBillItems(getCustomerType()); saveAll(); renderAll(); closeEditProductModal(); notify('Walk-in & trader rates updated','success'); }
+    function saveProductEdit() { let newName = document.getElementById('editProductName').value.trim(); let newPrice = parseFloat(document.getElementById('editProductPrice').value); let newTrader = parseFloat(document.getElementById('editProductTraderPrice').value); if(!newName || !(newPrice>0)) return notify('नाम और वॉक-इन दर दर्ज करें','error'); if(!(newTrader>0)) newTrader = newPrice; products[editProductIdx] = normalizeProduct({ ...products[editProductIdx], name: newName, price: newPrice, traderPrice: newTrader, unit: document.getElementById('editProductUnit').value, description: document.getElementById('editProductDesc').value, expiry: document.getElementById('editProductExpiry').value }); repriceBillItems(getCustomerType()); saveAll(); renderAll(); closeEditProductModal(); notify('Walk-in & trader rates updated','success'); }
     function closeEditProductModal() { document.getElementById('editProductModal').classList.remove('active'); editProductIdx = null; }
-    function bulkSetExpiry() { let newExpiry = prompt("Enter expiry date (YYYY-MM-DD) for ALL products:", "2026-12-31"); if(newExpiry && newExpiry.match(/^\d{4}-\d{2}-\d{2}$/)) { products.forEach(p => p.expiry = newExpiry); saveAll(); renderAll(); notify(`All products expiry set to ${newExpiry}`, 'success'); } else if(newExpiry) notify('Invalid date format','error'); }
+    function bulkSetExpiry() { let newExpiry = prompt("Enter expiry date (YYYY-MM-DD) for ALL products:", "2026-12-31"); if(newExpiry && newExpiry.match(/^\d{4}-\d{2}-\d{2}$/)) { products.forEach(p => p.expiry = newExpiry); saveAll(); renderAll(); notify(`All products expiry set to ${newExpiry}`, 'success'); } else if(newExpiry) notify('अमान्य तिथि प्रारूप','error'); }
 
     function addProductToBill(i) { const type = getCustomerType(); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity++; else billItems.push({ productIndex: i, product: pricedProductCopy(products[i], type), quantity: 1, rateType: type }); renderBillList(); calculateBill(); }
-    function quickAddProduct() { let idx = document.getElementById('quickProduct').value; if(idx==='') return notify('Select product','error'); let i = parseInt(idx); let qty = parseInt(document.getElementById('quickQty').value); const type = getCustomerType(); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity+=qty; else billItems.push({ productIndex: i, product: pricedProductCopy(products[i], type), quantity: qty, rateType: type }); renderBillList(); calculateBill(); document.getElementById('quickQty').value=1; notify('Added at ' + customerTypeLabel(type) + ' rate','success'); }
-    function renderBillList() { let list = document.getElementById('billList'); if(!billItems.length){ list.innerHTML='<div style="padding:20px; text-align:center;">🛒 Tap items to add</div>'; if (typeof updateReadyBar === 'function') updateReadyBar(0); if (typeof updateTileCounts === 'function') updateTileCounts(); return; } const type = getCustomerType(); const badge = `<span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)} rate</span>`; list.innerHTML = billItems.map((item,i)=>`<div class="bill-item"><div><strong>${item.product.name}</strong> ${badge}<br>${settings.currency}${Number(item.product.price).toFixed(2)} ${item.product.unit}${item.product.expiry?`<br><span style="font-size:11px;">📅 Exp: ${item.product.expiry}</span>`:''}</div><div class="qty-controls"><button class="qty-btn" onclick="updateQty(${i},-1)">−</button><span style="min-width:40px;text-align:center;">${item.quantity}</span><button class="qty-btn" onclick="updateQty(${i},1)">+</button></div><div>${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</div><button class="remove-item-btn" onclick="removeItem(${i})">×</button></div>`).join(''); if (typeof updateReadyBar === 'function') updateReadyBar(); if (typeof updateTileCounts === 'function') updateTileCounts(); }
+    function quickAddProduct() { let idx = document.getElementById('quickProduct').value; if(idx==='') return notify('उत्पाद चुनें','error'); let i = parseInt(idx); let qty = parseInt(document.getElementById('quickQty').value); const type = getCustomerType(); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity+=qty; else billItems.push({ productIndex: i, product: pricedProductCopy(products[i], type), quantity: qty, rateType: type }); renderBillList(); calculateBill(); document.getElementById('quickQty').value=1; notify('Added at ' + customerTypeLabel(type) + ' rate','success'); }
+    function renderBillList() { let list = document.getElementById('billList'); if(!billItems.length){ list.innerHTML='<div style="padding:20px; text-align:center;">🛒 आइटम जोड़ने के लिए टैप करें</div>'; if (typeof updateReadyBar === 'function') updateReadyBar(0); if (typeof updateTileCounts === 'function') updateTileCounts(); return; } const type = getCustomerType(); const badge = `<span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)} दर</span>`; list.innerHTML = billItems.map((item,i)=>`<div class="bill-item"><div><strong>${item.product.name}</strong> ${badge}<br>${settings.currency}${Number(item.product.price).toFixed(2)} ${item.product.unit}${item.product.expiry?`<br><span style="font-size:11px;">📅 समाप्ति: ${item.product.expiry}</span>`:''}</div><div class="qty-controls"><button class="qty-btn" onclick="updateQty(${i},-1)">−</button><span style="min-width:40px;text-align:center;">${item.quantity}</span><button class="qty-btn" onclick="updateQty(${i},1)">+</button></div><div>${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</div><button class="remove-item-btn" onclick="removeItem(${i})">×</button></div>`).join(''); if (typeof updateReadyBar === 'function') updateReadyBar(); if (typeof updateTileCounts === 'function') updateTileCounts(); }
     function updateQty(i,delta) { let newQty = billItems[i].quantity+delta; if(newQty>=1) billItems[i].quantity = newQty; renderBillList(); calculateBill(); }
     function removeItem(i) { billItems.splice(i,1); renderBillList(); calculateBill(); }
     function calculateBill() {
@@ -1687,7 +1716,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         let total = subtotal - discount + charges;
         let totalQty = billItems.reduce((s,i)=>s+i.quantity,0);
         const type = getCustomerType();
-        document.getElementById('summaryBox').innerHTML = `<div class="summary-row"><span>Rate card</span><span><span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)}</span></span></div><div class="summary-row"><span>Subtotal</span><span>${settings.currency}${subtotal.toFixed(2)}</span></div><div class="summary-row"><span>Other Charges</span><span>${settings.currency}${charges.toFixed(2)}</span></div><div class="summary-row"><span>Discount (${discPct}%)</span><span>-${settings.currency}${discount.toFixed(2)}</span></div><div class="quantity-info" style="background:#fef9e6; padding:10px; border-radius:20px; margin:10px 0;">📦 Items: ${billItems.length} | Total Qty: ${totalQty}</div><div class="summary-row summary-total"><span>GRAND TOTAL</span><span>${settings.currency}${total.toFixed(2)}</span></div>`;
+        document.getElementById('summaryBox').innerHTML = `<div class="summary-row"><span>दर कार्ड</span><span><span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)}</span></span></div><div class="summary-row"><span>उप-योग</span><span>${settings.currency}${subtotal.toFixed(2)}</span></div><div class="summary-row"><span>अन्य शुल्क</span><span>${settings.currency}${charges.toFixed(2)}</span></div><div class="summary-row"><span>छूट (${discPct}%)</span><span>-${settings.currency}${discount.toFixed(2)}</span></div><div class="quantity-info" style="background:#fef9e6; padding:10px; border-radius:20px; margin:10px 0;">📦 आइटम: ${billItems.length} | कुल मात्रा: ${totalQty}</div><div class="summary-row summary-total"><span>कुल राशि</span><span>${settings.currency}${total.toFixed(2)}</span></div>`;
         syncAmountReceived(total);
         updateReadyBar(total);
         return {subtotal,charges,discPct,discount,total,totalQty};
@@ -1707,7 +1736,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             if (totalEl) totalEl.textContent = (settings.currency || '₹') + (Number(val) || 0).toFixed(2);
             if (countEl) {
                 const qty = billItems.reduce((s, i) => s + i.quantity, 0);
-                countEl.textContent = billItems.length + (billItems.length === 1 ? ' item' : ' items') + ' · ' + qty + ' pcs · ' + (document.getElementById('customerName').value.trim() || customerTypeLabel(getCustomerType())) + ' · ' + customerTypeLabel(getCustomerType()) + ' rates';
+                countEl.textContent = billItems.length + (billItems.length === 1 ? ' आइटम' : ' आइटम') + ' · ' + qty + ' पीस · ' + (document.getElementById('customerName').value.trim() || customerTypeLabel(getCustomerType())) + ' · ' + customerTypeLabel(getCustomerType()) + ' दरें';
             }
             if (cartEl) {
                 const totalPcs = billItems.reduce((s, i) => s + i.quantity, 0);
@@ -1719,12 +1748,16 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     }
     
     function clearBill(skipConfirm) { if(!skipConfirm && billItems.length && !confirm('Clear all?')) return; billItems = []; document.getElementById('customerName').value=''; document.getElementById('customerPhone').value=''; const wrap = document.getElementById('customerPhoneWrap'); if (wrap) { wrap.classList.remove('valid','invalid'); } document.getElementById('otherCharges').value='0'; document.getElementById('discountPercent').value='0'; customerType = normalizeCustomerType(settings.defaultCustomerType); updateCustomerTypeUI(); setPayMode('full'); setDateTime(); renderProductGrid(); updateQuickSelect(); renderBillList(); calculateBill(); }
-    function saveBill() { const type = getCustomerType(); let name = document.getElementById('customerName').value.trim() || (type === 'trader' ? 'Retail Trader' : 'Walk-in Guest'); if(!billItems.length) return notify('Add items','error'); const rawPhone = document.getElementById('customerPhone').value.trim(); const phone = normalizeIndianMobile(rawPhone); if (rawPhone && !isValidIndianMobile(phone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let {subtotal,charges,discPct,discount,total,totalQty} = calculateBill(); let received = parseFloat(document.getElementById('amountReceived').value); if (isNaN(received)) received = total; received = Math.max(0, Math.min(received, total)); received = Math.round(received*100)/100; let due = Math.round((total-received)*100)/100; let bill = { billNo: billCounter, dateTime: document.getElementById('billDateTime').value||new Date().toISOString(), customerType: type, customer: { name, phone, type }, items: billItems.map(i=>({ product: {...i.product}, quantity: i.quantity, rateType: type })), subtotal, charges, discount, discPct, total, totalQty, paid: received, due, payments: received>0 ? [{ date: document.getElementById('billDateTime').value||new Date().toISOString(), amount: received, note: 'At billing' }] : [] }; billHistory.push(bill); billCounter++; lastSavedBill = bill; saveAll(); updateStatusBar(); notify('Bill saved at ' + customerTypeLabel(type) + ' rates','success'); openAfterSaveModal(bill); }
+    function saveBill() { const type = getCustomerType(); let name = document.getElementById('customerName').value.trim() || (type === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान'); if(!billItems.length) return notify('Add items','error'); const rawPhone = document.getElementById('customerPhone').value.trim(); const phone = normalizeIndianMobile(rawPhone); if (rawPhone && !isValidIndianMobile(phone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let {subtotal,charges,discPct,discount,total,totalQty} = calculateBill(); let received = parseFloat(document.getElementById('amountReceived').value); if (isNaN(received)) received = total; received = Math.max(0, Math.min(received, total)); received = Math.round(received*100)/100; let due = Math.round((total-received)*100)/100;
+    const isPaid = confirm('क्या राशि पूरी तरह भुगतान हुई है?\nOK = भुगतान पूरा\nCancel = बकाया है');
+    const status = isPaid ? 'paid' : 'due';
+    if (isPaid) { received = total; due = 0; }
+    let bill = { billNo: billCounter, dateTime: document.getElementById('billDateTime').value||new Date().toISOString(), customerType: type, customer: { name, phone, type }, status, items: billItems.map(i=>({ product: {...i.product}, quantity: i.quantity, rateType: type })), subtotal, charges, discount, discPct, total, totalQty, paid: received, due, payments: (received>0 || status==='paid') ? [{ date: document.getElementById('billDateTime').value||new Date().toISOString(), amount: received, note: 'At billing' }] : [] }; billHistory.push(bill); billCounter++; lastSavedBill = bill; saveAll(); updateStatusBar(); notify('Bill saved at ' + customerTypeLabel(type) + ' rates','success'); openAfterSaveModal(bill); }
 
-    // NEW YORK TIMES STYLE – NO GST, CLEAN, EXPIRY IN ITEMS
+    // NEW YORK TIMES STYLE – NO GST, CLEAN, EXPIRY IN आइटमS
     function generateNYTBillHTML(billData, items, isSaved=false) {
         let rateType = normalizeCustomerType(billData.customerType);
-        let custName = billData.customerName || (rateType === 'trader' ? 'Retail Trader' : 'Walk-in Guest');
+        let custName = billData.customerName || (rateType === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान');
         let custPhone = billData.customerPhone || '';
         let date = billData.dateTime ? new Date(billData.dateTime).toLocaleString('en-US', { hour12: true }) : new Date().toLocaleString();
         let billNo = billData.billNo || (isSaved ? billData.billNo : billCounter);
@@ -1734,8 +1767,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         let discount = subtotal * discPct / 100;
         let total = subtotal - discount + charges;
         let totalQty = items.reduce((s,i)=>s+i.quantity,0);
-        let itemsHtml = items.map((item,i)=>`<tr style="border-bottom: 0.5px solid #e2e2e2;"><td style="padding: 8px 4px 8px 0; width: 30px;">${i+1}</td><td style="padding: 8px 8px;"><strong>${escapeHtml(item.product.name)}</strong><br><span style="font-family: 'Times New Roman', serif; font-size: 11px; color: #5e5e5e;">${item.product.unit} · ${settings.currency}${item.product.price.toFixed(2)} each${item.product.expiry ? ` · Expiry: ${item.product.expiry}` : ''}</span></td><td style="padding: 8px; text-align: center;">${item.quantity}</td><td style="padding: 8px; text-align: right;">${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</td></tr>`).join('');
-        return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${settings.businessName} – Bill #${billNo}</title><style>body { margin: 0; padding: 0; background: white; font-family: 'Times New Roman', Georgia, serif; } .nyt-container { max-width: 700px; margin: 0 auto; padding: 0.6in 0.5in; background: white; } .nyt-header { text-align: center; border-bottom: 2px solid #111; margin-bottom: 24px; } .nyt-header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 6px 0; font-family: 'Times New Roman', serif; } .nyt-header .shop-details { font-size: 12px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; } .nyt-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 28px; border-bottom: 1px solid #ddd; padding-bottom: 12px; } .bill-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; } .bill-table th { text-align: left; padding: 6px 4px; border-bottom: 1px solid #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; } .totals { text-align: right; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 16px; font-size: 14px; } .totals div { margin: 6px 0; } .grand-total { font-size: 20px; font-weight: 700; margin-top: 12px; } .footer-note { margin-top: 32px; text-align: center; font-size: 11px; color: #5c5c5c; border-top: 1px solid #ddd; padding-top: 20px; font-style: italic; } .expiry-note { background: #fef7e0; padding: 8px 12px; font-size: 10px; text-align: center; margin-top: 20px; }</style></head><body><div class="nyt-container"><div class="nyt-header"><h1>${settings.businessName}</h1><div class="shop-details">${settings.address || ''} ${settings.phone ? '· ' + settings.phone : ''}</div></div><div class="nyt-meta"><div><strong>BILL NO:</strong> ${billNo}<br><strong>DATE:</strong> ${date}</div><div><strong>CUSTOMER:</strong> ${custName}<br>${custPhone ? `📞 ${custPhone}<br>` : ''}<strong>RATE:</strong> ${customerTypeLabel(rateType)}</div></div><table class="bill-table"><thead><tr><th>#</th><th>ITEM</th><th>QTY</th><th>AMOUNT</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><div>Subtotal: ${settings.currency}${subtotal.toFixed(2)}</div>${charges ? `<div>Other Charges: ${settings.currency}${charges.toFixed(2)}</div>` : ''}${discPct ? `<div>Discount (${discPct}%): -${settings.currency}${discount.toFixed(2)}</div>` : ''}<div class="grand-total">Total: ${settings.currency}${total.toFixed(2)}</div><div style="font-size: 12px;">Total Items: ${items.length} | Total Quantity: ${totalQty}</div></div><div class="expiry-note">📅 Best before / expiry dates are mentioned per product. Consume before expiry for freshness.</div><div class="footer-note">Thank you for your purchase — crisp khakra, timeless taste.</div></div></body></html>`;
+        let itemsHtml = items.map((item,i)=>`<tr style="border-bottom: 0.5px solid #e2e2e2;"><td style="padding: 8px 4px 8px 0; width: 30px;">${i+1}</td><td style="padding: 8px 8px;"><strong>${escapeHtml(item.product.name)}</strong><br><span style="font-family: 'Times New Roman', serif; font-size: 11px; color: #5e5e5e;">${item.product.unit} · ${settings.currency}${item.product.price.toFixed(2)} प्रत्येक${item.product.expiry ? ` · Expiry: ${item.product.expiry}` : ''}</span></td><td style="padding: 8px; text-align: center;">${item.quantity}</td><td style="padding: 8px; text-align: right;">${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</td></tr>`).join('');
+        return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${settings.businessName} – Bill #${billNo}</title><style>body { margin: 0; padding: 0; background: white; font-family: 'Times New Roman', Georgia, serif; } .nyt-container { max-width: 700px; margin: 0 auto; padding: 0.6in 0.5in; background: white; } .nyt-header { text-align: center; border-bottom: 2px solid #111; margin-bottom: 24px; } .nyt-header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 6px 0; font-family: 'Times New Roman', serif; } .nyt-header .shop-details { font-size: 12px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; } .nyt-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 28px; border-bottom: 1px solid #ddd; padding-bottom: 12px; } .bill-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; } .bill-table th { text-align: left; padding: 6px 4px; border-bottom: 1px solid #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; } .totals { text-align: right; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 16px; font-size: 14px; } .totals div { margin: 6px 0; } .grand-total { font-size: 20px; font-weight: 700; margin-top: 12px; } .footer-note { margin-top: 32px; text-align: center; font-size: 11px; color: #5c5c5c; border-top: 1px solid #ddd; padding-top: 20px; font-style: italic; } .expiry-note { background: #fef7e0; padding: 8px 12px; font-size: 10px; text-align: center; margin-top: 20px; }</style></head><body><div class="nyt-container"><div class="nyt-header"><h1>${settings.businessName}</h1><div class="shop-details">${settings.address || ''} ${settings.phone ? '· ' + settings.phone : ''}</div></div><div class="nyt-meta"><div><strong>बिल संख्या:</strong> ${billNo}<br><strong>दिनांक:</strong> ${date}</div><div><strong>ग्राहक:</strong> ${custName}<br>${custPhone ? `📞 ${custPhone}<br>` : ''}<strong>दर:</strong> ${customerTypeLabel(rateType)}</div></div><table class="bill-table"><thead><tr><th>#</th><th>आइटम</th><th>मात्रा</th><th>राशि</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><div>उप-योग: ${settings.currency}${subtotal.toFixed(2)}</div>${charges ? `<div>अन्य शुल्क: ${settings.currency}${charges.toFixed(2)}</div>` : ''}${discPct ? `<div>छूट (${discPct}%): -${settings.currency}${discount.toFixed(2)}</div>` : ''}<div class="grand-total">कुल: ${settings.currency}${total.toFixed(2)}</div><div style="font-size: 12px;">कुल आइटम: ${items.length} | कुल मात्रा: ${totalQty}</div></div><div class="expiry-note">📅 प्रत्येक उत्पाद पर समाप्ति तिथि दी गई है। ताजगी के लिए समाप्ति से पहले उपभोग करें।</div>${(billData.status==='paid') ? '<div style="margin-top:8px;padding:10px;background:#d1fae5;border-radius:12px;text-align:center;font-weight:800;color:#065f46;font-size:14px;">✅ भुगतान पूरा</div>' : ((billData.status==='due') ? '<div style="margin-top:8px;padding:10px;background:#fee2e2;border-radius:12px;text-align:center;font-weight:800;color:#991b1b;font-size:14px;">⏳ बकाया — कृपया भुगतान करें</div>' : '')}<div class="footer-note">खरीदारी के लिए धन्यवाद — कुरकुरा खखरा, शाश्वत स्वाद।</div></div></body></html>`;
     }
 
     // ================= PRINT / PDF =================
@@ -1766,16 +1799,16 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         // Meta
         const billNo = billData.billNo || (isSaved ? billData.billNo : billCounter);
         const rateType = normalizeCustomerType(billData.customerType);
-        const custName = billData.customerName || (rateType === 'trader' ? 'Retail Trader' : 'Walk-in Guest');
+        const custName = billData.customerName || (rateType === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान');
         const custPhone = billData.customerPhone || '';
         const date = billData.dateTime ? new Date(billData.dateTime).toLocaleString('en-US', { hour12: true }) : new Date().toLocaleString();
         doc.setFont('times', 'bold'); doc.setFontSize(10); doc.setTextColor(20);
-        doc.text('BILL NO: ' + billNo, margin, y);
-        doc.text('CUSTOMER: ' + custName, margin + curW / 2, y);
+        doc.text('बिल संख्या: ' + billNo, margin, y);
+        doc.text('ग्राहक: ' + custName, margin + curW / 2, y);
         y += 5;
         doc.setFont('times', 'normal'); doc.setFontSize(9); doc.setTextColor(70);
-        doc.text('DATE: ' + date, margin, y);
-        doc.text('RATE: ' + customerTypeLabel(rateType) + (custPhone ? '   PHONE: ' + custPhone : ''), margin + curW / 2, y);
+        doc.text('दिनांक: ' + date, margin, y);
+        doc.text('दर: ' + customerTypeLabel(rateType) + (custPhone ? '   PHONE: ' + custPhone : ''), margin + curW / 2, y);
         y += 9;
 
         // Table header
@@ -1783,9 +1816,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         y += 5;
         doc.setFont('times', 'bold'); doc.setFontSize(10); doc.setTextColor(20);
         doc.text('#', margin, y);
-        doc.text('ITEM', margin + 8, y);
-        doc.text('QTY', pageW - margin - 38, y);
-        doc.text('AMOUNT', pageW - margin, y, { align: 'right' });
+        doc.text('आइटम', margin + 8, y);
+        doc.text('मात्रा', pageW - margin - 38, y);
+        doc.text('राशि', pageW - margin, y, { align: 'right' });
         y += 4;
         doc.line(margin, y, pageW - margin, y);
         y += 6;
@@ -1795,7 +1828,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         doc.setFont('times', 'normal'); doc.setFontSize(10); doc.setTextColor(20);
         items.forEach((item, i) => {
             if (y > 268) { doc.addPage(); y = 20; }
-            const priceLine = item.product.unit + ' · ' + settings.currency + item.product.price.toFixed(2) + ' each' + (item.product.expiry ? ' · Exp: ' + item.product.expiry : '');
+            const priceLine = item.product.unit + ' · ' + settings.currency + item.product.price.toFixed(2) + ' प्रत्येक' + (item.product.expiry ? ' · Exp: ' + item.product.expiry : '');
             doc.text(String(i + 1), margin, y);
             doc.text(item.product.name, margin + 8, y);
             doc.text(String(item.quantity), pageW - margin - 38, y, { align: 'center' });
@@ -1816,9 +1849,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const discount = subtotal * discPct / 100;
         const total = subtotal - discount + charges;
         doc.setFont('times', 'normal'); doc.setFontSize(10); doc.setTextColor(20);
-        doc.text('Subtotal', margin, y); doc.text(settings.currency + subtotal.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5;
-        if (charges) { doc.text('Other Charges', margin, y); doc.text(settings.currency + charges.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
-        if (discPct) { doc.text('Discount (' + discPct + '%)', margin, y); doc.text('-' + settings.currency + discount.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
+        doc.text('उप-योग', margin, y); doc.text(settings.currency + subtotal.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5;
+        if (charges) { doc.text('अन्य शुल्क', margin, y); doc.text(settings.currency + charges.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
+        if (discPct) { doc.text('छूट (' + discPct + '%)', margin, y); doc.text('-' + settings.currency + discount.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
         y += 2;
         doc.setFont('times', 'bold'); doc.setFontSize(14);
         doc.text('GRAND TOTAL', margin, y);
@@ -1826,27 +1859,36 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         y += 6;
         doc.setFont('times', 'normal'); doc.setFontSize(9); doc.setTextColor(80);
         const totalQty = items.reduce((s, i) => s + i.quantity, 0);
-        doc.text('Items: ' + items.length + '   |   Total Quantity: ' + totalQty, margin, y);
+        doc.text('Items: ' + items.length + '   |   कुल मात्रा: ' + totalQty, margin, y);
         doc.text('Best before / expiry dates are per product.', pageW - margin, y, { align: 'right' });
 
+        // Status remark / watermark
+        if (billData.status) {
+            doc.setFont('times', 'bold'); doc.setFontSize(11);
+            const remark = billData.status === 'paid' ? '✅ भुगतान पूरा' : '⏳ बकाया';
+            const remarkColor = billData.status === 'paid' ? 13 : 180;
+            doc.setTextColor(remarkColor, 0, 0);
+            doc.text(remark, pageW - margin, 278, { align: 'right' });
+            doc.setTextColor(20, 20, 20);
+        }
         // Footer
         doc.setFont('times', 'italic'); doc.setFontSize(9); doc.setTextColor(110);
-        doc.text('Thank you for your purchase — crisp khakra, timeless taste.', pageW / 2, 285, { align: 'center' });
+        doc.text('खरीदारी के लिए धन्यवाद — कुरकुरा खखरा, शाश्वत स्वाद।', pageW / 2, 285, { align: 'center' });
         return doc;
     }
 
     function currentBillData() {
         const type = getCustomerType();
-        return { customerName: document.getElementById('customerName').value.trim() || (type === 'trader' ? 'Retail Trader' : 'Walk-in Guest'), customerPhone: document.getElementById('customerPhone').value, dateTime: document.getElementById('billDateTime').value, billNo: billCounter, customerType: type };
+        return { customerName: document.getElementById('customerName').value.trim() || (type === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान'), customerPhone: document.getElementById('customerPhone').value, dateTime: document.getElementById('billDateTime').value, billNo: billCounter, customerType: type };
     }
 
     // Save (download) a bill as a PDF file.
     function saveBillPDFFile(billData, items, isSaved) {
-        if (typeof window.jspdf === 'undefined') return notify('PDF engine not loaded (offline?)', 'error');
+        if (typeof window.jspdf === 'undefined') return notify('PDF इंजन लोड नहीं हुआ (ऑफलाइन?)', 'error');
         const doc = makeBillPDF(billData, items, isSaved);
         const billNo = billData.billNo || (isSaved ? billData.billNo : billCounter);
-        try { doc.save('Khakra_Bill_' + billNo + '.pdf'); notify('PDF downloaded', 'success'); }
-        catch (e) { notify('PDF download failed: ' + e.message, 'error'); }
+        try { doc.save('Khakra_Bill_' + billNo + '.pdf'); notify('PDF डाउनलोड हो गया', 'success'); }
+        catch (e) { notify('PDF डाउनलोड विफल: ' + e.message, 'error'); }
     }
 
     // Print a bill. On desktop: open browser print dialog (best quality).
@@ -1854,21 +1896,21 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function printBill(billData, items, isSaved) {
         if (isMobileDevice()) {
             saveBillPDFFile(billData, items, isSaved);
-            notify('PDF saved — open it and choose Share/Print', 'info');
+            notify('PDF सहेज दिया गया — खोलें और शेयर/प्रिंट चुनें', 'info');
         } else {
             const win = window.open('', '_blank', 'width=820,height=700');
-            if (!win) { saveBillPDFFile(billData, items, isSaved); return notify('Popup blocked — PDF downloaded instead', 'info'); }
+            if (!win) { saveBillPDFFile(billData, items, isSaved); return notify('पॉपअप ब्लॉक हो गया — इसके बजाय PDF डाउनलोड किया गया', 'info'); }
             win.document.write(generateNYTBillHTML(billData, items, isSaved));
             win.document.close(); win.focus(); win.print();
         }
     }
 
     function printCurrentBillAsPDF() {
-        if (!billItems.length) return notify('No items to print', 'error');
+        if (!billItems.length) return notify('प्रिंट करने के लिए कोई आइटम नहीं', 'error');
         printBill(currentBillData(), billItems, false);
     }
     function downloadCurrentBillPDF() {
-        if (!billItems.length) return notify('No items to download', 'error');
+        if (!billItems.length) return notify('डाउनलोड करने के लिए कोई आइटम नहीं', 'error');
         saveBillPDFFile(currentBillData(), billItems, false);
     }
     function printSavedBill(idx) {
@@ -1897,7 +1939,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             ensureBillPayments(b);
             const phone = (b.customer && b.customer.phone) ? b.customer.phone : '—';
             const st = paymentStatus(b);
-            const badge = st==='paid' ? '<span class="badge badge-paid">Paid</span>' : (st==='partial' ? '<span class="badge badge-partial">Partial</span>' : '<span class="badge badge-due">Due</span>');
+            const badge = st==='paid' ? '<span class="badge badge-paid">भुगतान किया गया</span>' : (st==='partial' ? '<span class="badge badge-partial">आंशिक</span>' : '<span class="badge badge-due">बकाया</span>');
             const payBtn = b.due>0.009 ? ` <button class="btn btn-warning" style="padding:4px 8px;min-height:32px;" onclick="openPayForBill(${idx})">Pay</button>` : '';
             const typeBadge = `<span class="rate-badge${(b.customerType|| (b.customer && b.customer.type))==='trader'?' trader':''}">${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}</span>`;
             return `<tr><td>#${b.billNo}</td><td>${new Date(b.dateTime).toLocaleString()}</td><td>${escapeHtml(b.customer.name)} ${badge} ${typeBadge}</td><td>${escapeHtml(phone)}</td><td>${settings.currency}${b.total.toFixed(2)}${b.due>0.009?`<br><small style="color:#b91c1c;">Due ${settings.currency}${b.due.toFixed(2)}</small>`:''}</td><td style="white-space:nowrap;"><button class="btn btn-whatsapp" style="padding:4px 8px;min-height:32px;" onclick="sendSavedBillWhatsApp(${idx})">WhatsApp</button>${payBtn} <button class="btn btn-primary" style="padding:4px 8px;min-height:32px;" onclick="editBill(${idx})">Edit</button> <button class="btn btn-success" style="padding:4px 8px;min-height:32px;" onclick="printSavedBill(${idx})">Print</button> <button class="btn btn-primary" style="padding:4px 8px;min-height:32px;" onclick="downloadSavedBill(${idx})">PDF</button> <button class="btn btn-danger" style="padding:4px 8px;min-height:32px;" onclick="deleteBill(${idx})">Del</button></td></tr>`;
@@ -1908,7 +1950,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
                 ensureBillPayments(b);
                 const phone = (b.customer && b.customer.phone) ? ('+91 ' + b.customer.phone) : 'No mobile';
                 const st = paymentStatus(b);
-                const badge = st==='paid' ? '<span class="badge badge-paid">Paid</span>' : (st==='partial' ? '<span class="badge badge-partial">Partial</span>' : '<span class="badge badge-due">Due</span>');
+                const badge = st==='paid' ? '<span class="badge badge-paid">भुगतान किया गया</span>' : (st==='partial' ? '<span class="badge badge-partial">आंशिक</span>' : '<span class="badge badge-due">बकाया</span>');
                 const payBtn = b.due>0.009 ? `<button class="btn btn-warning" onclick="openPayForBill(${idx})">💰 Pay</button>` : '';
                 const typeBadge = `<span class="rate-badge${(b.customerType|| (b.customer && b.customer.type))==='trader'?' trader':''}">${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}</span>`;
                 return `<div class="history-card"><div class="history-card-top"><div><strong>Bill #${b.billNo}</strong> ${badge} ${typeBadge}<div class="history-card-meta">${escapeHtml(b.customer.name)} · ${escapeHtml(phone)}<br>${new Date(b.dateTime).toLocaleString()}${b.due>0.009?`<br><span style="color:#b91c1c;font-weight:700;">Due ${settings.currency}${b.due.toFixed(2)}</span>`:''}</div></div><div style="font-weight:700;color:#b45309;">${settings.currency}${b.total.toFixed(2)}</div></div><div class="history-card-actions"><button class="btn btn-whatsapp" onclick="sendSavedBillWhatsApp(${idx})">📱 WhatsApp</button>${payBtn}<button class="btn btn-primary" onclick="editBill(${idx})">Edit</button><button class="btn btn-success" onclick="printSavedBill(${idx})">Print</button><button class="btn btn-primary" onclick="downloadSavedBill(${idx})">PDF</button><button class="btn btn-danger" onclick="deleteBill(${idx})">Del</button></div></div>`;
@@ -1916,7 +1958,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         }
     }
     
-    function deleteBill(i) { if(confirm('Delete bill?')){ let b = billHistory[i]; billHistory.splice(i,1); if(fb_db) fb_db.ref('bills/' + b.billNo).remove().catch(()=>{}); saveAll(); loadHistory(); updateStatusBar(); notify('Deleted','success'); } }
+    function deleteBill(i) { if(confirm('Delete bill?')){ let b = billHistory[i]; billHistory.splice(i,1); if(fb_db) fb_db.ref('bills/' + b.billNo).remove().catch(()=>{}); saveAll(); loadHistory(); updateStatusBar(); notify('हटा दिया गया','success'); } }
     let editingBillCopy = null, editBillIndex = -1;
     function editBill(idx) { editBillIndex = idx; let original = billHistory[idx]; editingBillCopy = JSON.parse(JSON.stringify(original)); if (!editingBillCopy.customerType) editingBillCopy.customerType = (editingBillCopy.customer && editingBillCopy.customer.type) || 'walkin'; document.getElementById('editBillCustomer').value = editingBillCopy.customer.name; document.getElementById('editBillPhone').value = editingBillCopy.customer.phone||''; document.getElementById('editBillDateTime').value = editingBillCopy.dateTime.slice(0,16); document.getElementById('editBillOtherCharges').value = editingBillCopy.charges; document.getElementById('editBillDiscount').value = editingBillCopy.discPct; const typeEl = document.getElementById('editBillCustomerType'); if (typeEl) typeEl.value = normalizeCustomerType(editingBillCopy.customerType); ensureBillPayments(editingBillCopy); document.getElementById('editBillPaid').value = (editingBillCopy.paid||0).toFixed(2); renderEditBillItems(); populateProductSelectForEdit(); document.getElementById('editBillModal').classList.add('active'); }
     function setEditBillCustomerType(type) {
@@ -1933,18 +1975,18 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         populateProductSelectForEdit();
         notify(customerTypeLabel(next) + ' rates applied to this bill', 'info');
     }
-    function renderEditBillItems() { let container = document.getElementById('editBillItemsList'); if(!editingBillCopy.items.length){ container.innerHTML='<div style="padding:20px;">No items</div>'; return; } const type = normalizeCustomerType(editingBillCopy.customerType); const badge = `<span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)} rate</span>`; container.innerHTML = editingBillCopy.items.map((item,i)=>`<div class="bill-item"><div><strong>${item.product.name}</strong> ${badge}<br>${settings.currency}${Number(item.product.price).toFixed(2)}<br><span style="font-size:11px;">📅 Exp: <input type="date" value="${item.product.expiry||''}" onchange="updateEditBillExpiry(${i}, this.value)" style="width:110px; border-radius:12px; border:1px solid #ccc;"></span></div><div class="qty-controls"><button class="qty-btn" onclick="updateEditBillQty(${i},-1)">−</button><span>${item.quantity}</span><button class="qty-btn" onclick="updateEditBillQty(${i},1)">+</button></div><div>${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</div><button class="remove-item-btn" onclick="removeEditBillItem(${i})">×</button></div>`).join(''); }
+    function renderEditBillItems() { let container = document.getElementById('editBillItemsList'); if(!editingBillCopy.items.length){ container.innerHTML='<div style="padding:20px;">No items</div>'; return; } const type = normalizeCustomerType(editingBillCopy.customerType); const badge = `<span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)} दर</span>`; container.innerHTML = editingBillCopy.items.map((item,i)=>`<div class="bill-item"><div><strong>${item.product.name}</strong> ${badge}<br>${settings.currency}${Number(item.product.price).toFixed(2)}<br><span style="font-size:11px;">📅 समाप्ति: <input type="date" value="${item.product.expiry||''}" onchange="updateEditBillExpiry(${i}, this.value)" style="width:110px; border-radius:12px; border:1px solid #ccc;"></span></div><div class="qty-controls"><button class="qty-btn" onclick="updateEditBillQty(${i},-1)">−</button><span>${item.quantity}</span><button class="qty-btn" onclick="updateEditBillQty(${i},1)">+</button></div><div>${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</div><button class="remove-item-btn" onclick="removeEditBillItem(${i})">×</button></div>`).join(''); }
     function updateEditBillExpiry(i, val) { editingBillCopy.items[i].product.expiry = val; renderEditBillItems(); }
     function updateEditBillQty(i,delta) { let newQty = editingBillCopy.items[i].quantity+delta; if(newQty>=1) editingBillCopy.items[i].quantity = newQty; renderEditBillItems(); }
     function removeEditBillItem(i) { editingBillCopy.items.splice(i,1); renderEditBillItems(); }
     function populateProductSelectForEdit() { let sel = document.getElementById('editBillProductSelect'); const t = editingBillCopy ? normalizeCustomerType(editingBillCopy.customerType) : getCustomerType(); sel.innerHTML = products.map((p,i)=>`<option value="${i}">${p.name} (${settings.currency}${getActivePrice(p, t).toFixed(2)} · ${customerTypeLabel(t)})</option>`).join(''); }
     function addProductToEditBill() { let idx = document.getElementById('editBillProductSelect').value; let qty = parseInt(document.getElementById('editBillQty').value)||1; let expiryManual = document.getElementById('editBillExpiry').value; if(idx==='') return; let i = parseInt(idx); const type = normalizeCustomerType(editingBillCopy.customerType); let newProduct = pricedProductCopy(products[i], type); if(expiryManual) newProduct.expiry = expiryManual; let existing = editingBillCopy.items.find(item=>item.product.name === newProduct.name && item.product.price === newProduct.price); if(existing) existing.quantity += qty; else editingBillCopy.items.push({ product: newProduct, quantity: qty, rateType: type }); renderEditBillItems(); }
-    function saveBillEdit() { let newName = document.getElementById('editBillCustomer').value.trim(); if(!newName) return notify('Customer name required','error'); if(!editingBillCopy.items.length) return notify('At least one item','error'); let newPhoneRaw = document.getElementById('editBillPhone').value.trim(); let newPhone = normalizeIndianMobile(newPhoneRaw); if (newPhoneRaw && !isValidIndianMobile(newPhone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let newDateTime = document.getElementById('editBillDateTime').value; let newCharges = parseFloat(document.getElementById('editBillOtherCharges').value)||0; let newDiscPct = parseFloat(document.getElementById('editBillDiscount').value)||0; let subtotal = editingBillCopy.items.reduce((s,i)=>s+(i.product.price*i.quantity),0); let discount = subtotal*newDiscPct/100; let total = subtotal - discount + newCharges; let totalQty = editingBillCopy.items.reduce((s,i)=>s+i.quantity,0); const type = normalizeCustomerType((document.getElementById('editBillCustomerType') && document.getElementById('editBillCustomerType').value) || editingBillCopy.customerType); editingBillCopy.customerType = type; editingBillCopy.customer = { name: newName, phone: newPhone, type }; editingBillCopy.dateTime = newDateTime; editingBillCopy.charges = newCharges; editingBillCopy.discPct = newDiscPct; editingBillCopy.discount = discount; editingBillCopy.subtotal = subtotal; editingBillCopy.total = total; editingBillCopy.totalQty = totalQty; let newPaid = parseFloat(document.getElementById('editBillPaid').value); if (isNaN(newPaid)) newPaid = (typeof editingBillCopy.paid === 'number' ? editingBillCopy.paid : total); newPaid = Math.max(0, Math.min(newPaid, total)); newPaid = Math.round(newPaid*100)/100; editingBillCopy.paid = newPaid; editingBillCopy.due = Math.round((total-newPaid)*100)/100; if (!Array.isArray(editingBillCopy.payments)) editingBillCopy.payments = []; billHistory[editBillIndex] = editingBillCopy; saveAll(); loadHistory(); updateStatusBar(); closeEditBillModal(); notify('Bill updated','success'); }
+    function saveBillEdit() { let newName = document.getElementById('editBillCustomer').value.trim(); if(!newName) return notify('ग्राहक का नाम आवश्यक है','error'); if(!editingBillCopy.items.length) return notify('कम से कम एक आइटम','error'); let newPhoneRaw = document.getElementById('editBillPhone').value.trim(); let newPhone = normalizeIndianMobile(newPhoneRaw); if (newPhoneRaw && !isValidIndianMobile(newPhone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let newDateTime = document.getElementById('editBillDateTime').value; let newCharges = parseFloat(document.getElementById('editBillOtherCharges').value)||0; let newDiscPct = parseFloat(document.getElementById('editBillDiscount').value)||0; let subtotal = editingBillCopy.items.reduce((s,i)=>s+(i.product.price*i.quantity),0); let discount = subtotal*newDiscPct/100; let total = subtotal - discount + newCharges; let totalQty = editingBillCopy.items.reduce((s,i)=>s+i.quantity,0); const type = normalizeCustomerType((document.getElementById('editBillCustomerType') && document.getElementById('editBillCustomerType').value) || editingBillCopy.customerType); editingBillCopy.customerType = type; editingBillCopy.customer = { name: newName, phone: newPhone, type }; editingBillCopy.dateTime = newDateTime; editingBillCopy.charges = newCharges; editingBillCopy.discPct = newDiscPct; editingBillCopy.discount = discount; editingBillCopy.subtotal = subtotal; editingBillCopy.total = total; editingBillCopy.totalQty = totalQty; let newPaid = parseFloat(document.getElementById('editBillPaid').value); if (isNaN(newPaid)) newPaid = (typeof editingBillCopy.paid === 'number' ? editingBillCopy.paid : total); newPaid = Math.max(0, Math.min(newPaid, total)); newPaid = Math.round(newPaid*100)/100; editingBillCopy.paid = newPaid; editingBillCopy.due = Math.round((total-newPaid)*100)/100; if (!Array.isArray(editingBillCopy.payments)) editingBillCopy.payments = []; billHistory[editBillIndex] = editingBillCopy; saveAll(); loadHistory(); updateStatusBar(); closeEditBillModal(); notify('बिल अपडेट कर दिया गया','success'); }
     function closeEditBillModal() { document.getElementById('editBillModal').classList.remove('active'); editBillIndex = -1; editingBillCopy = null; }
 
-    function saveSettings() { settings.businessName = document.getElementById('settingsBusinessName').value; settings.phone = document.getElementById('settingsPhone').value; settings.address = document.getElementById('settingsAddress').value; settings.currency = document.getElementById('settingsCurrency').value||'₹'; const dt = document.getElementById('settingsDefaultCustomerType'); settings.defaultCustomerType = normalizeCustomerType(dt && dt.value); saveAll(); if (!billItems.length) { customerType = settings.defaultCustomerType; } calculateBill(); renderAll(); notify('Settings saved','success'); }
+    function saveSettings() { settings.businessName = document.getElementById('settingsBusinessName').value; settings.phone = document.getElementById('settingsPhone').value; settings.address = document.getElementById('settingsAddress').value; settings.currency = document.getElementById('settingsCurrency').value||'₹'; const dt = document.getElementById('settingsDefaultCustomerType'); settings.defaultCustomerType = normalizeCustomerType(dt && dt.value); saveAll(); if (!billItems.length) { customerType = settings.defaultCustomerType; } calculateBill(); renderAll(); notify('सेटिंग्स सहेज दी गईं','success'); }
     function exportJSON() { let data = {products, settings, billHistory, billCounter}; let blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_backup_${new Date().toISOString().slice(0,10)}.json`; a.click(); notify('JSON exported','success'); }
-    function exportCSV() { if(!billHistory.length) return notify('No bills','error'); let csv = 'Bill No,Date,Customer,Phone,Customer Type,Total,Paid,Due,Items\n'; billHistory.forEach(b=>{ ensureBillPayments(b); csv+=`${b.billNo},${new Date(b.dateTime).toLocaleString()},"${b.customer.name}","${b.customer.phone||''}","${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}",${b.total},${b.paid},${b.due},"${b.items.map(i=>i.product.name).join('; ')}"\n`; }); let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_bills_${new Date().toISOString().slice(0,10)}.csv`; a.click(); notify('CSV exported','success'); }
+    function exportCSV() { if(!billHistory.length) return notify('कोई बिल नहीं','error'); let csv = 'Bill No,Date,Customer,Phone,Customer Type,Total,Paid,Due,Items\n'; billHistory.forEach(b=>{ ensureBillPayments(b); csv+=`${b.billNo},${new Date(b.dateTime).toLocaleString()},"${b.customer.name}","${b.customer.phone||''}","${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}",${b.total},${b.paid},${b.due},"${b.items.map(i=>i.product.name).join('; ')}"\n`; }); let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_bills_${new Date().toISOString().slice(0,10)}.csv`; a.click(); notify('CSV exported','success'); }
     function resetApp() { if(confirm('DELETE ALL DATA? Cannot undo')){ localStorage.clear(); location.reload(); } }
     function updateStatusBar() {
         const el = document.getElementById('statusInfo');
@@ -2027,9 +2069,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             lines.push((i + 1) + '. ' + item.product.name + ' × ' + item.quantity + ' = ' + formatMoney(amt));
         });
         lines.push('');
-        lines.push('Subtotal: ' + formatMoney(subtotal));
+        lines.push('उप-योग: ' + formatMoney(subtotal));
         if (charges) lines.push('Other charges: ' + formatMoney(charges));
-        if (discPct) lines.push('Discount (' + discPct + '%): -' + formatMoney(discount));
+        if (discPct) lines.push('छूट (' + discPct + '%): -' + formatMoney(discount));
         lines.push('*GRAND TOTAL: ' + formatMoney(total) + '*');
         if (billData.due !== undefined && billData.due > 0.009) {
             lines.push('Paid: ' + formatMoney(billData.paid || 0));
@@ -2037,6 +2079,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         } else if (billData.paid !== undefined) {
             lines.push('Paid in full');
         }
+        if (billData.status === 'paid') lines.push('✅ *स्थिति: भुगतान पूरा*');
+        else if (billData.status === 'due') lines.push('⏳ *स्थिति: बकाया* — कृपया जल्द से जल्द भुगतान करें');
         lines.push('');
         lines.push('📦 Items: ' + items.length + '  |  Qty: ' + totalQty);
         lines.push('');
@@ -2416,7 +2460,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             else tbody.innerHTML = bills.slice().reverse().map(b => {
                 const idx = findBillIndexByNo(b.billNo);
                 const st = paymentStatus(b);
-                const badge = st==='paid'?'<span class="badge badge-paid">Paid</span>':(st==='partial'?'<span class="badge badge-partial">Partial</span>':'<span class="badge badge-due">Due</span>');
+                const badge = st==='paid'?'<span class="badge badge-paid">भुगतान किया गया</span>':(st==='partial'?'<span class="badge badge-partial">आंशिक</span>':'<span class="badge badge-due">बकाया</span>');
                 return `<tr><td>#${b.billNo}</td><td>${new Date(b.dateTime).toLocaleString()}</td><td>${escapeHtml(b.customer.name)} ${badge}</td><td>${money(b.total)}</td><td>${money(b.paid)}</td><td>${b.due>0.009?'<span style="color:#b91c1c;font-weight:700;">'+money(b.due)+'</span>':money(0)}</td><td><button class="btn btn-primary" style="padding:4px 8px;min-height:32px;" onclick="switchTab('history'); setTimeout(function(){ editBill(${idx}); }, 50);">Open</button></td></tr>`;
             }).join('');
         }
@@ -2424,8 +2468,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             if (!bills.length) cards.innerHTML = '<div style="padding:12px;text-align:center;color:#64748b;">No bills in this date range</div>';
             else cards.innerHTML = bills.slice().reverse().map(b => {
                 const st = paymentStatus(b);
-                const badge = st==='paid'?'<span class="badge badge-paid">Paid</span>':(st==='partial'?'<span class="badge badge-partial">Partial</span>':'<span class="badge badge-due">Due</span>');
-                return `<div class="history-card"><div class="history-card-top"><div><strong>Bill #${b.billNo}</strong> ${badge}<div class="history-card-meta">${escapeHtml(b.customer.name)} · ${new Date(b.dateTime).toLocaleString()}</div></div><div style="text-align:right;"><div style="font-weight:700;">${money(b.total)}</div><div class="history-card-meta">${b.due>0.009?'<span style="color:#b91c1c;">Due '+money(b.due)+'</span>':'Paid'}</div></div></div></div>`;
+                const badge = st==='paid'?'<span class="badge badge-paid">भुगतान किया गया</span>':(st==='partial'?'<span class="badge badge-partial">आंशिक</span>':'<span class="badge badge-due">बकाया</span>');
+                return `<div class="history-card"><div class="history-card-top"><div><strong>Bill #${b.billNo}</strong> ${badge}<div class="history-card-meta">${escapeHtml(b.customer.name)} · ${new Date(b.dateTime).toLocaleString()}</div></div><div style="text-align:right;"><div style="font-weight:700;">${money(b.total)}</div><div class="history-card-meta">${b.due>0.009?'<span style="color:#b91c1c;">Due '+money(b.due)+'</span>':'भुगतान किया गया'}</div></div></div></div>`;
             }).join('');
         }
     }
@@ -2582,7 +2626,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             else lines.push(d + '  ' + e.note + '  -' + money(e.credit));
         });
         lines.push('');
-        lines.push('Total sales: ' + money(c.sales));
+        lines.push('कुल sales: ' + money(c.sales));
         lines.push('Paid: ' + money(c.paid));
         lines.push('*Balance due: ' + money(c.due) + '*');
         lines.push('');
