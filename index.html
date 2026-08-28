@@ -625,8 +625,124 @@
             body * { visibility: hidden; }
             .nyt-bill, .nyt-bill * { visibility: visible; }
             .nyt-bill { position: absolute; top: 0; left: 0; width: 100%; padding: 0.5in; background: white; }
-            .mobile-nav, .lock-overlay, .notification, .title-bar, .menu-bar { display: none !important; }
+            .mobile-nav, .lock-overlay, .notification, .title-bar, .menu-bar, .ready-bar { display: none !important; }
         }
+
+        /* ============ TOUCH & GO: simplified quick-bill flow ============
+           Tap a product -> the bill builds itself -> tap "Bill Ready" to save.
+           Products are the hero tap area; every tap feels like a tap-to-order. */
+        .billing-main .panel.products-panel { order: 1; }
+        .billing-main .panel.customer-panel { order: 2; }
+        .billing-main .panel.quick-panel { order: 3; }
+
+        .product-tile { min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
+        .product-price { font-size: 17px; }
+
+        /* Floating "Bill Ready" bar — the single-finger path to a finished bill */
+        .ready-bar { display: none; }
+        .ready-bar .ready-total { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
+        .ready-bar .ready-sub { font-size: 11px; color: #cbd5e1; }
+
+        @media (max-width: 767px) {
+            .billing-main { display: flex; flex-direction: column; }
+            /* products show first so the operator can start tapping instantly */
+            .billing-main .panel.products-panel { order: 1; }
+            .billing-main .panel.customer-panel { order: 2; }
+            .billing-main .panel.quick-panel { order: 3; }
+            /* Quick Add duplicates tap-to-add; hide it on phones for a cleaner 1-2-3 flow */
+            .quick-panel { display: none; }
+            .customer-panel .field-hint { display: block; }
+            /* the floating "Bill Ready" bar covers Save / WhatsApp / Clear on phones */
+            .billing-side .btn-group { display: none; }
+
+            .ready-bar.show {
+                display: flex;
+                position: fixed;
+                left: 0; right: 0;
+                bottom: calc(58px + env(safe-area-inset-bottom));
+                z-index: 890;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 10px;
+                background: #0f172a;
+                color: #fff;
+                box-shadow: 0 -6px 20px rgba(0,0,0,0.18);
+            }
+            .ready-bar .ready-info { flex: 1 1 auto; min-width: 0; }
+            .ready-bar .ready-actions { display: flex; gap: 6px; flex: 0 0 auto; }
+            .ready-bar .ready-actions .btn { min-height: 44px; padding: 0 14px; justify-content: center; font-size: 14px; }
+            .ready-bar .ready-actions .btn-ready-save { background: #22c55e; color: #fff; font-weight: 800; }
+            .ready-bar .ready-actions .btn-ready-icon { width: 44px; padding: 0; font-size: 16px; }
+            /* reserve space so the fixed bar never covers content */
+            .content-pane.active#billing { padding-bottom: 124px; }
+
+            /* cart icon inside the ready bar */
+            .ready-bar .ready-cart { width: 44px; height: 44px; border-radius: 14px; background: #fff; color: #0f766e; display: flex; align-items: center; justify-content: center; position: relative; font-size: 22px; flex: 0 0 auto; }
+            .ready-bar .ready-cart .cart-count { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; background: #ef4444; color: #fff; border-radius: 999px; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+        }
+
+        /* ==================== TEAL THEME (slight teal, keep it appetising) ==================== */
+        body { background: linear-gradient(145deg, #ccfbf1 0%, #99f6e4 100%); }
+        .title-bar { background: linear-gradient(90deg, #0f766e, #0d9488); }
+        .title-bar.v5 { color: #fff; }
+        .menu-item.active, .menu-item:hover { background: #ccfbf1; color: #0f766e; }
+        .panel-header { border-left-color: #0d9488; color: #0f766e; }
+        .btn-primary { background: #0d9488; }
+        .btn-primary:hover { background: #0f766e; }
+        .btn-success { background: #0d9488; }
+        .btn-success:hover { background: #0f766e; }
+        .qty-btn { background: #0d9488; }
+        .qty-btn:active { background: #0f766e; }
+        .field-input:focus, .field-select:focus { border-color: #14b8a6; box-shadow: 0 0 0 3px rgba(20,184,166,0.18); outline: none; }
+        .summary-total { background: #0f766e; }
+        .mobile-nav-item.active { color: #0f766e; }
+        .mobile-nav { border-top-color: #ccfbf1; }
+        .status-bar { background: #f0fdfa; }
+        .kpi-card.accent-sales { background: #f0fdfa; border-color: #99f6e4; }
+        .lock-card h2 { color: #0f766e; }
+        .lock-dots span.fill { background: #0d9488; border-color: #0d9488; }
+        .lock-numpad button:active { background: #ccfbf1; }
+        .np-key-ok { background: #0d9488; color: #fff; }
+        /* teal warmth for prices so they still pop */
+        .product-price { color: #b45309; }
+
+        /* ==================== KFC / McDonald's-style menu tiles ==================== */
+        .product-grid { gap: 14px; }
+        .product-tile {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 22px; padding: 14px 12px 12px;
+            display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px;
+            box-shadow: 0 2px 10px rgba(15,118,110,0.06); position: relative; overflow: visible; justify-content: center;
+        }
+        .product-tile:hover { border-color: #14b8a6; transform: translateY(-3px); box-shadow: 0 12px 24px rgba(15,118,110,0.14); }
+        .product-tile:active { transform: scale(0.95); background: #f0fdfa; border-color: #14b8a6; }
+        .product-icon {
+            font-size: 38px; width: 62px; height: 62px; line-height: 62px; border-radius: 18px;
+            background: linear-gradient(145deg, #f0fdfa, #ccfbf1); margin: 0 auto 4px;
+            display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px #99f6e4;
+        }
+        .product-name { font-size: 13.5px; line-height: 1.25; }
+        .product-price { font-size: 17px; margin: 2px 0; }
+        .product-expiry { font-size: 10px; background: #fef9e3; display: inline-block; padding: 2px 8px; border-radius: 30px; }
+        .tile-qty {
+            position: absolute; top: 8px; right: 8px; min-width: 26px; height: 26px; padding: 0 6px;
+            background: #0d9488; color: #fff; border-radius: 999px; font-weight: 800; font-size: 14px;
+            display: none; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(15,118,110,0.3);
+        }
+        .product-tile.has-qty .tile-qty { display: flex; }
+        .tap-pop { color: #0d9488; }
+        .products-panel .panel-header { margin-bottom: 12px; }
+
+        /* category chips (KFC-style menu tabs) */
+        .cat-row { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 14px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .cat-row::-webkit-scrollbar { display: none; }
+        .cat-chip { flex: 0 0 auto; border: 1px solid #e2e8f0; background: #fff; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 13px; color: #334155; cursor: pointer; touch-action: manipulation; font-family: inherit; transition: 0.15s; }
+        .cat-chip.active { background: #0d9488; color: #fff; border-color: #0d9488; }
+
+        /* cart-style bottom order bar */
+        .ready-bar.show { background: #0f766e; }
+        .ready-bar .ready-actions .btn-ready-save { background: #16a34a; }
+        .ready-bar .ready-total { color: #fff; }
+        .ready-bar .ready-sub { color: #ccfbf1; }
     </style>
 </head>
 <body>
@@ -648,7 +764,7 @@
     </div>
 </div>
 <div class="app-window">
-    <div class="title-bar"><span class="title-full">🥙 KHAKRA BILLING — NO GST, CLEAN BILLS</span><span class="title-short">🥙 KHAKRA BILLING</span><span>v4 · WhatsApp <button class="btn btn-warning" onclick="lockApp()" style="padding:3px 14px; margin-left:10px;">🔒 Lock</button></span></div>
+    <div class="title-bar v5"><span class="title-full">🥙 KHAKRA BILLING — NO GST, CLEAN BILLS</span><span class="title-short">🥙 KHAKRA BILLING</span><span>v5 · Touch & Go <button class="btn btn-warning" onclick="lockApp()" style="padding:3px 14px; margin-left:10px;">🔒 Lock</button></span></div>
     <div class="menu-bar">
         <div class="menu-item active" data-tab="billing" onclick="switchTab('billing')">📝 New Bill</div>
         <div class="menu-item" data-tab="products" onclick="switchTab('products')">📦 Products</div>
@@ -661,9 +777,9 @@
         <div id="billing" class="content-pane active">
             <div class="billing-layout">
             <div class="billing-main">
-            <div class="panel"><div class="panel-header">🧾 Customer</div><div class="form-row"><div class="form-field"><label class="field-label">Name *</label><input id="customerName" class="field-input" autocomplete="name" placeholder="Customer name"></div><div class="form-field"><label class="field-label">Mobile Number <span class="optional-tag">optional</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="tel" aria-label="Customer mobile number (optional)"></div><div class="field-hint">Optional. Enter to send this bill on WhatsApp in one tap.</div></div><div class="form-field"><label class="field-label">Date & Time</label><input type="datetime-local" id="billDateTime" class="field-input"></div></div></div>
-            <div class="panel"><div class="panel-header">⚡ Quick Add</div><div class="form-row"><div class="form-field"><label>Product</label><select id="quickProduct" class="field-select"></select></div><div class="form-field"><label>Qty</label><input id="quickQty" class="field-input" type="number" value="1" min="1"></div><div><button class="btn btn-primary" onclick="quickAddProduct()" style="margin-top:24px;">+ Add</button></div></div></div>
-            <div class="panel"><div class="panel-header">🍪 Products Gallery</div><div id="productGrid" class="product-grid"></div></div>
+            <div class="panel customer-panel"><div class="panel-header">🏷️ Customer <span class="optional-tag">optional</span></div><div class="form-row"><div class="form-field"><label class="field-label">Name <span class="optional-tag">walk-in ok</span></label><input id="customerName" class="field-input" autocomplete="name" placeholder="Customer name (optional)"></div><div class="form-field"><label class="field-label">Mobile Number <span class="optional-tag">optional</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile" autocomplete="tel" aria-label="Customer mobile number (optional)"></div><div class="field-hint">Optional. Enter to send this bill on WhatsApp in one tap.</div></div><div class="form-field"><label class="field-label">Date & Time</label><input type="datetime-local" id="billDateTime" class="field-input"></div></div><div class="field-hint" style="margin-top:10px;color:#0f766e;">👆 Leave name blank for walk-in guests — tap products, then hit <strong>Bill Ready</strong>.</div></div>
+            <div class="panel quick-panel"><div class="panel-header">⚡ Quick Add</div><div class="form-row"><div class="form-field"><label>Product</label><select id="quickProduct" class="field-select"></select></div><div class="form-field"><label>Qty</label><input id="quickQty" class="field-input" type="number" value="1" min="1"></div><div><button class="btn btn-primary" onclick="quickAddProduct()" style="margin-top:24px;">+ Add</button></div></div></div>
+            <div class="panel products-panel"><div class="panel-header">🍪 Menu — Tap to add</div><div id="catRow" class="cat-row"></div><div id="productGrid" class="product-grid"></div></div>
             </div>
             <div class="billing-side">
             <div class="panel"><div class="panel-header">🛒 Current Bill</div><div id="billList" class="bill-list"></div></div>
@@ -756,6 +872,22 @@
     <button type="button" class="mobile-nav-item" data-tab="reports" onclick="switchTab('reports')"><span class="ico">📒</span><span>Ledger</span></button>
     <button type="button" class="mobile-nav-item" data-tab="settings" onclick="switchTab('settings')"><span class="ico">⚙️</span><span>More</span></button>
 </nav>
+
+<!-- Floating cart/order bar — tap a product, the order builds itself, then hit Checkout. -->
+<div id="billReadyBar" class="ready-bar">
+    <button type="button" class="ready-cart" onclick="scrollToBill()" title="View current order" aria-label="View current order">
+        🛒<span class="cart-count" id="readyCartCount">0</span>
+    </button>
+    <div class="ready-info">
+        <div class="ready-total" id="readyTotal">₹0.00</div>
+        <div class="ready-sub" id="readyCount"></div>
+    </div>
+    <div class="ready-actions">
+        <button type="button" class="btn btn-ready-icon" onclick="sendCurrentBillWhatsApp()" title="Send on WhatsApp" aria-label="Send on WhatsApp">📱</button>
+        <button type="button" class="btn btn-success btn-ready-save" onclick="saveBill()">✔ Checkout</button>
+        <button type="button" class="btn btn-danger btn-ready-icon" onclick="clearBill()" title="Clear bill" aria-label="Clear bill">🗑</button>
+    </div>
+</div>
 
 <!-- WhatsApp number (optional) modal -->
 <div id="waPhoneModal" class="modal-overlay"><div class="modal-window" style="max-width:440px;"><div class="modal-title-bar"><span>📱 Send bill on WhatsApp</span><span class="modal-close" onclick="closeWaPhoneModal()">×</span></div><div class="modal-content"><p style="font-size:14px;color:#475569;margin-bottom:14px;line-height:1.45;">Mobile number is <strong>optional</strong>. Enter a 10-digit number to send directly, or leave it blank and pick a WhatsApp contact.</p><div class="form-field"><label class="field-label">Customer mobile</label><div class="phone-input-wrap" id="waPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="waPhoneInput" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile (optional)"></div></div><div class="btn-group" style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-whatsapp" onclick="confirmSendWhatsApp()">📱 Send on WhatsApp</button><button class="btn btn-secondary" onclick="closeWaPhoneModal()">Cancel</button></div></div></div></div>
@@ -1339,10 +1471,71 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         if (pane) pane.classList.add('active');
         if (tabName === 'reports') renderReports();
         if (tabName === 'history') loadHistory();
+        if (typeof updateReadyBar === 'function') updateReadyBar();
         try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
     }
 
-    function renderProductGrid() { let grid = document.getElementById('productGrid'); if(!products.length){ grid.innerHTML='<div>No products</div>'; return; } grid.innerHTML = products.map((p,i)=>`<div class="product-tile" onclick="tapAddProduct(${i})"><div class="product-name">${escapeHtml(p.name)}</div><div class="product-price">${settings.currency}${p.price.toFixed(2)}/${p.unit}</div>${p.expiry?`<div class="product-expiry">📅 ${p.expiry}</div>`:''}</div>`).join(''); }
+    // ---- KFC / McDonald's style: emoji menu tiles, category chips, qty badges ----
+    let activeCat = 'All';
+    function productEmoji(p) {
+        const s = ((p && p.name) || '') + ' ' + ((p && p.description) || '');
+        const t = s.toLowerCase();
+        if (t.includes('khakra')) return '🥙';
+        if (t.includes('methi')) return '🌿';
+        if (t.includes('masala')) return '🌶️';
+        if (t.includes('plain')) return '🫓';
+        if (t.includes('chai') || t.includes('tea')) return '☕';
+        if (t.includes('coffee')) return '☕';
+        if (t.includes('samosa')) return '🥟';
+        if (t.includes('pakoda')) return '🍤';
+        if (t.includes('biscuit') || t.includes('cookie')) return '🍪';
+        if (t.includes('juice')) return '🧃';
+        if (t.includes('lassi')) return '🥛';
+        if (t.includes('paneer')) return '🧀';
+        if (t.includes('chocolate')) return '🍫';
+        return '🥯';
+    }
+    function categoryOf(p) {
+        const s = ((p && p.name) || '') + ' ' + ((p && p.description) || '');
+        const t = s.toLowerCase();
+        if (t.includes('khakra')) return 'Khakra';
+        if (t.includes('chai') || t.includes('tea') || t.includes('coffee')) return 'Drinks';
+        if (t.includes('samosa') || t.includes('pakoda') || t.includes('biscuit') || t.includes('snack')) return 'Snacks';
+        return 'Other';
+    }
+    function categoryList() {
+        const set = new Set();
+        products.forEach(p => set.add(categoryOf(p)));
+        return ['All', ...Array.from(set)];
+    }
+    function renderCategoryChips() {
+        const wrap = document.getElementById('catRow');
+        if (!wrap) return;
+        const cats = categoryList();
+        wrap.innerHTML = cats.map(c => `<button type="button" class="cat-chip${c === activeCat ? ' active' : ''}" onclick="setActiveCat('${c}')">${c}</button>`).join('');
+    }
+    function setActiveCat(c) { activeCat = c; renderProductGrid(); }
+
+    function renderProductGrid() {
+        let grid = document.getElementById('productGrid');
+        if (!grid) return;
+        if (!products.length) { grid.innerHTML = '<div>No products</div>'; return; }
+        renderCategoryChips();
+        const items = products.map((p, i) => ({ p, i })).filter(x => activeCat === 'All' || categoryOf(x.p) === activeCat);
+        grid.innerHTML = items.map(({ p, i }) => `<div class="product-tile" data-idx="${i}" onclick="tapAddProduct(${i})"><div class="product-icon">${productEmoji(p)}</div><div class="product-name">${escapeHtml(p.name)}</div><div class="product-price">${settings.currency}${p.price.toFixed(2)}<span style="font-size:11px;color:#64748b;">/${p.unit}</span></div>${p.expiry ? `<div class="product-expiry">📅 ${p.expiry}</div>` : ''}<span class="tile-qty" id="tileQty${i}"></span></div>`).join('');
+        updateTileCounts();
+    }
+    // Show how many of each product is already in the order (on the tile).
+    function updateTileCounts() {
+        products.forEach((p, i) => {
+            const inBill = billItems.find(it => it.productIndex === i);
+            const qty = inBill ? inBill.quantity : 0;
+            const badge = document.getElementById('tileQty' + i);
+            if (badge) badge.textContent = qty;
+            const tile = document.querySelector('#productGrid .product-tile[data-idx="' + i + '"]');
+            if (tile) tile.classList.toggle('has-qty', qty > 0);
+        });
+    }
 
     // Fast tap-to-add (KFC/McDonald's style).
     // EVERY tap adds 1 to the bill, so a single tap adds one and rapid taps
@@ -1352,7 +1545,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function tapAddProduct(i) {
         addProductToBill(i);
         // little "+1" pop on the tapped tile for feedback
-        let tile = document.querySelectorAll('#productGrid .product-tile')[i];
+        let tile = document.querySelector('#productGrid .product-tile[data-idx="' + i + '"]');
         if (tile) {
             let pop = document.createElement('span');
             pop.className = 'tap-pop';
@@ -1360,6 +1553,12 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             tile.appendChild(pop);
             setTimeout(() => pop.remove(), 700);
         }
+    }
+    function scrollToBill() {
+        const el = document.getElementById('billList');
+        if (!el) return;
+        try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        catch (e) { try { el.scrollIntoView(); } catch (e2) { try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e3) { window.scrollTo(0, 0); } } }
     }
     function renderProductTable() { let tbody = document.getElementById('productTableBody'); if(!products.length){ tbody.innerHTML='<tr><td colspan="5">No products</td></tr>'; return; } tbody.innerHTML = products.map((p,i)=>`<tr><td><strong>${escapeHtml(p.name)}</strong><br><small>${escapeHtml(p.description||'')}</small></td><td>${settings.currency}${p.price.toFixed(2)}</td><td>${p.unit}</td><td>${p.expiry||'—'}</td><td><button class="btn btn-primary" style="padding:4px 12px;" onclick="editProduct(${i})">Edit</button> <button class="btn btn-danger" style="padding:4px 12px;" onclick="deleteProduct(${i})">Del</button></td></tr>`).join(''); }
     function updateQuickSelect() { let sel = document.getElementById('quickProduct'); sel.innerHTML = '<option value="">-- Select --</option>'+products.map((p,i)=>`<option value="${i}">${p.name} (${settings.currency}${p.price})</option>`).join(''); }
@@ -1374,7 +1573,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 
     function addProductToBill(i) { let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity++; else billItems.push({ productIndex: i, product: {...products[i], expiry: products[i].expiry}, quantity: 1 }); renderBillList(); calculateBill(); }
     function quickAddProduct() { let idx = document.getElementById('quickProduct').value; if(idx==='') return notify('Select product','error'); let i = parseInt(idx); let qty = parseInt(document.getElementById('quickQty').value); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity+=qty; else billItems.push({ productIndex: i, product: {...products[i], expiry: products[i].expiry}, quantity: qty }); renderBillList(); calculateBill(); document.getElementById('quickQty').value=1; notify('Added','success'); }
-    function renderBillList() { let list = document.getElementById('billList'); if(!billItems.length){ list.innerHTML='<div style="padding:20px; text-align:center;">No items</div>'; return; } list.innerHTML = billItems.map((item,i)=>`<div class="bill-item"><div><strong>${item.product.name}</strong><br>${settings.currency}${item.product.price} ${item.product.unit}${item.product.expiry?`<br><span style="font-size:11px;">📅 Exp: ${item.product.expiry}</span>`:''}</div><div class="qty-controls"><button class="qty-btn" onclick="updateQty(${i},-1)">−</button><span style="min-width:40px;text-align:center;">${item.quantity}</span><button class="qty-btn" onclick="updateQty(${i},1)">+</button></div><div>${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</div><button class="remove-item-btn" onclick="removeItem(${i})">×</button></div>`).join(''); }
+    function renderBillList() { let list = document.getElementById('billList'); if(!billItems.length){ list.innerHTML='<div style="padding:20px; text-align:center;">🛒 Tap items to add</div>'; if (typeof updateReadyBar === 'function') updateReadyBar(0); if (typeof updateTileCounts === 'function') updateTileCounts(); return; } list.innerHTML = billItems.map((item,i)=>`<div class="bill-item"><div><strong>${item.product.name}</strong><br>${settings.currency}${item.product.price} ${item.product.unit}${item.product.expiry?`<br><span style="font-size:11px;">📅 Exp: ${item.product.expiry}</span>`:''}</div><div class="qty-controls"><button class="qty-btn" onclick="updateQty(${i},-1)">−</button><span style="min-width:40px;text-align:center;">${item.quantity}</span><button class="qty-btn" onclick="updateQty(${i},1)">+</button></div><div>${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</div><button class="remove-item-btn" onclick="removeItem(${i})">×</button></div>`).join(''); if (typeof updateReadyBar === 'function') updateReadyBar(); if (typeof updateTileCounts === 'function') updateTileCounts(); }
     function updateQty(i,delta) { let newQty = billItems[i].quantity+delta; if(newQty>=1) billItems[i].quantity = newQty; renderBillList(); calculateBill(); }
     function removeItem(i) { billItems.splice(i,1); renderBillList(); calculateBill(); }
     function calculateBill() {
@@ -1386,11 +1585,37 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         let totalQty = billItems.reduce((s,i)=>s+i.quantity,0);
         document.getElementById('summaryBox').innerHTML = `<div class="summary-row"><span>Subtotal</span><span>${settings.currency}${subtotal.toFixed(2)}</span></div><div class="summary-row"><span>Other Charges</span><span>${settings.currency}${charges.toFixed(2)}</span></div><div class="summary-row"><span>Discount (${discPct}%)</span><span>-${settings.currency}${discount.toFixed(2)}</span></div><div class="quantity-info" style="background:#fef9e6; padding:10px; border-radius:20px; margin:10px 0;">📦 Items: ${billItems.length} | Total Qty: ${totalQty}</div><div class="summary-row summary-total"><span>GRAND TOTAL</span><span>${settings.currency}${total.toFixed(2)}</span></div>`;
         syncAmountReceived(total);
+        updateReadyBar(total);
         return {subtotal,charges,discPct,discount,total,totalQty};
+    }
+    // Show/hide the floating "Bill Ready" bar and keep its total in sync.
+    function updateReadyBar(total) {
+        const bar = document.getElementById('billReadyBar');
+        if (!bar) return;
+        const billingActive = document.getElementById('billing') && document.getElementById('billing').classList.contains('active');
+        const show = billingActive && billItems.length > 0;
+        bar.classList.toggle('show', show);
+        if (show) {
+            const val = (typeof total === 'number' && !isNaN(total)) ? total : (typeof calculateBillBare === 'function' ? calculateBillBare() : 0);
+            const totalEl = document.getElementById('readyTotal');
+            const countEl = document.getElementById('readyCount');
+            const cartEl = document.getElementById('readyCartCount');
+            if (totalEl) totalEl.textContent = (settings.currency || '₹') + (Number(val) || 0).toFixed(2);
+            if (countEl) {
+                const qty = billItems.reduce((s, i) => s + i.quantity, 0);
+                countEl.textContent = billItems.length + (billItems.length === 1 ? ' item' : ' items') + ' · ' + qty + ' pcs · ' + (document.getElementById('customerName').value.trim() || 'Walk-in Guest');
+            }
+            if (cartEl) {
+                const totalPcs = billItems.reduce((s, i) => s + i.quantity, 0);
+                cartEl.textContent = totalPcs;
+            }
+        } else {
+            if (bar.querySelector('.cart-count')) bar.querySelector('.cart-count').textContent = 0;
+        }
     }
     
     function clearBill(skipConfirm) { if(!skipConfirm && billItems.length && !confirm('Clear all?')) return; billItems = []; document.getElementById('customerName').value=''; document.getElementById('customerPhone').value=''; const wrap = document.getElementById('customerPhoneWrap'); if (wrap) { wrap.classList.remove('valid','invalid'); } document.getElementById('otherCharges').value='0'; document.getElementById('discountPercent').value='0'; setPayMode('full'); setDateTime(); renderBillList(); calculateBill(); }
-    function saveBill() { let name = document.getElementById('customerName').value.trim(); if(!name) return notify('Customer name required','error'); if(!billItems.length) return notify('Add items','error'); const rawPhone = document.getElementById('customerPhone').value.trim(); const phone = normalizeIndianMobile(rawPhone); if (rawPhone && !isValidIndianMobile(phone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let {subtotal,charges,discPct,discount,total,totalQty} = calculateBill(); let received = parseFloat(document.getElementById('amountReceived').value); if (isNaN(received)) received = total; received = Math.max(0, Math.min(received, total)); received = Math.round(received*100)/100; let due = Math.round((total-received)*100)/100; let bill = { billNo: billCounter, dateTime: document.getElementById('billDateTime').value||new Date().toISOString(), customer: { name, phone }, items: billItems.map(i=>({ product: {...i.product}, quantity: i.quantity })), subtotal, charges, discount, discPct, total, totalQty, paid: received, due, payments: received>0 ? [{ date: document.getElementById('billDateTime').value||new Date().toISOString(), amount: received, note: 'At billing' }] : [] }; billHistory.push(bill); billCounter++; lastSavedBill = bill; saveAll(); updateStatusBar(); notify('Bill saved!','success'); openAfterSaveModal(bill); }
+    function saveBill() { let name = document.getElementById('customerName').value.trim() || 'Walk-in Guest'; if(!billItems.length) return notify('Add items','error'); const rawPhone = document.getElementById('customerPhone').value.trim(); const phone = normalizeIndianMobile(rawPhone); if (rawPhone && !isValidIndianMobile(phone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let {subtotal,charges,discPct,discount,total,totalQty} = calculateBill(); let received = parseFloat(document.getElementById('amountReceived').value); if (isNaN(received)) received = total; received = Math.max(0, Math.min(received, total)); received = Math.round(received*100)/100; let due = Math.round((total-received)*100)/100; let bill = { billNo: billCounter, dateTime: document.getElementById('billDateTime').value||new Date().toISOString(), customer: { name, phone }, items: billItems.map(i=>({ product: {...i.product}, quantity: i.quantity })), subtotal, charges, discount, discPct, total, totalQty, paid: received, due, payments: received>0 ? [{ date: document.getElementById('billDateTime').value||new Date().toISOString(), amount: received, note: 'At billing' }] : [] }; billHistory.push(bill); billCounter++; lastSavedBill = bill; saveAll(); updateStatusBar(); notify('Bill saved!','success'); openAfterSaveModal(bill); }
 
     // NEW YORK TIMES STYLE – NO GST, CLEAN, EXPIRY IN ITEMS
     function generateNYTBillHTML(billData, items, isSaved=false) {
@@ -1505,7 +1730,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     }
 
     function currentBillData() {
-        return { customerName: document.getElementById('customerName').value.trim(), customerPhone: document.getElementById('customerPhone').value, dateTime: document.getElementById('billDateTime').value, billNo: billCounter };
+        return { customerName: document.getElementById('customerName').value.trim() || 'Walk-in Guest', customerPhone: document.getElementById('customerPhone').value, dateTime: document.getElementById('billDateTime').value, billNo: billCounter };
     }
 
     // Save (download) a bill as a PDF file.
