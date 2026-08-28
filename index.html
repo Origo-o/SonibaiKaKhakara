@@ -35,15 +35,34 @@
 
         /* Title bar – neutral */
         .title-bar {
-            background: #1a2c3e;
-            padding: 12px 24px;
+            background: linear-gradient(135deg, #0f766e 0%, #134e4a 100%);
+            padding: 14px 20px;
             color: white;
             font-family: 'Inter', system-ui;
-            font-weight: 500;
-            letter-spacing: 0.3px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
+        .brand { display: flex; flex-direction: column; gap: 2px; }
+        .brand-name {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.4px;
+            font-family: 'Poppins', 'Inter', system-ui;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .brand-tagline {
+            font-size: 12.5px;
+            opacity: 0.92;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            font-style: italic;
+        }
+        .brand-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
         .menu-bar {
             background: #f9fafb;
@@ -820,7 +839,16 @@
     </div>
 </div>
 <div class="app-window">
-    <div class="title-bar v5"><span class="title-full" id="appTitleFull">🥙 खखरा बिलिंग — जीएसटी नहीं, साफ़ बिल</span><span class="title-short" id="appTitleShort">🥙 खखरा बिलिंग</span><span style="display:flex;align-items:center;gap:8px;"><button class="btn" id="langToggleBtn" onclick="toggleLanguage()" style="background:#ffffff;color:#0f766e;padding:4px 12px;font-weight:800;border:2px solid #ffffff;">🌐 EN</button><span>v5 · टच और गो <button class="btn btn-warning" onclick="lockApp()" style="padding:3px 14px; margin-left:6px;">🔒 लॉक</button></span></span></div>
+    <div class="title-bar v5">
+            <div class="brand">
+                <div class="brand-name" id="brandName">🥙 Sonibaai Ka Khakra</div>
+                <div class="brand-tagline" id="brandTagline">कुरकुरा स्वाद, खुश दिल — हर बाइट में खुशी, सेहत भरा एहसास</div>
+            </div>
+            <div class="brand-actions">
+                <button class="btn" id="langToggleBtn" onclick="toggleLanguage()" style="background:#ffffff;color:#0f766e;padding:6px 14px;font-weight:800;border:2px solid #ffffff;border-radius:999px;">🌐 EN</button>
+                <button class="btn btn-warning" onclick="lockApp()" style="padding:6px 14px;border-radius:999px;">🔒 लॉक</button>
+            </div>
+        </div>
     <div class="menu-bar">
         <div class="menu-item active" data-tab="billing" onclick="startNewBill()">📝 नया बिल</div>
         <div class="menu-item" data-tab="products" onclick="switchTab('products')">📦 उत्पाद</div>
@@ -1498,8 +1526,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     // ================= LANGUAGE TOGGLE – Hindi / English =================
     const TRANSLATIONS = {
         hi: {
-            appTitleFull: '🥙 खखरा बिलिंग — जीएसटी नहीं, साफ़ बिल',
-            appTitleShort: '🥙 खखरा बिलिंग',
+            appTitleFull: '🥙 Sonibaai Ka Khakra',
+            appTitleShort: '🥙 Sonibaai Ka Khakra',
+            brandName: '🥙 Sonibaai Ka Khakra',
+            brandTagline: 'कुरकुरा स्वाद, खुश दिल — हर बाइट में खुशी, सेहत भरा एहसास',
             newBill: '📝 नया बिल',
             products: '📦 उत्पाद',
             history: '📜 इतिहास',
@@ -1625,8 +1655,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             hi: 'हिंदी'
         },
         en: {
-            appTitleFull: '🥙 Khakra Billing — No GST, Clean Bills',
-            appTitleShort: '🥙 Khakra Billing',
+            appTitleFull: '🥙 Sonibaai Ka Khakra',
+            appTitleShort: '🥙 Sonibaai Ka Khakra',
+            brandName: '🥙 Sonibaai Ka Khakra',
+            brandTagline: 'Crunchy Goodness, Happy Hearts — Feel-Good Bites, Anytime',
             newBill: '📝 New Bill',
             products: '📦 Products',
             history: '📜 History',
@@ -1773,7 +1805,12 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const btn = document.getElementById('langToggleBtn');
         if (btn) btn.textContent = lang === 'en' ? '🌐 हिंदी' : '🌐 EN';
 
-        // Title
+        // Brand – only Sonibaai Ka Khakra name + feel-good tagline
+        const brandName = document.getElementById('brandName');
+        const brandTag = document.getElementById('brandTagline');
+        if (brandName) brandName.textContent = t('brandName');
+        if (brandTag) brandTag.textContent = t('brandTagline');
+        // Legacy IDs (if still present)
         const full = document.getElementById('appTitleFull');
         const short = document.getElementById('appTitleShort');
         if (full) full.textContent = t('appTitleFull');
