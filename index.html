@@ -631,9 +631,10 @@
         /* ============ TOUCH & GO: simplified quick-bill flow ============
            Tap a product -> the bill builds itself -> tap "Bill Ready" to save.
            Products are the hero tap area; every tap feels like a tap-to-order. */
-        .billing-main .panel.products-panel { order: 1; }
-        .billing-main .panel.customer-panel { order: 2; }
-        .billing-main .panel.quick-panel { order: 3; }
+        .billing-main .panel.step-panel { order: 1; }
+        .billing-main .panel.products-panel { order: 2; }
+        .billing-main .panel.customer-panel { order: 3; }
+        .billing-main .panel.quick-panel { order: 4; }
 
         .product-tile { min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
         .product-price { font-size: 17px; }
@@ -645,10 +646,11 @@
 
         @media (max-width: 767px) {
             .billing-main { display: flex; flex-direction: column; }
-            /* products show first so the operator can start tapping instantly */
-            .billing-main .panel.products-panel { order: 1; }
-            .billing-main .panel.customer-panel { order: 2; }
-            .billing-main .panel.quick-panel { order: 3; }
+            /* Step 1 first, then products – easy as 123 */
+            .billing-main .panel.step-panel { order: 1; }
+            .billing-main .panel.products-panel { order: 2; }
+            .billing-main .panel.customer-panel { order: 3; }
+            .billing-main .panel.quick-panel { order: 4; }
             /* Quick Add duplicates tap-to-add; hide it on phones for a cleaner 1-2-3 flow */
             .quick-panel { display: none; }
             .customer-panel .field-hint { display: block; }
@@ -744,24 +746,34 @@
         .ready-bar .ready-total { color: #fff; }
         .ready-bar .ready-sub { color: #ccfbf1; }
 
-        /* Dual rates: walk-in vs retail trader */
-        .ctype-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 4px 0 12px; }
+        /* Dual rates: walk-in vs retail trader – EASY AS 123 */
+        .step-indicator { display: flex; gap: 8px; margin: 0 0 14px; flex-wrap: wrap; }
+        .step-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-weight: 800; font-size: 12px; letter-spacing: 0.3px; }
+        .step-pill.s1 { background: #0f766e; color: #fff; }
+        .step-pill.s2 { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .step-pill.s3 { background: #dcfce7; color: #065f46; border: 1px solid #bbf7d0; }
+        .step-panel { background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 60%); border: 2px solid #14b8a6; }
+        .ctype-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0 6px; }
         .ctype-chip {
-            flex: 1 1 160px;
-            border: 1px solid #d1d5db;
+            flex: 1 1 180px;
+            border: 2px solid #d1d5db;
             background: #fff;
-            border-radius: 16px;
-            padding: 12px 14px;
+            border-radius: 20px;
+            padding: 16px 16px;
             cursor: pointer;
             font-family: inherit;
             text-align: left;
             touch-action: manipulation;
-            transition: 0.15s;
+            transition: 0.18s;
+            position: relative;
         }
-        .ctype-chip:hover { border-color: #14b8a6; }
-        .ctype-chip.active { background: #0f766e; color: #fff; border-color: #0f766e; box-shadow: 0 8px 18px rgba(15,118,110,0.22); }
-        .ctype-chip .ctype-title { font-weight: 800; font-size: 14px; display: block; }
-        .ctype-chip .ctype-sub { font-size: 11px; opacity: 0.88; margin-top: 3px; display: block; line-height: 1.35; }
+        .ctype-chip:hover { border-color: #14b8a6; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(20,184,166,0.12); }
+        .ctype-chip.active { background: #0f766e; color: #fff; border-color: #0f766e; box-shadow: 0 10px 22px rgba(15,118,110,0.28); transform: scale(1.02); }
+        .ctype-chip.active.trader-active { background: linear-gradient(135deg, #b45309, #d97706); border-color: #b45309; box-shadow: 0 10px 22px rgba(180,83,9,0.28); }
+        .ctype-chip .ctype-title { font-weight: 900; font-size: 16px; display: block; letter-spacing: -0.2px; }
+        .ctype-chip .ctype-sub { font-size: 12px; opacity: 0.9; margin-top: 4px; display: block; line-height: 1.35; }
+        .ctype-chip .ctype-rate { font-size: 13px; font-weight: 800; margin-top: 8px; display: inline-block; padding: 4px 10px; border-radius: 999px; background: #f1f5f9; color: #0f172a; }
+        .ctype-chip.active .ctype-rate { background: rgba(255,255,255,0.22); color: #fff; }
         .product-price-alt { font-size: 11px; color: #64748b; font-weight: 600; }
         .product-tile .product-price-alt { margin-top: -1px; }
         .rate-badge {
@@ -771,6 +783,22 @@
         .rate-badge.trader { background: #fff7ed; color: #b45309; }
         .price-pair { display: flex; gap: 4px; flex-direction: column; }
         .price-pair .muted { font-size: 11px; color: #64748b; }
+
+        /* Bulk global rates – ONE BUTTON X for all, Y for all */
+        .bulk-rate-panel { background: linear-gradient(135deg, #fffbeb 0%, #ffffff 70%); border: 2px dashed #f59e0b; }
+        .bulk-rate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 700px) { .bulk-rate-grid { grid-template-columns: 1fr; } }
+        .bulk-rate-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 18px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .bulk-rate-card.walkin { border-left: 5px solid #0d9488; }
+        .bulk-rate-card.trader { border-left: 5px solid #b45309; }
+        .bulk-rate-card .bulk-title { font-weight: 900; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .bulk-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        .btn-xl { padding: 14px 20px; font-size: 15px; border-radius: 14px; font-weight: 800; min-height: 50px; flex: 1 1 180px; justify-content: center; }
+        .btn-teal { background: #0d9488; color: #fff; }
+        .btn-teal:hover { background: #0f766e; }
+        .btn-orange { background: #b45309; color: #fff; }
+        .btn-orange:hover { background: #92400e; }
+        .bulk-hint { font-size: 12px; color: #64748b; margin-top: 8px; line-height: 1.4; }
         </style>
 </head>
 <body>
@@ -805,7 +833,8 @@
         <div id="billing" class="content-pane active">
             <div class="billing-layout">
             <div class="billing-main">
-            <div class="panel customer-panel"><div class="panel-header">🏷️ ग्राहक <span class="optional-tag">वैकल्पिक</span></div><div class="form-row"><div class="form-field"><label class="field-label">नाम <span class="optional-tag">वॉक-इन ठीक है</span></label><input id="customerName" class="field-input" autocomplete="name" placeholder="ग्राहक का नाम (वैकल्पिक)"></div><div class="form-field"><label class="field-label">मोबाइल नंबर <span class="optional-tag">वैकल्पिक</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल" autocomplete="tel" aria-label="Customer mobile number (optional)"></div><div class="field-hint">वैकल्पिक। इस बिल को एक टैप में व्हाट्सएप पर भेजने के लिए दर्ज करें।</div></div><div class="form-field"><label class="field-label">दिनांक और समय</label><input type="datetime-local" id="billDateTime" class="field-input"></div></div><div class="field-label" style="margin-top:6px;">ग्राहक प्रकार <span class="optional-tag">दर निर्धारित करता है</span></div><div class="ctype-row" id="customerTypeRow"><button type="button" class="ctype-chip active" id="ctypeWalkin" onclick="setCustomerType('walkin')"><span class="ctype-title">🚶 वॉक-इन ग्राहक</span><span class="ctype-sub">उत्पादों से वॉक-इन दरें</span></button><button type="button" class="ctype-chip" id="ctypeTrader" onclick="setCustomerType('trader')"><span class="ctype-title">🏪 खुदरा व्यापारी</span><span class="ctype-sub">खुदरा-व्यापारी / थोक दरें</span></button></div><div class="field-hint" style="margin-top:2px;color:#0f766e;">जैसे ही आप वॉक-इन या खुदरा व्यापारी चुनते हैं, दरें बदल जाती हैं। वॉक-इन मेहमानों के लिए नाम खाली छोड़ें — उत्पाद टैप करें, फिर <strong>बिल तैयार</strong> पर क्लिक करें।</div></div>
+            <div class="panel step-panel"><div class="panel-header">⚡ Easy as 1-2-3 — पहले ग्राहक प्रकार चुनें</div><div class="step-indicator"><span class="step-pill s1">1️⃣ ग्राहक प्रकार चुनें</span><span class="step-pill s2">2️⃣ उत्पाद टैप करें</span><span class="step-pill s3">3️⃣ Checkout</span></div><div class="field-label" style="margin:8px 0 8px;font-size:13px;color:#0f766e;font-weight:800;">STEP 1 — वॉक-इन (Rate X) या खुदरा व्यापारी (Rate Y) चुनें — दरें तुरंत बदलेंगी</div><div class="ctype-row" id="customerTypeRow"><button type="button" class="ctype-chip active" id="ctypeWalkin" onclick="setCustomerType('walkin')"><span class="ctype-title">🚶 वॉक-इन ग्राहक — Rate X</span><span class="ctype-sub">काउंटर / मेहमान — सभी उत्पादों पर वॉक-इन दर</span><span class="ctype-rate" id="ctypeWalkinRate">₹0 Walk-in</span></button><button type="button" class="ctype-chip" id="ctypeTrader" onclick="setCustomerType('trader')"><span class="ctype-title">🏪 खुदरा व्यापारी — Rate Y</span><span class="ctype-sub">दुकान / थोक — सभी उत्पादों पर व्यापारी दर</span><span class="ctype-rate" id="ctypeTraderRate">₹0 Trader</span></button></div><div class="field-hint" style="margin-top:8px;color:#0f766e;font-weight:600;">👉 Walk-in या Retail Trader चुनें → STEP 2 में उत्पाद टैप करें। बिल में दरें उसी हिसाब से बदलेंगी।</div></div>
+            <div class="panel customer-panel"><div class="panel-header">🏷️ ग्राहक <span class="optional-tag">वैकल्पिक</span></div><div class="form-row"><div class="form-field"><label class="field-label">नाम <span class="optional-tag">वॉक-इन ठीक है</span></label><input id="customerName" class="field-input" autocomplete="name" placeholder="ग्राहक का नाम (वैकल्पिक)"></div><div class="form-field"><label class="field-label">मोबाइल नंबर <span class="optional-tag">वैकल्पिक</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल" autocomplete="tel" aria-label="Customer mobile number (optional)"></div><div class="field-hint">वैकल्पिक। इस बिल को एक टैप में व्हाट्सएप पर भेजने के लिए दर्ज करें।</div></div><div class="form-field"><label class="field-label">दिनांक और समय</label><input type="datetime-local" id="billDateTime" class="field-input"></div></div></div></div>
             <div class="panel quick-panel"><div class="panel-header">⚡ Quick Add</div><div class="form-row"><div class="form-field"><label>Product</label><select id="quickProduct" class="field-select"></select></div><div class="form-field"><label>Qty</label><input id="quickQty" class="field-input" type="number" value="1" min="1"></div><div><button class="btn btn-primary" onclick="quickAddProduct()" style="margin-top:24px;">+ जोड़ें</button></div></div></div>
             <div class="panel products-panel"><div class="panel-header">🍪 मेनू — जोड़ने के लिए टैप करें <span id="menuRateLabel" class="rate-badge">वॉक-इन दर</span></div><div id="catRow" class="cat-row"></div><div id="productGrid" class="product-grid"></div></div>
             </div>
@@ -830,8 +859,30 @@
         </div>
         <!-- Products Tab -->
         <div id="products" class="content-pane">
-            <div class="panel"><div class="panel-header">➕ उत्पाद जोड़ें <span class="optional-tag">दो दरें</span></div><div class="form-row"><div class="form-field"><label>नाम</label><input id="newProductName" class="field-input"></div><div class="form-field"><label>वॉक-इन दर (₹)</label><input id="newProductPrice" class="field-input" type="number" step="0.01" min="0" placeholder="काउंटर / मेहमान दर"></div><div class="form-field"><label>खुदरा व्यापारी दर (₹)</label><input id="newProductTraderPrice" class="field-input" type="number" step="0.01" min="0" placeholder="दुकान / थोक दर"></div><div class="form-field"><label>इकाई</label><select id="newProductUnit" class="field-select"><option>packet</option><option>kg</option><option>piece</option></select></div><div class="form-field"><label>विवरण</label><input id="newProductDesc" class="field-input"></div><div class="form-field"><label>समाप्ति तिथि</label><input id="newProductExpiry" class="field-input" type="date"></div></div><button class="btn btn-success" onclick="addProduct()">➕ उत्पाद जोड़ें</button> <button class="btn btn-warning" onclick="setSamePrice()" style="margin-left:8px;">एक क्लिक - समान दर</button> <button class="btn btn-warning" onclick="bulkSetExpiry()" style="margin-left:12px;">📅 सभी उत्पादों की समाप्ति तिथि सेट करें</button></div>
-            <div class="panel"><div class="panel-header">📋 उत्पाद सूची — वॉक-इन और व्यापारी दरें ठीक करें</div><div class="field-hint" style="margin:-8px 0 14px;color:#0f766e;">वॉक-इन (काउंटर) और खुदरा व्यापारी दरें बदलने के लिए किसी भी उत्पाद को संपादित करें। बिल बनाते समय आप जो ग्राहक प्रकार चुनते हैं, उसी दर का उपयोग होता है।</div><table class="data-table"><thead><tr><th>नाम</th><th>वॉक-इन</th><th>खुदरा व्यापारी</th><th>इकाई</th><th>समाप्ति</th><th>कार्रवाई</th></tr></thead><tbody id="productTableBody"></tbody></table></div>
+            <div class="panel bulk-rate-panel"><div class="panel-header">⚡ One-Click Global Rates — Easy as 123</div>
+                <div class="field-hint" style="margin:-8px 0 14px;color:#92400e;font-weight:600;">यहाँ आप एक ही बार में सभी उत्पादों के लिए Rate X (वॉक-इन) और Rate Y (खुदरा व्यापारी) सेट कर सकते हैं। 1 बटन = सभी पर लागू!</div>
+                <div class="bulk-rate-grid">
+                    <div class="bulk-rate-card walkin">
+                        <div class="bulk-title">🚶 वॉक-इन Rate X — सभी के लिए</div>
+                        <div class="form-field" style="min-width:100%;"><label class="field-label">Walk-in Rate X (₹) — सभी उत्पादों पर</label><input id="bulkWalkinRate" class="field-input" type="number" step="0.01" min="0" placeholder="जैसे 50"></div>
+                        <div class="bulk-actions"><button class="btn btn-teal btn-xl" onclick="applyBulkWalkinRate()">🚶 Walk-in Rate X सभी पर लागू करें</button></div>
+                        <div class="bulk-hint">सभी उत्पादों की वॉक-इन दर एक क्लिक में X पर सेट हो जाएगी।</div>
+                    </div>
+                    <div class="bulk-rate-card trader">
+                        <div class="bulk-title">🏪 खुदरा व्यापारी Rate Y — सभी के लिए</div>
+                        <div class="form-field" style="min-width:100%;"><label class="field-label">Retail Trader Rate Y (₹) — सभी उत्पादों पर</label><input id="bulkTraderRate" class="field-input" type="number" step="0.01" min="0" placeholder="जैसे 42"></div>
+                        <div class="bulk-actions"><button class="btn btn-orange btn-xl" onclick="applyBulkTraderRate()">🏪 Trader Rate Y सभी पर लागू करें</button></div>
+                        <div class="bulk-hint">सभी उत्पादों की खुदरा व्यापारी दर एक क्लिक में Y पर सेट हो जाएगी।</div>
+                    </div>
+                </div>
+                <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+                    <button class="btn btn-primary btn-xl" onclick="applyBulkBothRates()" style="background:#0f172a;">⚡ दोनों दरें (X और Y) सभी पर लागू करें</button>
+                    <button class="btn btn-secondary btn-xl" onclick="loadGlobalRatesIntoBulk()">🔄 Settings से दरें लोड करें</button>
+                </div>
+                <div class="bulk-hint" style="margin-top:10px;">💡 Tip: Settings में भी आप X और Y को हमेशा के लिए सेव कर सकते हैं। नए उत्पाद जोड़ते समय वही दरें अपने आप लगेंगी।</div>
+            </div>
+            <div class="panel"><div class="panel-header">➕ उत्पाद जोड़ें <span class="optional-tag">दो दरें</span></div><div class="form-row"><div class="form-field"><label>नाम</label><input id="newProductName" class="field-input"></div><div class="form-field"><label>वॉक-इन दर (₹)</label><input id="newProductPrice" class="field-input" type="number" step="0.01" min="0" placeholder="काउंटर / मेहमान दर"></div><div class="form-field"><label>खुदरा व्यापारी दर (₹)</label><input id="newProductTraderPrice" class="field-input" type="number" step="0.01" min="0" placeholder="दुकान / थोक दर"></div><div class="form-field"><label>इकाई</label><select id="newProductUnit" class="field-select"><option>packet</option><option>kg</option><option>piece</option></select></div><div class="form-field"><label>विवरण</label><input id="newProductDesc" class="field-input"></div><div class="form-field"><label>समाप्ति तिथि</label><input id="newProductExpiry" class="field-input" type="date"></div></div><button class="btn btn-success" onclick="addProduct()">➕ उत्पाद जोड़ें</button> <button class="btn btn-warning" onclick="setSamePrice()" style="margin-left:8px;">एक क्लिक - समान दर</button> <button class="btn btn-warning" onclick="bulkSetExpiry()" style="margin-left:12px;">📅 सभी उत्पादों की समाप्ति तिथि सेट करें</button> <button class="btn btn-primary" onclick="fillFromGlobalRates()" style="margin-left:8px;">⚡ Global X/Y भरें</button></div>
+            <div class="panel"><div class="panel-header">📋 उत्पाद सूची — वॉक-इन और व्यापारी दरें ठीक करें</div><div class="field-hint" style="margin:-8px 0 14px;color:#0f766e;">वॉक-इन (काउंटर) और खुदरा व्यापारी दरें बदलने के लिए किसी भी उत्पाद को संपादित करें। बिल बनाते समय आप जो ग्राहक प्रकार चुनते हैं, उसी दर का उपयोग होता है। ऊपर वाले बटनों से आप एक क्लिक में सभी पर Rate X और Rate Y लागू कर सकते हैं।</div><table class="data-table"><thead><tr><th>नाम</th><th>वॉक-इन</th><th>खुदरा व्यापारी</th><th>इकाई</th><th>समाप्ति</th><th>कार्रवाई</th></tr></thead><tbody id="productTableBody"></tbody></table></div>
         </div>
         <!-- History Tab -->
         <div id="history" class="content-pane"><div class="panel"><div class="panel-header">📜 बिल इतिहास</div><div class="btn-group" style="margin-bottom:16px;"><button class="btn btn-primary" onclick="loadHistory()">🔄 रिफ्रेश</button><button class="btn btn-success" onclick="exportCSV()">📊 CSV</button><button class="btn btn-success" onclick="exportJSON()">📁 JSON</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>बिल #</th><th>दिनांक</th><th>ग्राहक</th><th>मोबाइल</th><th>कुल</th><th>कार्रवाई</th></tr></thead><tbody id="historyTableBody"></tbody></table></div><div id="historyCards" class="history-cards"></div></div></div>
@@ -888,7 +939,25 @@
             </div>
         </div>
         <!-- Settings Tab – No GST -->
-        <div id="settings" class="content-pane"><div class="panel"><div class="panel-header">⚙️ व्यवसाय सेटिंग्स</div><div class="form-row"><div class="form-field"><label>व्यापार नाम</label><input id="settingsBusinessName" class="field-input"></div><div class="form-field"><label>फोन</label><input id="settingsPhone" class="field-input"></div><div class="form-field"><label>पता</label><input id="settingsAddress" class="field-input"></div><div class="form-field"><label>मुद्रा प्रतीक</label><input id="settingsCurrency" class="field-input" value="₹"></div><div class="form-field"><label>डिफ़ॉल्ट ग्राहक प्रकार</label><select id="settingsDefaultCustomerType" class="field-select"><option value="walkin">वॉक-इन ग्राहक (काउंटर दर)</option><option value="trader">खुदरा व्यापारी (थोक दर)</option></select><div class="field-hint">नए बिल इस प्रकार से शुरू होते हैं। आप बिल स्क्रीन पर बदल सकते हैं — दरें तुरंत अपडेट होती हैं।</div></div></div><div class="field-hint" style="margin:-8px 0 16px;">Product rates themselves are fixed on the <strong>Products</strong> tab (walk-in vs retail trader). This setting only picks the default type for a new bill.</div><button class="btn btn-success" onclick="saveSettings()">सेटिंग्स सहेजें</button> <button class="btn btn-warning" onclick="openChangePin()" style="margin-left:12px;">🔑 Change PIN</button> <button class="btn btn-secondary" onclick="lockApp()" style="margin-left:12px;">🔒 Lock Now</button> <button class="btn btn-danger" onclick="resetApp()">Reset All Data</button></div></div>
+        <div id="settings" class="content-pane">
+            <div class="panel"><div class="panel-header">⚙️ व्यवसाय सेटिंग्स</div>
+                <div class="form-row"><div class="form-field"><label>व्यापार नाम</label><input id="settingsBusinessName" class="field-input"></div><div class="form-field"><label>फोन</label><input id="settingsPhone" class="field-input"></div><div class="form-field"><label>पता</label><input id="settingsAddress" class="field-input"></div><div class="form-field"><label>मुद्रा प्रतीक</label><input id="settingsCurrency" class="field-input" value="₹"></div><div class="form-field"><label>डिफ़ॉल्ट ग्राहक प्रकार</label><select id="settingsDefaultCustomerType" class="field-select"><option value="walkin">वॉक-इन ग्राहक (काउंटर दर)</option><option value="trader">खुदरा व्यापारी (थोक दर)</option></select><div class="field-hint">नए बिल इस प्रकार से शुरू होते हैं। आप बिल स्क्रीन पर बदल सकते हैं — दरें तुरंत अपडेट होती हैं।</div></div></div>
+                <div class="panel bulk-rate-panel" style="margin:16px 0 16px;"><div class="panel-header" style="margin-bottom:12px;">⚡ Global Rates — Rate X और Rate Y सेव करें</div>
+                    <div class="field-hint" style="margin:-8px 0 12px;color:#0f766e;font-weight:600;">यहाँ आप वॉक-इन के लिए Rate X और खुदरा व्यापारी के लिए Rate Y सेव कर सकते हैं। नए उत्पाद जोड़ते समय यही दरें अपने आप लगेंगी। एक बटन से सभी उत्पादों पर भी लागू कर सकते हैं।</div>
+                    <div class="form-row">
+                        <div class="form-field"><label class="field-label">🌍 Walk-in Global Rate X (₹)</label><input id="settingsWalkinRate" class="field-input" type="number" step="0.01" min="0" placeholder="जैसे 50 — सभी के लिए वॉक-इन दर"></div>
+                        <div class="form-field"><label class="field-label">🌍 Trader Global Rate Y (₹)</label><input id="settingsTraderRate" class="field-input" type="number" step="0.01" min="0" placeholder="जैसे 42 — सभी के लिए व्यापारी दर"></div>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                        <button class="btn btn-teal btn-xl" onclick="saveGlobalRatesAndApplyWalkin()">🚶 X को सेव + सभी पर लागू</button>
+                        <button class="btn btn-orange btn-xl" onclick="saveGlobalRatesAndApplyTrader()">🏪 Y को सेव + सभी पर लागू</button>
+                        <button class="btn btn-primary btn-xl" style="background:#0f172a;" onclick="saveGlobalRatesAndApplyBoth()">⚡ X और Y सेव + सभी पर लागू</button>
+                    </div>
+                </div>
+                <div class="field-hint" style="margin:-8px 0 16px;">Product rates themselves are fixed on the <strong>Products</strong> tab (walk-in vs retail trader). This setting only picks the default type for a new bill. Global X/Y above helps you set all products in one click.</div>
+                <button class="btn btn-success" onclick="saveSettings()">सेटिंग्स सहेजें</button> <button class="btn btn-warning" onclick="openChangePin()" style="margin-left:12px;">🔑 Change PIN</button> <button class="btn btn-secondary" onclick="lockApp()" style="margin-left:12px;">🔒 Lock Now</button> <button class="btn btn-danger" onclick="resetApp()">Reset All Data</button>
+            </div>
+        </div>
     </div>
     <div class="status-bar"><div>✅ No GST | Classic billing</div><div id="statusInfo">Total Bills: 0</div><div id="syncStatus" style="font-weight:600;">🔘 Realtime: connecting…</div></div>
 </div>
@@ -924,7 +993,7 @@
 <div id="afterSaveModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>✅ बिल सहेज दिया गया</span><span class="modal-close" onclick="afterSaveDone()">×</span></div><div class="modal-content"><p id="afterSaveMsg" style="font-size:15px;color:#0f172a;margin-bottom:16px;font-weight:600;"></p><div class="after-save-actions"><button class="btn btn-whatsapp" id="afterSaveWa" onclick="afterSaveWhatsApp()">📱 व्हाट्सएप भेजें</button><button class="btn btn-primary" onclick="afterSavePrint()">🖨️ बिल प्रिंट करें</button><button class="btn btn-success" onclick="afterSaveDone()">➕ नया बिल</button></div></div></div></div>
 
 <!-- New Bill Customer Type Modal -->
-<div id="newBillTypeModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>🏷️ नया बिल — ग्राहक प्रकार चुनें</span><span class="modal-close" onclick="closeNewBillTypeModal()">×</span></div><div class="modal-content"><p style="font-size:15px;color:#0f172a;margin-bottom:16px;">बिल बनाने से पहले ग्राहक का प्रकार चुनें।</p><div style="display:flex;gap:12px;margin-bottom:12px;"><button class="btn btn-primary" style="flex:1;" onclick="selectNewBillType('walkin')">🚶 वॉक-इन ग्राहक</button><button class="btn btn-warning" style="flex:1;" onclick="selectNewBillType('trader')">🏪 खुदरा व्यापारी</button></div><div class="btn-group"><button class="btn btn-secondary" onclick="closeNewBillTypeModal()">रद्द करें</button></div></div></div></div>
+<div id="newBillTypeModal" class="modal-overlay"><div class="modal-window" style="max-width:460px;"><div class="modal-title-bar"><span>🏷️ नया बिल — ग्राहक प्रकार चुनें (Easy as 1-2-3)</span><span class="modal-close" onclick="closeNewBillTypeModal()">×</span></div><div class="modal-content"><p style="font-size:15px;color:#0f172a;margin-bottom:8px;font-weight:700;">STEP 1 — बिल बनाने से पहले ग्राहक प्रकार चुनें:</p><p style="font-size:12px;color:#64748b;margin-bottom:16px;">वॉक-इन = Rate X सभी पर, खुदरा व्यापारी = Rate Y सभी पर। बाद में उत्पाद टैप करें।</p><div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;"><button class="btn btn-teal btn-xl" style="flex:1;" onclick="selectNewBillType('walkin')"><span>🚶 वॉक-इन<br><small id="modalWalkinRate" style="font-size:12px;opacity:0.9;">Rate X</small></span></button><button class="btn btn-orange btn-xl" style="flex:1;" onclick="selectNewBillType('trader')"><span>🏪 खुदरा व्यापारी<br><small id="modalTraderRate" style="font-size:12px;opacity:0.9;">Rate Y</small></span></button></div><div class="btn-group"><button class="btn btn-secondary" onclick="closeNewBillTypeModal()">रद्द करें</button></div></div></div></div>
 
 <!-- Edit Product Modal -->
 <div id="editProductModal" class="modal-overlay"><div class="modal-window"><div class="modal-title-bar"><span>✏️ उत्पाद संपादित करें</span><span class="modal-close" onclick="closeEditProductModal()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>नाम</label><input id="editProductName" class="field-input"></div><div class="form-field"><label>वॉक-इन दर (₹)</label><input id="editProductPrice" class="field-input" type="number" step="0.01" min="0"></div><div class="form-field"><label>खुदरा व्यापारी दर (₹)</label><input id="editProductTraderPrice" class="field-input" type="number" step="0.01" min="0"></div><div class="form-field"><label>इकाई</label><select id="editProductUnit" class="field-select"><option>packet</option><option>kg</option><option>piece</option></select></div><div class="form-field"><label>विवरण</label><input id="editProductDesc" class="field-input"></div><div class="form-field"><label>समाप्ति</label><input id="editProductExpiry" class="field-input" type="date"></div></div><div class="btn-group"><button class="btn btn-success" onclick="setSameEditPrice()">एक क्लिक - समान दर</button><button class="btn btn-success" onclick="saveProductEdit()">सहेजें</button><button class="btn btn-secondary" onclick="closeEditProductModal()">रद्द करें</button></div></div></div></div>
@@ -1404,8 +1473,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     };
     // Expose on window — initFirebase() (in an earlier script) reads window.firebaseConfig.
     window.firebaseConfig = firebaseConfig;
-    let settings = { businessName: 'Khakra & Co.', phone: '+91 98765 43210', address: 'Mumbai, India', currency: '₹', defaultCustomerType: 'walkin' };
+    let settings = { businessName: 'Khakra & Co.', phone: '+91 98765 43210', address: 'Mumbai, India', currency: '₹', defaultCustomerType: 'walkin', walkinGlobalRate: 50, traderGlobalRate: 42 };
     let customerType = 'walkin'; // 'walkin' | 'trader' — which rate card is active on this bill
+    let customerTypeChosen = false; // has user explicitly picked walk-in vs trader for this bill?
     const defaultProducts = [
         { name: 'Plain Khakra', price: 40, traderPrice: 35, unit: 'packet', description: 'Crispy & thin', expiry: '2026-01-15' },
         { name: 'Methi Khakra', price: 45, traderPrice: 40, unit: 'packet', description: 'Fenugreek', expiry: '2026-01-20' },
@@ -1418,7 +1488,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             phone: '+91 98765 43210',
             address: 'Mumbai, India',
             currency: '₹',
-            defaultCustomerType: 'walkin'
+            defaultCustomerType: 'walkin',
+            walkinGlobalRate: 50,
+            traderGlobalRate: 42
         }, s || {});
     }
     function normalizeCustomerType(t) { return t === 'trader' ? 'trader' : 'walkin'; }
@@ -1444,8 +1516,22 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const t = getCustomerType();
         const w = document.getElementById('ctypeWalkin');
         const r = document.getElementById('ctypeTrader');
-        if (w) w.classList.toggle('active', t === 'walkin');
-        if (r) r.classList.toggle('active', t === 'trader');
+        if (w) {
+            w.classList.toggle('active', t === 'walkin');
+            w.classList.remove('trader-active');
+        }
+        if (r) {
+            r.classList.toggle('active', t === 'trader');
+            r.classList.toggle('trader-active', t === 'trader');
+        }
+        // show global rates on chips
+        const wrEl = document.getElementById('ctypeWalkinRate');
+        const trEl = document.getElementById('ctypeTraderRate');
+        const cur = settings.currency || '₹';
+        const walkRate = settings.walkinGlobalRate != null ? settings.walkinGlobalRate : (products.length ? products[0].price : 0);
+        const tradRate = settings.traderGlobalRate != null ? settings.traderGlobalRate : (products.length ? products[0].traderPrice : 0);
+        if (wrEl) wrEl.textContent = cur + (Number(walkRate)||0).toFixed(2) + ' Walk-in (X)';
+        if (trEl) trEl.textContent = cur + (Number(tradRate)||0).toFixed(2) + ' Trader (Y)';
     }
     function repriceBillItems(type) {
         const t = normalizeCustomerType(type);
@@ -1457,8 +1543,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function setCustomerType(type, opts) {
         const next = normalizeCustomerType(type);
         const force = opts && opts.force;
-        if (next === customerType && !force) { updateCustomerTypeUI(); return; }
+        if (next === customerType && !force && customerTypeChosen) { updateCustomerTypeUI(); return; }
         customerType = next;
+        customerTypeChosen = true;
         repriceBillItems(next);
         updateCustomerTypeUI();
         if (opts && opts.silent) return;
@@ -1476,6 +1563,15 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         document.getElementById('settingsCurrency').value = settings.currency;
         const dt = document.getElementById('settingsDefaultCustomerType');
         if (dt) dt.value = normalizeCustomerType(settings.defaultCustomerType);
+        const wr = document.getElementById('settingsWalkinRate');
+        const tr = document.getElementById('settingsTraderRate');
+        if (wr) wr.value = settings.walkinGlobalRate != null ? settings.walkinGlobalRate : '';
+        if (tr) tr.value = settings.traderGlobalRate != null ? settings.traderGlobalRate : '';
+        // also sync bulk inputs if present
+        const bw = document.getElementById('bulkWalkinRate');
+        const bt = document.getElementById('bulkTraderRate');
+        if (bw && !bw.value) bw.value = settings.walkinGlobalRate != null ? settings.walkinGlobalRate : '';
+        if (bt && !bt.value) bt.value = settings.traderGlobalRate != null ? settings.traderGlobalRate : '';
     }
     function loadStorage() {
         let p = localStorage.getItem('khakra_products');
@@ -1554,7 +1650,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         }, err => { console.warn('bills listener', err); updateSyncStatus('error'); });
     }
     function setDateTime() { document.getElementById('billDateTime').value = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,16); }
-    function renderAll() { updateCustomerTypeUI(); renderProductGrid(); renderProductTable(); updateQuickSelect(); renderBillList(); calculateBill(); loadHistory(); updateStatusBar(); if (typeof renderReports === 'function') renderReports(); }
+    function renderAll() { updateCustomerTypeUI(); renderProductGrid(); renderProductTable(); updateQuickSelect(); renderBillList(); calculateBill(); loadHistory(); updateStatusBar(); try { applySettingsToUI(); } catch(e){} if (typeof renderReports === 'function') renderReports(); }
     function switchTab(tabName) {
         document.querySelectorAll('.menu-item, .mobile-nav-item').forEach(m => {
             m.classList.toggle('active', m.getAttribute('data-tab') === tabName);
@@ -1570,16 +1666,23 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 
     // ===== New Bill customer type prompt =====
     function startNewBill() {
+        const cur = settings.currency || '₹';
+        const mW = document.getElementById('modalWalkinRate');
+        const mT = document.getElementById('modalTraderRate');
+        if (mW) mW.textContent = cur + (settings.walkinGlobalRate||0).toFixed(2) + ' — Rate X सभी पर';
+        if (mT) mT.textContent = cur + (settings.traderGlobalRate||0).toFixed(2) + ' — Rate Y सभी पर';
         document.getElementById('newBillTypeModal').classList.add('active');
     }
     function closeNewBillTypeModal() {
         document.getElementById('newBillTypeModal').classList.remove('active');
     }
     function selectNewBillType(type) {
-        setCustomerType(type, {force:true, silent:true});
         closeNewBillTypeModal();
         switchTab('billing');
-        notify(type==='trader' ? 'खुदरा व्यापारी दर लागू हो गई' : 'वॉक-इन दर लागू हो गई', 'info');
+        setCustomerType(type, {force:true});
+        // ensure bill is cleared for new customer type if previous bill had items? keep items but reprice
+        // notify handled inside setCustomerType, but also show big confirmation
+        notify(type==='trader' ? '🏪 खुदरा व्यापारी Rate Y लागू — अब उत्पाद टैप करें' : '🚶 वॉक-इन Rate X लागू — अब उत्पाद टैप करें', 'success');
     }
 
     // ===== One-click same price =====
@@ -1592,6 +1695,116 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const w = document.getElementById('editProductPrice');
         const r = document.getElementById('editProductTraderPrice');
         if (w && r && w.value) { r.value = w.value; notify('दोनों दरें एक जैसी सेट हो गईं', 'success'); }
+    }
+
+    // ===== BULK GLOBAL RATES – ONE BUTTON X for all, Y for all – EASY AS 123 =====
+    function getBulkWalkinValue() {
+        const el = document.getElementById('bulkWalkinRate');
+        const v = el ? parseFloat(el.value) : NaN;
+        if (!(v>0)) {
+            const s = parseFloat(document.getElementById('settingsWalkinRate') && document.getElementById('settingsWalkinRate').value);
+            if (s>0) return s;
+        }
+        return v;
+    }
+    function getBulkTraderValue() {
+        const el = document.getElementById('bulkTraderRate');
+        const v = el ? parseFloat(el.value) : NaN;
+        if (!(v>0)) {
+            const s = parseFloat(document.getElementById('settingsTraderRate') && document.getElementById('settingsTraderRate').value);
+            if (s>0) return s;
+        }
+        return v;
+    }
+    function applyBulkWalkinRate() {
+        const rate = getBulkWalkinValue();
+        if (!(rate>0)) return notify('Walk-in Rate X डालें (₹)', 'error');
+        if (!products.length) return notify('कोई उत्पाद नहीं', 'error');
+        if (!confirm('सभी ' + products.length + ' उत्पादों की वॉक-इन दर ₹' + rate.toFixed(2) + ' पर सेट करें?')) return;
+        products.forEach(p => { p.price = rate; });
+        settings.walkinGlobalRate = rate;
+        repriceBillItems(getCustomerType());
+        saveAll();
+        renderAll();
+        updateCustomerTypeUI();
+        notify('सभी पर Walk-in Rate X ₹' + rate.toFixed(2) + ' लागू हो गया', 'success');
+    }
+    function applyBulkTraderRate() {
+        const rate = getBulkTraderValue();
+        if (!(rate>0)) return notify('Trader Rate Y डालें (₹)', 'error');
+        if (!products.length) return notify('कोई उत्पाद नहीं', 'error');
+        if (!confirm('सभी ' + products.length + ' उत्पादों की व्यापारी दर ₹' + rate.toFixed(2) + ' पर सेट करें?')) return;
+        products.forEach(p => { p.traderPrice = rate; });
+        settings.traderGlobalRate = rate;
+        repriceBillItems(getCustomerType());
+        saveAll();
+        renderAll();
+        updateCustomerTypeUI();
+        notify('सभी पर Trader Rate Y ₹' + rate.toFixed(2) + ' लागू हो गया', 'success');
+    }
+    function applyBulkBothRates() {
+        const wx = getBulkWalkinValue();
+        const ty = getBulkTraderValue();
+        if (!(wx>0) || !(ty>0)) return notify('दोनों दरें X और Y डालें', 'error');
+        if (!products.length) return notify('कोई उत्पाद नहीं', 'error');
+        if (!confirm('सभी ' + products.length + ' उत्पादों पर Walk-in ₹' + wx.toFixed(2) + ' और Trader ₹' + ty.toFixed(2) + ' सेट करें?')) return;
+        products.forEach(p => { p.price = wx; p.traderPrice = ty; });
+        settings.walkinGlobalRate = wx;
+        settings.traderGlobalRate = ty;
+        repriceBillItems(getCustomerType());
+        saveAll();
+        renderAll();
+        updateCustomerTypeUI();
+        notify('सभी पर X=₹' + wx.toFixed(2) + ' और Y=₹' + ty.toFixed(2) + ' लागू', 'success');
+    }
+    function loadGlobalRatesIntoBulk() {
+        const bw = document.getElementById('bulkWalkinRate');
+        const bt = document.getElementById('bulkTraderRate');
+        if (bw) bw.value = settings.walkinGlobalRate != null ? settings.walkinGlobalRate : '';
+        if (bt) bt.value = settings.traderGlobalRate != null ? settings.traderGlobalRate : '';
+        notify('Global दरें लोड हो गईं', 'info');
+    }
+    function fillFromGlobalRates() {
+        const w = document.getElementById('newProductPrice');
+        const t = document.getElementById('newProductTraderPrice');
+        if (w) w.value = settings.walkinGlobalRate != null ? settings.walkinGlobalRate : '';
+        if (t) t.value = settings.traderGlobalRate != null ? settings.traderGlobalRate : '';
+        notify('Global X/Y भर दिया गया', 'info');
+    }
+    function saveGlobalRatesAndApplyWalkin() {
+        const wxEl = document.getElementById('settingsWalkinRate');
+        const wx = wxEl ? parseFloat(wxEl.value) : NaN;
+        if (!(wx>0)) return notify('Walk-in Global Rate X डालें', 'error');
+        settings.walkinGlobalRate = wx;
+        const bw = document.getElementById('bulkWalkinRate');
+        if (bw) bw.value = wx;
+        saveAll();
+        applyBulkWalkinRate();
+    }
+    function saveGlobalRatesAndApplyTrader() {
+        const tyEl = document.getElementById('settingsTraderRate');
+        const ty = tyEl ? parseFloat(tyEl.value) : NaN;
+        if (!(ty>0)) return notify('Trader Global Rate Y डालें', 'error');
+        settings.traderGlobalRate = ty;
+        const bt = document.getElementById('bulkTraderRate');
+        if (bt) bt.value = ty;
+        saveAll();
+        applyBulkTraderRate();
+    }
+    function saveGlobalRatesAndApplyBoth() {
+        const wxEl = document.getElementById('settingsWalkinRate');
+        const tyEl = document.getElementById('settingsTraderRate');
+        const wx = wxEl ? parseFloat(wxEl.value) : NaN;
+        const ty = tyEl ? parseFloat(tyEl.value) : NaN;
+        if (!(wx>0) || !(ty>0)) return notify('दोनों Global दरें X और Y डालें', 'error');
+        settings.walkinGlobalRate = wx;
+        settings.traderGlobalRate = ty;
+        const bw = document.getElementById('bulkWalkinRate');
+        const bt = document.getElementById('bulkTraderRate');
+        if (bw) bw.value = wx;
+        if (bt) bt.value = ty;
+        saveAll();
+        applyBulkBothRates();
     }
 
     // ---- KFC / McDonald's style: emoji menu tiles, category chips, qty badges ----
@@ -1645,7 +1858,10 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const otherType = type === 'trader' ? 'walkin' : 'trader';
         const menuLab = document.getElementById('menuRateLabel');
         if (menuLab) {
-            menuLab.textContent = customerTypeLabel(type) + ' दरें';
+            const cur = settings.currency || '₹';
+            const rateVal = type === 'trader' ? (settings.traderGlobalRate||0) : (settings.walkinGlobalRate||0);
+            const tag = type === 'trader' ? 'Y' : 'X';
+            menuLab.textContent = customerTypeLabel(type) + ' दरें — Rate ' + tag + ' (' + cur + rateVal.toFixed(0) + ')';
             menuLab.classList.toggle('trader', type === 'trader');
         }
         grid.innerHTML = items.map(({ p, i }) => {
@@ -1695,7 +1911,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function renderProductTable() { let tbody = document.getElementById('productTableBody'); if(!products.length){ tbody.innerHTML='<tr><td colspan="6">No products</td></tr>'; return; } tbody.innerHTML = products.map((p,i)=>{ const n = normalizeProduct(p); return `<tr><td><strong>${escapeHtml(n.name)}</strong><br><small>${escapeHtml(n.description||'')}</small></td><td>${settings.currency}${n.price.toFixed(2)}<div class="muted" style="font-size:11px;color:#64748b;">Walk-in</div></td><td>${settings.currency}${n.traderPrice.toFixed(2)}<div class="muted" style="font-size:11px;color:#64748b;">Retail trader</div></td><td>${n.unit}</td><td>${n.expiry||'—'}</td><td><button class="btn btn-primary" style="padding:4px 12px;" onclick="editProduct(${i})">Edit</button> <button class="btn btn-danger" style="padding:4px 12px;" onclick="deleteProduct(${i})">Del</button></td></tr>`; }).join(''); }
     function updateQuickSelect() { let sel = document.getElementById('quickProduct'); const t = getCustomerType(); sel.innerHTML = '<option value="">-- Select --</option>'+products.map((p,i)=>`<option value="${i}">${p.name} (${settings.currency}${getActivePrice(p, t).toFixed(2)} · ${customerTypeLabel(t)})</option>`).join(''); }
 
-    function addProduct() { let name = document.getElementById('newProductName').value.trim(); let price = parseFloat(document.getElementById('newProductPrice').value); let traderPrice = parseFloat(document.getElementById('newProductTraderPrice').value); if(!name || !(price>0)) return notify('नाम और वॉक-इन दर दर्ज करें','error'); if(!(traderPrice>0)) traderPrice = price; products.push(normalizeProduct({ name, price, traderPrice, unit: document.getElementById('newProductUnit').value, description: document.getElementById('newProductDesc').value, expiry: document.getElementById('newProductExpiry').value })); saveAll(); renderAll(); document.getElementById('newProductName').value=''; document.getElementById('newProductPrice').value=''; document.getElementById('newProductTraderPrice').value=''; document.getElementById('newProductDesc').value=''; document.getElementById('newProductExpiry').value=''; notify('उत्पाद वॉक-इन और व्यापारी दरों के साथ जोड़ा गया','success'); }
+    function addProduct() { let name = document.getElementById('newProductName').value.trim(); let price = parseFloat(document.getElementById('newProductPrice').value); let traderPrice = parseFloat(document.getElementById('newProductTraderPrice').value); if(!(price>0) && settings.walkinGlobalRate>0) price = settings.walkinGlobalRate; if(!(traderPrice>0) && settings.traderGlobalRate>0) traderPrice = settings.traderGlobalRate; if(!name || !(price>0)) return notify('नाम और वॉक-इन दर दर्ज करें — या Settings में Global X सेट करें','error'); if(!(traderPrice>0)) traderPrice = price; products.push(normalizeProduct({ name, price, traderPrice, unit: document.getElementById('newProductUnit').value, description: document.getElementById('newProductDesc').value, expiry: document.getElementById('newProductExpiry').value })); saveAll(); renderAll(); document.getElementById('newProductName').value=''; document.getElementById('newProductPrice').value=''; document.getElementById('newProductTraderPrice').value=''; document.getElementById('newProductDesc').value=''; document.getElementById('newProductExpiry').value=''; notify('उत्पाद वॉक-इन और व्यापारी दरों के साथ जोड़ा गया','success'); }
     function deleteProduct(i) { if(confirm('Delete product?')){ products.splice(i,1); saveAll(); renderAll(); notify('हटा दिया गया','success'); } }
     let editProductIdx = null;
     function editProduct(i) { editProductIdx = i; let p = normalizeProduct(products[i]); document.getElementById('editProductName').value = p.name; document.getElementById('editProductPrice').value = p.price; document.getElementById('editProductTraderPrice').value = p.traderPrice; document.getElementById('editProductUnit').value = p.unit; document.getElementById('editProductDesc').value = p.description||''; document.getElementById('editProductExpiry').value = p.expiry||''; document.getElementById('editProductModal').classList.add('active'); }
@@ -1703,8 +1919,20 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function closeEditProductModal() { document.getElementById('editProductModal').classList.remove('active'); editProductIdx = null; }
     function bulkSetExpiry() { let newExpiry = prompt("Enter expiry date (YYYY-MM-DD) for ALL products:", "2026-12-31"); if(newExpiry && newExpiry.match(/^\d{4}-\d{2}-\d{2}$/)) { products.forEach(p => p.expiry = newExpiry); saveAll(); renderAll(); notify(`All products expiry set to ${newExpiry}`, 'success'); } else if(newExpiry) notify('अमान्य तिथि प्रारूप','error'); }
 
-    function addProductToBill(i) { const type = getCustomerType(); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity++; else billItems.push({ productIndex: i, product: pricedProductCopy(products[i], type), quantity: 1, rateType: type }); renderBillList(); calculateBill(); }
-    function quickAddProduct() { let idx = document.getElementById('quickProduct').value; if(idx==='') return notify('उत्पाद चुनें','error'); let i = parseInt(idx); let qty = parseInt(document.getElementById('quickQty').value); const type = getCustomerType(); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity+=qty; else billItems.push({ productIndex: i, product: pricedProductCopy(products[i], type), quantity: qty, rateType: type }); renderBillList(); calculateBill(); document.getElementById('quickQty').value=1; notify('Added at ' + customerTypeLabel(type) + ' rate','success'); }
+    function addProductToBill(i) {
+        if (!customerTypeChosen && billItems.length===0) {
+            // enforce Step 1 – ask user to pick rate type first (easy as 123)
+            notify('STEP 1: पहले Walk-in या Retail चुनें — फिर उत्पाद टैप करें', 'info');
+            try { document.getElementById('customerTypeRow').scrollIntoView({behavior:'smooth', block:'center'}); } catch(e){}
+            // also open the chooser modal for clarity
+            if (typeof startNewBill === 'function') startNewBill();
+            return;
+        }
+        const type = getCustomerType(); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity++; else billItems.push({ productIndex: i, product: pricedProductCopy(products[i], type), quantity: 1, rateType: type }); renderBillList(); calculateBill();
+    }
+    function quickAddProduct() {
+        if (!customerTypeChosen && billItems.length===0) { notify('STEP 1: पहले Walk-in या Retail चुनें', 'info'); if (typeof startNewBill === 'function') startNewBill(); return; }
+        let idx = document.getElementById('quickProduct').value; if(idx==='') return notify('उत्पाद चुनें','error'); let i = parseInt(idx); let qty = parseInt(document.getElementById('quickQty').value); const type = getCustomerType(); let ex = billItems.find(item=>item.productIndex===i); if(ex) ex.quantity+=qty; else billItems.push({ productIndex: i, product: pricedProductCopy(products[i], type), quantity: qty, rateType: type }); renderBillList(); calculateBill(); document.getElementById('quickQty').value=1; notify('Added at ' + customerTypeLabel(type) + ' rate','success'); }
     function renderBillList() { let list = document.getElementById('billList'); if(!billItems.length){ list.innerHTML='<div style="padding:20px; text-align:center;">🛒 आइटम जोड़ने के लिए टैप करें</div>'; if (typeof updateReadyBar === 'function') updateReadyBar(0); if (typeof updateTileCounts === 'function') updateTileCounts(); return; } const type = getCustomerType(); const badge = `<span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)} दर</span>`; list.innerHTML = billItems.map((item,i)=>`<div class="bill-item"><div><strong>${item.product.name}</strong> ${badge}<br>${settings.currency}${Number(item.product.price).toFixed(2)} ${item.product.unit}${item.product.expiry?`<br><span style="font-size:11px;">📅 समाप्ति: ${item.product.expiry}</span>`:''}</div><div class="qty-controls"><button class="qty-btn" onclick="updateQty(${i},-1)">−</button><span style="min-width:40px;text-align:center;">${item.quantity}</span><button class="qty-btn" onclick="updateQty(${i},1)">+</button></div><div>${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</div><button class="remove-item-btn" onclick="removeItem(${i})">×</button></div>`).join(''); if (typeof updateReadyBar === 'function') updateReadyBar(); if (typeof updateTileCounts === 'function') updateTileCounts(); }
     function updateQty(i,delta) { let newQty = billItems[i].quantity+delta; if(newQty>=1) billItems[i].quantity = newQty; renderBillList(); calculateBill(); }
     function removeItem(i) { billItems.splice(i,1); renderBillList(); calculateBill(); }
@@ -1747,7 +1975,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         }
     }
     
-    function clearBill(skipConfirm) { if(!skipConfirm && billItems.length && !confirm('Clear all?')) return; billItems = []; document.getElementById('customerName').value=''; document.getElementById('customerPhone').value=''; const wrap = document.getElementById('customerPhoneWrap'); if (wrap) { wrap.classList.remove('valid','invalid'); } document.getElementById('otherCharges').value='0'; document.getElementById('discountPercent').value='0'; customerType = normalizeCustomerType(settings.defaultCustomerType); updateCustomerTypeUI(); setPayMode('full'); setDateTime(); renderProductGrid(); updateQuickSelect(); renderBillList(); calculateBill(); }
+    function clearBill(skipConfirm) { if(!skipConfirm && billItems.length && !confirm('Clear all?')) return; billItems = []; customerTypeChosen = false; document.getElementById('customerName').value=''; document.getElementById('customerPhone').value=''; const wrap = document.getElementById('customerPhoneWrap'); if (wrap) { wrap.classList.remove('valid','invalid'); } document.getElementById('otherCharges').value='0'; document.getElementById('discountPercent').value='0'; customerType = normalizeCustomerType(settings.defaultCustomerType); updateCustomerTypeUI(); setPayMode('full'); setDateTime(); renderProductGrid(); updateQuickSelect(); renderBillList(); calculateBill(); }
     function saveBill() { const type = getCustomerType(); let name = document.getElementById('customerName').value.trim() || (type === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान'); if(!billItems.length) return notify('Add items','error'); const rawPhone = document.getElementById('customerPhone').value.trim(); const phone = normalizeIndianMobile(rawPhone); if (rawPhone && !isValidIndianMobile(phone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let {subtotal,charges,discPct,discount,total,totalQty} = calculateBill(); let received = parseFloat(document.getElementById('amountReceived').value); if (isNaN(received)) received = total; received = Math.max(0, Math.min(received, total)); received = Math.round(received*100)/100; let due = Math.round((total-received)*100)/100;
     const isPaid = confirm('क्या राशि पूरी तरह भुगतान हुई है?\nOK = भुगतान पूरा\nCancel = बकाया है');
     const status = isPaid ? 'paid' : 'due';
@@ -1984,7 +2212,30 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function saveBillEdit() { let newName = document.getElementById('editBillCustomer').value.trim(); if(!newName) return notify('ग्राहक का नाम आवश्यक है','error'); if(!editingBillCopy.items.length) return notify('कम से कम एक आइटम','error'); let newPhoneRaw = document.getElementById('editBillPhone').value.trim(); let newPhone = normalizeIndianMobile(newPhoneRaw); if (newPhoneRaw && !isValidIndianMobile(newPhone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let newDateTime = document.getElementById('editBillDateTime').value; let newCharges = parseFloat(document.getElementById('editBillOtherCharges').value)||0; let newDiscPct = parseFloat(document.getElementById('editBillDiscount').value)||0; let subtotal = editingBillCopy.items.reduce((s,i)=>s+(i.product.price*i.quantity),0); let discount = subtotal*newDiscPct/100; let total = subtotal - discount + newCharges; let totalQty = editingBillCopy.items.reduce((s,i)=>s+i.quantity,0); const type = normalizeCustomerType((document.getElementById('editBillCustomerType') && document.getElementById('editBillCustomerType').value) || editingBillCopy.customerType); editingBillCopy.customerType = type; editingBillCopy.customer = { name: newName, phone: newPhone, type }; editingBillCopy.dateTime = newDateTime; editingBillCopy.charges = newCharges; editingBillCopy.discPct = newDiscPct; editingBillCopy.discount = discount; editingBillCopy.subtotal = subtotal; editingBillCopy.total = total; editingBillCopy.totalQty = totalQty; let newPaid = parseFloat(document.getElementById('editBillPaid').value); if (isNaN(newPaid)) newPaid = (typeof editingBillCopy.paid === 'number' ? editingBillCopy.paid : total); newPaid = Math.max(0, Math.min(newPaid, total)); newPaid = Math.round(newPaid*100)/100; editingBillCopy.paid = newPaid; editingBillCopy.due = Math.round((total-newPaid)*100)/100; if (!Array.isArray(editingBillCopy.payments)) editingBillCopy.payments = []; billHistory[editBillIndex] = editingBillCopy; saveAll(); loadHistory(); updateStatusBar(); closeEditBillModal(); notify('बिल अपडेट कर दिया गया','success'); }
     function closeEditBillModal() { document.getElementById('editBillModal').classList.remove('active'); editBillIndex = -1; editingBillCopy = null; }
 
-    function saveSettings() { settings.businessName = document.getElementById('settingsBusinessName').value; settings.phone = document.getElementById('settingsPhone').value; settings.address = document.getElementById('settingsAddress').value; settings.currency = document.getElementById('settingsCurrency').value||'₹'; const dt = document.getElementById('settingsDefaultCustomerType'); settings.defaultCustomerType = normalizeCustomerType(dt && dt.value); saveAll(); if (!billItems.length) { customerType = settings.defaultCustomerType; } calculateBill(); renderAll(); notify('सेटिंग्स सहेज दी गईं','success'); }
+    function saveSettings() {
+        settings.businessName = document.getElementById('settingsBusinessName').value;
+        settings.phone = document.getElementById('settingsPhone').value;
+        settings.address = document.getElementById('settingsAddress').value;
+        settings.currency = document.getElementById('settingsCurrency').value||'₹';
+        const dt = document.getElementById('settingsDefaultCustomerType');
+        settings.defaultCustomerType = normalizeCustomerType(dt && dt.value);
+        const wgr = document.getElementById('settingsWalkinRate');
+        const tgr = document.getElementById('settingsTraderRate');
+        if (wgr) {
+            const v = parseFloat(wgr.value);
+            if (v>0) settings.walkinGlobalRate = v;
+        }
+        if (tgr) {
+            const v = parseFloat(tgr.value);
+            if (v>0) settings.traderGlobalRate = v;
+        }
+        saveAll();
+        if (!billItems.length) { customerType = settings.defaultCustomerType; }
+        calculateBill();
+        renderAll();
+        updateCustomerTypeUI();
+        notify('सेटिंग्स सहेज दी गईं — Global X/Y सेव','success');
+    }
     function exportJSON() { let data = {products, settings, billHistory, billCounter}; let blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_backup_${new Date().toISOString().slice(0,10)}.json`; a.click(); notify('JSON exported','success'); }
     function exportCSV() { if(!billHistory.length) return notify('कोई बिल नहीं','error'); let csv = 'Bill No,Date,Customer,Phone,Customer Type,Total,Paid,Due,Items\n'; billHistory.forEach(b=>{ ensureBillPayments(b); csv+=`${b.billNo},${new Date(b.dateTime).toLocaleString()},"${b.customer.name}","${b.customer.phone||''}","${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}",${b.total},${b.paid},${b.due},"${b.items.map(i=>i.product.name).join('; ')}"\n`; }); let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_bills_${new Date().toISOString().slice(0,10)}.csv`; a.click(); notify('CSV exported','success'); }
     function resetApp() { if(confirm('DELETE ALL DATA? Cannot undo')){ localStorage.clear(); location.reload(); } }
