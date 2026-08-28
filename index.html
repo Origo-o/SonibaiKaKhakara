@@ -820,7 +820,7 @@
     </div>
 </div>
 <div class="app-window">
-    <div class="title-bar v5"><span class="title-full">🥙 खखरा बिलिंग — जीएसटी नहीं, साफ़ बिल</span><span class="title-short">🥙 खखरा बिलिंग</span><span>v5 · टच और गो <button class="btn btn-warning" onclick="lockApp()" style="padding:3px 14px; margin-left:10px;">🔒 लॉक</button></span></div>
+    <div class="title-bar v5"><span class="title-full" id="appTitleFull">🥙 खखरा बिलिंग — जीएसटी नहीं, साफ़ बिल</span><span class="title-short" id="appTitleShort">🥙 खखरा बिलिंग</span><span style="display:flex;align-items:center;gap:8px;"><button class="btn" id="langToggleBtn" onclick="toggleLanguage()" style="background:#ffffff;color:#0f766e;padding:4px 12px;font-weight:800;border:2px solid #ffffff;">🌐 EN</button><span>v5 · टच और गो <button class="btn btn-warning" onclick="lockApp()" style="padding:3px 14px; margin-left:6px;">🔒 लॉक</button></span></span></div>
     <div class="menu-bar">
         <div class="menu-item active" data-tab="billing" onclick="startNewBill()">📝 नया बिल</div>
         <div class="menu-item" data-tab="products" onclick="switchTab('products')">📦 उत्पाद</div>
@@ -941,7 +941,7 @@
         <!-- Settings Tab – No GST -->
         <div id="settings" class="content-pane">
             <div class="panel"><div class="panel-header">⚙️ व्यवसाय सेटिंग्स</div>
-                <div class="form-row"><div class="form-field"><label>व्यापार नाम</label><input id="settingsBusinessName" class="field-input"></div><div class="form-field"><label>फोन</label><input id="settingsPhone" class="field-input"></div><div class="form-field"><label>पता</label><input id="settingsAddress" class="field-input"></div><div class="form-field"><label>मुद्रा प्रतीक</label><input id="settingsCurrency" class="field-input" value="₹"></div><div class="form-field"><label>डिफ़ॉल्ट ग्राहक प्रकार</label><select id="settingsDefaultCustomerType" class="field-select"><option value="walkin">वॉक-इन ग्राहक (काउंटर दर)</option><option value="trader">खुदरा व्यापारी (थोक दर)</option></select><div class="field-hint">नए बिल इस प्रकार से शुरू होते हैं। आप बिल स्क्रीन पर बदल सकते हैं — दरें तुरंत अपडेट होती हैं।</div></div></div>
+                <div class="form-row"><div class="form-field"><label>व्यापार नाम</label><input id="settingsBusinessName" class="field-input"></div><div class="form-field"><label>फोन</label><input id="settingsPhone" class="field-input"></div><div class="form-field"><label>पता</label><input id="settingsAddress" class="field-input"></div><div class="form-field"><label>मुद्रा प्रतीक</label><input id="settingsCurrency" class="field-input" value="₹"></div><div class="form-field"><label>डिफ़ॉल्ट ग्राहक प्रकार</label><select id="settingsDefaultCustomerType" class="field-select"><option value="walkin">वॉक-इन ग्राहक (काउंटर दर)</option><option value="trader">खुदरा व्यापारी (थोक दर)</option></select><div class="field-hint">नए बिल इस प्रकार से शुरू होते हैं। आप बिल स्क्रीन पर बदल सकते हैं — दरें तुरंत अपडेट होती हैं।</div></div><div class="form-field"><label id="settingsLangLabel">🌐 भाषा / Language</label><select id="settingsLanguage" class="field-select" onchange="setLanguage(this.value)"><option value="hi">हिंदी (Hindi)</option><option value="en">English</option></select><div class="field-hint">Toggle between Hindi and English for entire app and bills.</div></div></div>
                 <div class="panel bulk-rate-panel" style="margin:16px 0 16px;"><div class="panel-header" style="margin-bottom:12px;">⚡ Global Rates — Rate X और Rate Y सेव करें</div>
                     <div class="field-hint" style="margin:-8px 0 12px;color:#0f766e;font-weight:600;">यहाँ आप वॉक-इन के लिए Rate X और खुदरा व्यापारी के लिए Rate Y सेव कर सकते हैं। नए उत्पाद जोड़ते समय यही दरें अपने आप लगेंगी। एक बटन से सभी उत्पादों पर भी लागू कर सकते हैं।</div>
                     <div class="form-row">
@@ -1473,7 +1473,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     };
     // Expose on window — initFirebase() (in an earlier script) reads window.firebaseConfig.
     window.firebaseConfig = firebaseConfig;
-    let settings = { businessName: 'Khakra & Co.', phone: '+91 98765 43210', address: 'Mumbai, India', currency: '₹', defaultCustomerType: 'walkin', walkinGlobalRate: 50, traderGlobalRate: 42 };
+    let settings = { businessName: 'Khakra & Co.', phone: '+91 98765 43210', address: 'Mumbai, India', currency: '₹', defaultCustomerType: 'walkin', walkinGlobalRate: 50, traderGlobalRate: 42, language: 'hi' };
     let customerType = 'walkin'; // 'walkin' | 'trader' — which rate card is active on this bill
     let customerTypeChosen = false; // has user explicitly picked walk-in vs trader for this bill?
     const defaultProducts = [
@@ -1490,12 +1490,386 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             currency: '₹',
             defaultCustomerType: 'walkin',
             walkinGlobalRate: 50,
-            traderGlobalRate: 42
+            traderGlobalRate: 42,
+            language: 'hi'
         }, s || {});
     }
+
+    // ================= LANGUAGE TOGGLE – Hindi / English =================
+    const TRANSLATIONS = {
+        hi: {
+            appTitleFull: '🥙 खखरा बिलिंग — जीएसटी नहीं, साफ़ बिल',
+            appTitleShort: '🥙 खखरा बिलिंग',
+            newBill: '📝 नया बिल',
+            products: '📦 उत्पाद',
+            history: '📜 इतिहास',
+            ledger: '📒 Ledger & Sales',
+            settings: '⚙️ Settings',
+            billing: 'बिल',
+            more: 'More',
+            easy123: '⚡ Easy as 1-2-3 — पहले ग्राहक प्रकार चुनें',
+            step1Choose: '1️⃣ ग्राहक प्रकार चुनें',
+            step2Tap: '2️⃣ उत्पाद टैप करें',
+            step3Checkout: '3️⃣ Checkout',
+            step1Label: 'STEP 1 — वॉक-इन (Rate X) या खुदरा व्यापारी (Rate Y) चुनें — दरें तुरंत बदलेंगी',
+            walkinTitle: '🚶 वॉक-इन ग्राहक — Rate X',
+            walkinSub: 'काउंटर / मेहमान — सभी उत्पादों पर वॉक-इन दर',
+            traderTitle: '🏪 खुदरा व्यापारी — Rate Y',
+            traderSub: 'दुकान / थोक — सभी उत्पादों पर व्यापारी दर',
+            stepHint: '👉 Walk-in या Retail Trader चुनें → STEP 2 में उत्पाद टैप करें। बिल में दरें उसी हिसाब से बदलेंगी।',
+            customer: '🏷️ ग्राहक',
+            optional: 'वैकल्पिक',
+            name: 'नाम',
+            walkinOk: 'वॉक-इन ठीक है',
+            mobile: 'मोबाइल नंबर',
+            dateTime: 'दिनांक और समय',
+            menuTap: '🍪 मेनू — जोड़ने के लिए टैप करें',
+            currentBill: '🛒 वर्तमान बिल',
+            summary: '💰 सारांश',
+            otherCharges: 'अन्य शुल्क (₹)',
+            discount: 'छूट (%)',
+            payment: 'Payment',
+            trackDues: 'track dues',
+            paidFull: 'Paid in full',
+            partial: 'Partial',
+            creditDue: 'Credit / Due',
+            received: 'प्राप्त राशि (₹)',
+            dueAmount: 'बकाया राशि',
+            sendWhatsApp: '📱 व्हाट्सएप भेजें',
+            saveBill: '💾 बिल सहेजें',
+            printBill: '🖨️ बिल प्रिंट करें',
+            downloadPDF: '⬇️ PDF डाउनलोड करें',
+            clear: '🗑️ साफ़ करें',
+            tapToAdd: '🛒 आइटम जोड़ने के लिए टैप करें',
+            rateCard: 'दर कार्ड',
+            subtotal: 'उप-योग',
+            grandTotal: 'कुल राशि',
+            items: 'आइटम',
+            totalQty: 'कुल मात्रा',
+            bulkHeader: '⚡ One-Click Global Rates — Easy as 123',
+            bulkHintMain: 'यहाँ आप एक ही बार में सभी उत्पादों के लिए Rate X (वॉक-इन) और Rate Y (खुदरा व्यापारी) सेट कर सकते हैं। 1 बटन = सभी पर लागू!',
+            walkinRateX: '🚶 वॉक-इन Rate X — सभी के लिए',
+            walkinRateXLabel: 'Walk-in Rate X (₹) — सभी उत्पादों पर',
+            walkinApply: '🚶 Walk-in Rate X सभी पर लागू करें',
+            walkinBulkHint: 'सभी उत्पादों की वॉक-इन दर एक क्लिक में X पर सेट हो जाएगी।',
+            traderRateY: '🏪 खुदरा व्यापारी Rate Y — सभी के लिए',
+            traderRateYLabel: 'Retail Trader Rate Y (₹) — सभी उत्पादों पर',
+            traderApply: '🏪 Trader Rate Y सभी पर लागू करें',
+            traderBulkHint: 'सभी उत्पादों की खुदरा व्यापारी दर एक क्लिक में Y पर सेट हो जाएगी।',
+            bothApply: '⚡ दोनों दरें (X और Y) सभी पर लागू करें',
+            loadFromSettings: '🔄 Settings से दरें लोड करें',
+            tipGlobal: '💡 Tip: Settings में भी आप X और Y को हमेशा के लिए सेव कर सकते हैं। नए उत्पाद जोड़ते समय वही दरें अपने आप लगेंगी।',
+            addProduct: '➕ उत्पाद जोड़ें',
+            productName: 'नाम',
+            walkinRate: 'वॉक-इन दर (₹)',
+            traderRate: 'खुदरा व्यापारी दर (₹)',
+            unit: 'इकाई',
+            desc: 'विवरण',
+            expiry: 'समाप्ति तिथि',
+            sameRate: 'एक क्लिक - समान दर',
+            setExpiryAll: '📅 सभी उत्पादों की समाप्ति तिथि सेट करें',
+            fillGlobal: '⚡ Global X/Y भरें',
+            productList: '📋 उत्पाद सूची — वॉक-इन और व्यापारी दरें ठीक करें',
+            productListHint: 'वॉक-इन (काउंटर) और खुदरा व्यापारी दरें बदलने के लिए किसी भी उत्पाद को संपादित करें। बिल बनाते समय आप जो ग्राहक प्रकार चुनते हैं, उसी दर का उपयोग होता है। ऊपर वाले बटनों से आप एक क्लिक में सभी पर Rate X और Rate Y लागू कर सकते हैं।',
+            billHistory: '📜 बिल इतिहास',
+            refresh: '🔄 रिफ्रेश',
+            salesByDate: '📅 Sales by date',
+            from: 'From',
+            to: 'To',
+            apply: 'Apply',
+            export: '📊 Export',
+            today: 'Today',
+            week: 'This week',
+            month: 'This month',
+            year: 'This year',
+            allTime: 'All time',
+            productSales: '🍪 Product sales — what sold most',
+            inSelected: 'In selected dates',
+            customerLedger: '📒 Customer ledger',
+            searchCustomer: 'Search customer name or mobile',
+            businessSettings: '⚙️ व्यवसाय सेटिंग्स',
+            businessName: 'व्यापार नाम',
+            phone: 'फोन',
+            address: 'पता',
+            currency: 'मुद्रा प्रतीक',
+            defaultCustomerType: 'डिफ़ॉल्ट ग्राहक प्रकार',
+            defaultHint: 'नए बिल इस प्रकार से शुरू होते हैं। आप बिल स्क्रीन पर बदल सकते हैं — दरें तुरंत अपडेट होती हैं।',
+            globalRates: '⚡ Global Rates — Rate X और Rate Y सेव करें',
+            globalHint: 'यहाँ आप वॉक-इन के लिए Rate X और खुदरा व्यापारी के लिए Rate Y सेव कर सकते हैं। नए उत्पाद जोड़ते समय यही दरें अपने आप लगेंगी। एक बटन से सभी उत्पादों पर भी लागू कर सकते हैं।',
+            walkinGlobal: '🌍 Walk-in Global Rate X (₹)',
+            traderGlobal: '🌍 Trader Global Rate Y (₹)',
+            saveXApply: '🚶 X को सेव + सभी पर लागू',
+            saveYApply: '🏪 Y को सेव + सभी पर लागू',
+            saveBothApply: '⚡ X और Y सेव + सभी पर लागू',
+            saveSettings: 'सेटिंग्स सहेजें',
+            changePIN: '🔑 Change PIN',
+            lockNow: '🔒 Lock Now',
+            resetAll: 'Reset All Data',
+            billNo: 'बिल संख्या',
+            date: 'दिनांक',
+            customerLabel: 'ग्राहक',
+            rate: 'दर',
+            walkinCustomer: 'वॉक-इन',
+            retailTrader: 'खुदरा व्यापारी',
+            walkinGuest: 'वॉक-इन मेहमान',
+            retailTraderFull: 'खुदरा व्यापारी',
+            paid: 'भुगतान किया गया',
+            due: 'बकाया',
+            partialBadge: 'आंशिक',
+            rateX: 'Rate X',
+            rateY: 'Rate Y',
+            walkinRateLabel: 'वॉक-इन दर',
+            traderRateLabel: 'खुदरा व्यापारी दर',
+            language: 'भाषा',
+            en: 'English',
+            hi: 'हिंदी'
+        },
+        en: {
+            appTitleFull: '🥙 Khakra Billing — No GST, Clean Bills',
+            appTitleShort: '🥙 Khakra Billing',
+            newBill: '📝 New Bill',
+            products: '📦 Products',
+            history: '📜 History',
+            ledger: '📒 Ledger & Sales',
+            settings: '⚙️ Settings',
+            billing: 'Billing',
+            more: 'More',
+            easy123: '⚡ Easy as 1-2-3 — Choose Customer Type First',
+            step1Choose: '1️⃣ Choose Customer Type',
+            step2Tap: '2️⃣ Tap Products',
+            step3Checkout: '3️⃣ Checkout',
+            step1Label: 'STEP 1 — Choose Walk-in (Rate X) or Retail Trader (Rate Y) — rates change instantly',
+            walkinTitle: '🚶 Walk-in Customer — Rate X',
+            walkinSub: 'Counter / Guest — Walk-in rate for all products',
+            traderTitle: '🏪 Retail Trader — Rate Y',
+            traderSub: 'Shop / Wholesale — Trader rate for all products',
+            stepHint: '👉 Choose Walk-in or Retail Trader → Then tap products in STEP 2. Bill rates will update accordingly.',
+            customer: '🏷️ Customer',
+            optional: 'Optional',
+            name: 'Name',
+            walkinOk: 'Walk-in OK',
+            mobile: 'Mobile Number',
+            dateTime: 'Date & Time',
+            menuTap: '🍪 Menu — Tap to Add',
+            currentBill: '🛒 Current Bill',
+            summary: '💰 Summary',
+            otherCharges: 'Other Charges (₹)',
+            discount: 'Discount (%)',
+            payment: 'Payment',
+            trackDues: 'track dues',
+            paidFull: 'Paid in full',
+            partial: 'Partial',
+            creditDue: 'Credit / Due',
+            received: 'Amount Received (₹)',
+            dueAmount: 'Due Amount',
+            sendWhatsApp: '📱 Send WhatsApp',
+            saveBill: '💾 Save Bill',
+            printBill: '🖨️ Print Bill',
+            downloadPDF: '⬇️ Download PDF',
+            clear: '🗑️ Clear',
+            tapToAdd: '🛒 Tap items to add',
+            rateCard: 'Rate Card',
+            subtotal: 'Subtotal',
+            grandTotal: 'Grand Total',
+            items: 'Items',
+            totalQty: 'Total Qty',
+            bulkHeader: '⚡ One-Click Global Rates — Easy as 123',
+            bulkHintMain: 'Set Rate X (Walk-in) and Rate Y (Retail Trader) for ALL products in one click. 1 Button = Apply to All!',
+            walkinRateX: '🚶 Walk-in Rate X — For All',
+            walkinRateXLabel: 'Walk-in Rate X (₹) — For All Products',
+            walkinApply: '🚶 Apply Walk-in Rate X to ALL',
+            walkinBulkHint: 'All products walk-in rate will be set to X in one click.',
+            traderRateY: '🏪 Retail Trader Rate Y — For All',
+            traderRateYLabel: 'Retail Trader Rate Y (₹) — For All Products',
+            traderApply: '🏪 Apply Trader Rate Y to ALL',
+            traderBulkHint: 'All products trader rate will be set to Y in one click.',
+            bothApply: '⚡ Apply BOTH Rates (X & Y) to ALL',
+            loadFromSettings: '🔄 Load Rates from Settings',
+            tipGlobal: '💡 Tip: You can also save X & Y permanently in Settings. New products will auto-use those rates.',
+            addProduct: '➕ Add Product',
+            productName: 'Name',
+            walkinRate: 'Walk-in Rate (₹)',
+            traderRate: 'Retail Trader Rate (₹)',
+            unit: 'Unit',
+            desc: 'Description',
+            expiry: 'Expiry Date',
+            sameRate: 'One Click - Same Rate',
+            setExpiryAll: '📅 Set Expiry for All Products',
+            fillGlobal: '⚡ Fill Global X/Y',
+            productList: '📋 Product List — Fix Walk-in & Trader Rates',
+            productListHint: 'Edit any product to fix Walk-in (counter) and Retail Trader rates. The rate used in billing is the customer type you choose. Use the buttons above to apply Rate X & Rate Y to all in one click.',
+            billHistory: '📜 Bill History',
+            refresh: '🔄 Refresh',
+            salesByDate: '📅 Sales by date',
+            from: 'From',
+            to: 'To',
+            apply: 'Apply',
+            export: '📊 Export',
+            today: 'Today',
+            week: 'This week',
+            month: 'This month',
+            year: 'This year',
+            allTime: 'All time',
+            productSales: '🍪 Product sales — what sold most',
+            inSelected: 'In selected dates',
+            customerLedger: '📒 Customer ledger',
+            searchCustomer: 'Search customer name or mobile',
+            businessSettings: '⚙️ Business Settings',
+            businessName: 'Business Name',
+            phone: 'Phone',
+            address: 'Address',
+            currency: 'Currency Symbol',
+            defaultCustomerType: 'Default Customer Type',
+            defaultHint: 'New bills start with this type. You can change on billing screen — rates update instantly.',
+            globalRates: '⚡ Global Rates — Save Rate X & Rate Y',
+            globalHint: 'Here you can save Rate X for Walk-in and Rate Y for Retail Trader. New products will auto-use these rates. You can also apply to all products in one click.',
+            walkinGlobal: '🌍 Walk-in Global Rate X (₹)',
+            traderGlobal: '🌍 Trader Global Rate Y (₹)',
+            saveXApply: '🚶 Save X + Apply to All',
+            saveYApply: '🏪 Save Y + Apply to All',
+            saveBothApply: '⚡ Save X & Y + Apply to All',
+            saveSettings: 'Save Settings',
+            changePIN: '🔑 Change PIN',
+            lockNow: '🔒 Lock Now',
+            resetAll: 'Reset All Data',
+            billNo: 'Bill No',
+            date: 'Date',
+            customerLabel: 'Customer',
+            rate: 'Rate',
+            walkinCustomer: 'Walk-in',
+            retailTrader: 'Retail Trader',
+            walkinGuest: 'Walk-in Guest',
+            retailTraderFull: 'Retail Trader',
+            paid: 'Paid',
+            due: 'Due',
+            partialBadge: 'Partial',
+            rateX: 'Rate X',
+            rateY: 'Rate Y',
+            walkinRateLabel: 'Walk-in Rate',
+            traderRateLabel: 'Retail Trader Rate',
+            language: 'Language',
+            en: 'English',
+            hi: 'हिंदी'
+        }
+    };
+
+    function getLang() { return (settings && settings.language === 'en') ? 'en' : 'hi'; }
+    function t(key) {
+        const lang = getLang();
+        return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || (TRANSLATIONS['hi'][key]) || key;
+    }
+    function setLanguage(lang) {
+        const next = (lang === 'en') ? 'en' : 'hi';
+        settings.language = next;
+        saveAll();
+        applyLanguage();
+        notify(next === 'en' ? 'Language: English' : 'भाषा: हिंदी', 'success');
+    }
+    function toggleLanguage() {
+        setLanguage(getLang() === 'en' ? 'hi' : 'en');
+    }
+    function applyLanguage() {
+        const lang = getLang();
+        const btn = document.getElementById('langToggleBtn');
+        if (btn) btn.textContent = lang === 'en' ? '🌐 हिंदी' : '🌐 EN';
+
+        // Title
+        const full = document.getElementById('appTitleFull');
+        const short = document.getElementById('appTitleShort');
+        if (full) full.textContent = t('appTitleFull');
+        if (short) short.textContent = t('appTitleShort');
+
+        // Menu bar
+        document.querySelectorAll('.menu-item').forEach(el => {
+            const tab = el.getAttribute('data-tab');
+            if (tab === 'billing') el.textContent = t('newBill');
+            else if (tab === 'products') el.textContent = t('products');
+            else if (tab === 'history') el.textContent = t('history');
+            else if (tab === 'reports') el.textContent = t('ledger');
+            else if (tab === 'settings') el.textContent = t('settings');
+        });
+        document.querySelectorAll('.mobile-nav-item').forEach(el => {
+            const tab = el.getAttribute('data-tab');
+            const span = el.querySelector('span:last-child');
+            if (!span) return;
+            if (tab === 'billing') span.textContent = t('billing');
+            else if (tab === 'products') span.textContent = 'Products';
+            else if (tab === 'history') span.textContent = 'Bills';
+            else if (tab === 'reports') span.textContent = 'Ledger';
+            else if (tab === 'settings') span.textContent = t('more');
+        });
+
+        // Billing – step panel
+        const stepHeader = document.querySelector('.step-panel .panel-header');
+        if (stepHeader) stepHeader.textContent = t('easy123');
+        const pills = document.querySelectorAll('.step-pill');
+        if (pills[0]) pills[0].textContent = t('step1Choose');
+        if (pills[1]) pills[1].textContent = t('step2Tap');
+        if (pills[2]) pills[2].textContent = t('step3Checkout');
+        const stepLabel = document.querySelector('.step-panel .field-label');
+        if (stepLabel) stepLabel.textContent = t('step1Label');
+
+        const wTitle = document.querySelector('#ctypeWalkin .ctype-title');
+        const wSub = document.querySelector('#ctypeWalkin .ctype-sub');
+        const tTitle = document.querySelector('#ctypeTrader .ctype-title');
+        const tSub = document.querySelector('#ctypeTrader .ctype-sub');
+        if (wTitle) wTitle.textContent = t('walkinTitle');
+        if (wSub) wSub.textContent = t('walkinSub');
+        if (tTitle) tTitle.textContent = t('traderTitle');
+        if (tSub) tSub.textContent = t('traderSub');
+
+        const stepHint = document.querySelector('.step-panel .field-hint');
+        if (stepHint) stepHint.textContent = t('stepHint');
+
+        // Customer panel
+        const custHeader = document.querySelector('.customer-panel .panel-header');
+        if (custHeader) custHeader.innerHTML = t('customer') + ' <span class="optional-tag">' + t('optional') + '</span>';
+
+        // Products panel headers – best effort
+        const menuHeader = document.querySelector('.products-panel .panel-header');
+        if (menuHeader) {
+            const badge = document.getElementById('menuRateLabel');
+            const badgeHtml = badge ? badge.outerHTML : '';
+            menuHeader.innerHTML = t('menuTap') + ' ' + badgeHtml;
+        }
+
+        // Translate Products tab static headers
+        try {
+            const prodHeaders = document.querySelectorAll('#products .data-table thead th');
+            if (prodHeaders.length >= 6) {
+                prodHeaders[0].textContent = t('productName');
+                prodHeaders[1].textContent = t('walkinRateLabel');
+                prodHeaders[2].textContent = t('traderRateLabel');
+                prodHeaders[3].textContent = t('unit');
+                prodHeaders[4].textContent = t('expiry');
+            }
+        } catch(e){}
+
+        // Translate bulk panel and other panels
+        try {
+            const bulkHeader = document.querySelector('.bulk-rate-panel .panel-header');
+            if (bulkHeader) bulkHeader.textContent = t('bulkHeader');
+        } catch(e){}
+
+        // Settings headers
+        try {
+            const setHeaders = document.querySelectorAll('#settings .panel-header');
+            if (setHeaders[0]) setHeaders[0].textContent = t('businessSettings');
+        } catch(e){}
+
+        // Re-render dynamic parts that use t()
+        try { updateCustomerTypeUI(); } catch(e){}
+        try { renderProductGrid(); } catch(e){}
+        try { renderProductTable(); } catch(e){}
+        try { renderBillList(); } catch(e){}
+        try { calculateBill(); } catch(e){}
+        try { loadHistory(); } catch(e){}
+        try { renderReports(); } catch(e){}
+    }
+
     function normalizeCustomerType(t) { return t === 'trader' ? 'trader' : 'walkin'; }
     function getCustomerType() { return normalizeCustomerType(customerType); }
-    function customerTypeLabel(t) { return normalizeCustomerType(t) === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन'; }
+    function customerTypeLabel(t) { const isTrader = normalizeCustomerType(t) === 'trader'; return isTrader ? t('retailTrader') : t('walkinCustomer'); }
     function normalizeProduct(pr) {
         const price = Number(pr && pr.price) || 0;
         let traderPrice = (pr && pr.traderPrice != null && pr.traderPrice !== '') ? Number(pr.traderPrice) : price;
@@ -1567,6 +1941,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const tr = document.getElementById('settingsTraderRate');
         if (wr) wr.value = settings.walkinGlobalRate != null ? settings.walkinGlobalRate : '';
         if (tr) tr.value = settings.traderGlobalRate != null ? settings.traderGlobalRate : '';
+        const sl = document.getElementById('settingsLanguage');
+        if (sl) sl.value = getLang();
         // also sync bulk inputs if present
         const bw = document.getElementById('bulkWalkinRate');
         const bt = document.getElementById('bulkTraderRate');
@@ -1585,6 +1961,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         billHistory = (billHistory || []).map(b => { try { return ensureBillPayments(b); } catch (e) { return b; } });
         billCounter = parseInt(localStorage.getItem('khakra_billCounter') || '1');
         applySettingsToUI();
+        try { applyLanguage(); } catch(e){}
     }
     function saveAll() {
         localStorage.setItem('khakra_products', JSON.stringify(products));
@@ -1944,7 +2321,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         let total = subtotal - discount + charges;
         let totalQty = billItems.reduce((s,i)=>s+i.quantity,0);
         const type = getCustomerType();
-        document.getElementById('summaryBox').innerHTML = `<div class="summary-row"><span>दर कार्ड</span><span><span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)}</span></span></div><div class="summary-row"><span>उप-योग</span><span>${settings.currency}${subtotal.toFixed(2)}</span></div><div class="summary-row"><span>अन्य शुल्क</span><span>${settings.currency}${charges.toFixed(2)}</span></div><div class="summary-row"><span>छूट (${discPct}%)</span><span>-${settings.currency}${discount.toFixed(2)}</span></div><div class="quantity-info" style="background:#fef9e6; padding:10px; border-radius:20px; margin:10px 0;">📦 आइटम: ${billItems.length} | कुल मात्रा: ${totalQty}</div><div class="summary-row summary-total"><span>कुल राशि</span><span>${settings.currency}${total.toFixed(2)}</span></div>`;
+        document.getElementById('summaryBox').innerHTML = `<div class="summary-row"><span>${t('rateCard')}</span><span><span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)}</span></span></div><div class="summary-row"><span>${t('subtotal')}</span><span>${settings.currency}${subtotal.toFixed(2)}</span></div><div class="summary-row"><span>${t('otherCharges')}</span><span>${settings.currency}${charges.toFixed(2)}</span></div><div class="summary-row"><span>${t('discount')} (${discPct}%)</span><span>-${settings.currency}${discount.toFixed(2)}</span></div><div class="quantity-info" style="background:#fef9e6; padding:10px; border-radius:20px; margin:10px 0;">📦 ${t('items')}: ${billItems.length} | ${t('totalQty')}: ${totalQty}</div><div class="summary-row summary-total"><span>${t('grandTotal')}</span><span>${settings.currency}${total.toFixed(2)}</span></div>`;
         syncAmountReceived(total);
         updateReadyBar(total);
         return {subtotal,charges,discPct,discount,total,totalQty};
@@ -1976,18 +2353,46 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     }
     
     function clearBill(skipConfirm) { if(!skipConfirm && billItems.length && !confirm('Clear all?')) return; billItems = []; customerTypeChosen = false; document.getElementById('customerName').value=''; document.getElementById('customerPhone').value=''; const wrap = document.getElementById('customerPhoneWrap'); if (wrap) { wrap.classList.remove('valid','invalid'); } document.getElementById('otherCharges').value='0'; document.getElementById('discountPercent').value='0'; customerType = normalizeCustomerType(settings.defaultCustomerType); updateCustomerTypeUI(); setPayMode('full'); setDateTime(); renderProductGrid(); updateQuickSelect(); renderBillList(); calculateBill(); }
-    function saveBill() { const type = getCustomerType(); let name = document.getElementById('customerName').value.trim() || (type === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान'); if(!billItems.length) return notify('Add items','error'); const rawPhone = document.getElementById('customerPhone').value.trim(); const phone = normalizeIndianMobile(rawPhone); if (rawPhone && !isValidIndianMobile(phone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let {subtotal,charges,discPct,discount,total,totalQty} = calculateBill(); let received = parseFloat(document.getElementById('amountReceived').value); if (isNaN(received)) received = total; received = Math.max(0, Math.min(received, total)); received = Math.round(received*100)/100; let due = Math.round((total-received)*100)/100;
-    const isPaid = confirm('क्या राशि पूरी तरह भुगतान हुई है?\nOK = भुगतान पूरा\nCancel = बकाया है');
-    const status = isPaid ? 'paid' : 'due';
-    if (isPaid) { received = total; due = 0; }
-    let bill = { billNo: billCounter, dateTime: document.getElementById('billDateTime').value||new Date().toISOString(), customerType: type, customer: { name, phone, type }, status, items: billItems.map(i=>({ product: {...i.product}, quantity: i.quantity, rateType: type })), subtotal, charges, discount, discPct, total, totalQty, paid: received, due, payments: (received>0 || status==='paid') ? [{ date: document.getElementById('billDateTime').value||new Date().toISOString(), amount: received, note: 'At billing' }] : [] }; billHistory.push(bill); billCounter++; lastSavedBill = bill; saveAll(); updateStatusBar(); notify('Bill saved at ' + customerTypeLabel(type) + ' rates','success'); openAfterSaveModal(bill); }
+    function saveBill() {
+        const type = getCustomerType();
+        const lang = getLang();
+        // Ensure customer type was chosen (easy as 123) – if not, use current type but mark chosen
+        if (!customerTypeChosen) customerTypeChosen = true;
+        let defaultName = type === 'trader' ? t('retailTraderFull') : t('walkinGuest');
+        let name = document.getElementById('customerName').value.trim() || defaultName;
+        if(!billItems.length) return notify(lang==='en' ? 'Add items to make bill' : 'बिल बनाने के लिए आइटम जोड़ें','error');
+        const rawPhone = document.getElementById('customerPhone').value.trim();
+        const phone = normalizeIndianMobile(rawPhone);
+        if (rawPhone && !isValidIndianMobile(phone)) return notify(lang==='en' ? 'Mobile is optional — leave blank or enter valid 10-digit' : 'Mobile is optional — leave blank or enter a valid 10-digit number','error');
+        let {subtotal,charges,discPct,discount,total,totalQty} = calculateBill();
+        let received = parseFloat(document.getElementById('amountReceived').value);
+        if (isNaN(received)) received = total;
+        received = Math.max(0, Math.min(received, total));
+        received = Math.round(received*100)/100;
+        let due = Math.round((total-received)*100)/100;
+        const confirmMsg = lang==='en' ? 'Is the amount fully paid?\nOK = Paid\nCancel = Due' : 'क्या राशि पूरी तरह भुगतान हुई है?\nOK = भुगतान पूरा\nCancel = बकाया है';
+        const isPaid = confirm(confirmMsg);
+        const status = isPaid ? 'paid' : 'due';
+        if (isPaid) { received = total; due = 0; }
+        let bill = { billNo: billCounter, dateTime: document.getElementById('billDateTime').value||new Date().toISOString(), customerType: type, customer: { name, phone, type }, status, items: billItems.map(i=>({ product: {...i.product}, quantity: i.quantity, rateType: type })), subtotal, charges, discount, discPct, total, totalQty, paid: received, due, payments: (received>0 || status==='paid') ? [{ date: document.getElementById('billDateTime').value||new Date().toISOString(), amount: received, note: 'At billing' }] : [], lang: lang };
+        billHistory.push(bill);
+        billCounter++;
+        lastSavedBill = bill;
+        saveAll();
+        updateStatusBar();
+        try { loadHistory(); } catch(e){}
+        try { renderReports(); } catch(e){}
+        notify((lang==='en' ? 'Bill #' + bill.billNo + ' saved at ' : 'बिल #' + bill.billNo + ' सेव — ') + customerTypeLabel(type) + (lang==='en' ? ' rates' : ' दरें'), 'success');
+        openAfterSaveModal(bill);
+    }
 
-    // NEW YORK TIMES STYLE – NO GST, CLEAN, EXPIRY IN आइटमS
+    // NEW YORK TIMES STYLE – NO GST, CLEAN, EXPIRY IN ITEMS – BILINGUAL
     function generateNYTBillHTML(billData, items, isSaved=false) {
+        const lang = getLang();
         let rateType = normalizeCustomerType(billData.customerType);
-        let custName = billData.customerName || (rateType === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान');
+        let custName = billData.customerName || (rateType === 'trader' ? t('retailTraderFull') : t('walkinGuest'));
         let custPhone = billData.customerPhone || '';
-        let date = billData.dateTime ? new Date(billData.dateTime).toLocaleString('en-US', { hour12: true }) : new Date().toLocaleString();
+        let date = billData.dateTime ? new Date(billData.dateTime).toLocaleString(lang==='en' ? 'en-US' : 'en-IN', { hour12: true }) : new Date().toLocaleString();
         let billNo = billData.billNo || (isSaved ? billData.billNo : billCounter);
         let subtotal = billData.subtotal !== undefined ? billData.subtotal : items.reduce((s,i)=>s+(i.product.price*i.quantity),0);
         let charges = billData.charges !== undefined ? billData.charges : (parseFloat(document.getElementById('otherCharges')?.value)||0);
@@ -1995,8 +2400,27 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         let discount = subtotal * discPct / 100;
         let total = subtotal - discount + charges;
         let totalQty = items.reduce((s,i)=>s+i.quantity,0);
-        let itemsHtml = items.map((item,i)=>`<tr style="border-bottom: 0.5px solid #e2e2e2;"><td style="padding: 8px 4px 8px 0; width: 30px;">${i+1}</td><td style="padding: 8px 8px;"><strong>${escapeHtml(item.product.name)}</strong><br><span style="font-family: 'Times New Roman', serif; font-size: 11px; color: #5e5e5e;">${item.product.unit} · ${settings.currency}${item.product.price.toFixed(2)} प्रत्येक${item.product.expiry ? ` · Expiry: ${item.product.expiry}` : ''}</span></td><td style="padding: 8px; text-align: center;">${item.quantity}</td><td style="padding: 8px; text-align: right;">${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</td></tr>`).join('');
-        return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${settings.businessName} – Bill #${billNo}</title><style>body { margin: 0; padding: 0; background: white; font-family: 'Times New Roman', Georgia, serif; } .nyt-container { max-width: 700px; margin: 0 auto; padding: 0.6in 0.5in; background: white; } .nyt-header { text-align: center; border-bottom: 2px solid #111; margin-bottom: 24px; } .nyt-header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 6px 0; font-family: 'Times New Roman', serif; } .nyt-header .shop-details { font-size: 12px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; } .nyt-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 28px; border-bottom: 1px solid #ddd; padding-bottom: 12px; } .bill-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; } .bill-table th { text-align: left; padding: 6px 4px; border-bottom: 1px solid #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; } .totals { text-align: right; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 16px; font-size: 14px; } .totals div { margin: 6px 0; } .grand-total { font-size: 20px; font-weight: 700; margin-top: 12px; } .footer-note { margin-top: 32px; text-align: center; font-size: 11px; color: #5c5c5c; border-top: 1px solid #ddd; padding-top: 20px; font-style: italic; } .expiry-note { background: #fef7e0; padding: 8px 12px; font-size: 10px; text-align: center; margin-top: 20px; }</style></head><body><div class="nyt-container"><div class="nyt-header"><h1>${settings.businessName}</h1><div class="shop-details">${settings.address || ''} ${settings.phone ? '· ' + settings.phone : ''}</div></div><div class="nyt-meta"><div><strong>बिल संख्या:</strong> ${billNo}<br><strong>दिनांक:</strong> ${date}</div><div><strong>ग्राहक:</strong> ${custName}<br>${custPhone ? `📞 ${custPhone}<br>` : ''}<strong>दर:</strong> ${customerTypeLabel(rateType)}</div></div><table class="bill-table"><thead><tr><th>#</th><th>आइटम</th><th>मात्रा</th><th>राशि</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><div>उप-योग: ${settings.currency}${subtotal.toFixed(2)}</div>${charges ? `<div>अन्य शुल्क: ${settings.currency}${charges.toFixed(2)}</div>` : ''}${discPct ? `<div>छूट (${discPct}%): -${settings.currency}${discount.toFixed(2)}</div>` : ''}<div class="grand-total">कुल: ${settings.currency}${total.toFixed(2)}</div><div style="font-size: 12px;">कुल आइटम: ${items.length} | कुल मात्रा: ${totalQty}</div></div><div class="expiry-note">📅 प्रत्येक उत्पाद पर समाप्ति तिथि दी गई है। ताजगी के लिए समाप्ति से पहले उपभोग करें।</div>${(billData.status==='paid') ? '<div style="margin-top:8px;padding:10px;background:#d1fae5;border-radius:12px;text-align:center;font-weight:800;color:#065f46;font-size:14px;">✅ भुगतान पूरा</div>' : ((billData.status==='due') ? '<div style="margin-top:8px;padding:10px;background:#fee2e2;border-radius:12px;text-align:center;font-weight:800;color:#991b1b;font-size:14px;">⏳ बकाया — कृपया भुगतान करें</div>' : '')}<div class="footer-note">खरीदारी के लिए धन्यवाद — कुरकुरा खखरा, शाश्वत स्वाद।</div></div></body></html>`;
+        let itemsHtml = items.map((item,i)=>`<tr style="border-bottom: 0.5px solid #e2e2e2;"><td style="padding: 8px 4px 8px 0; width: 30px;">${i+1}</td><td style="padding: 8px 8px;"><strong>${escapeHtml(item.product.name)}</strong><br><span style="font-family: 'Times New Roman', serif; font-size: 11px; color: #5e5e5e;">${item.product.unit} · ${settings.currency}${item.product.price.toFixed(2)} ${lang==='en' ? 'each' : 'प्रत्येक'}${item.product.expiry ? ` · Expiry: ${item.product.expiry}` : ''}</span></td><td style="padding: 8px; text-align: center;">${item.quantity}</td><td style="padding: 8px; text-align: right;">${settings.currency}${(item.product.price*item.quantity).toFixed(2)}</td></tr>`).join('');
+        const L = {
+            billNo: lang==='en' ? 'Bill No' : 'बिल संख्या',
+            date: lang==='en' ? 'Date' : 'दिनांक',
+            customer: lang==='en' ? 'Customer' : 'ग्राहक',
+            rate: lang==='en' ? 'Rate' : 'दर',
+            item: lang==='en' ? 'Item' : 'आइटम',
+            qty: lang==='en' ? 'Qty' : 'मात्रा',
+            amount: lang==='en' ? 'Amount' : 'राशि',
+            subtotal: lang==='en' ? 'Subtotal' : 'उप-योग',
+            other: lang==='en' ? 'Other Charges' : 'अन्य शुल्क',
+            discount: lang==='en' ? 'Discount' : 'छूट',
+            total: lang==='en' ? 'Total' : 'कुल',
+            totalItems: lang==='en' ? 'Total Items' : 'कुल आइटम',
+            totalQty: lang==='en' ? 'Total Qty' : 'कुल मात्रा',
+            expiryNote: lang==='en' ? '📅 Expiry date is mentioned per product. Please consume before expiry for freshness.' : '📅 प्रत्येक उत्पाद पर समाप्ति तिथि दी गई है। ताजगी के लिए समाप्ति से पहले उपभोग करें।',
+            paid: lang==='en' ? '✅ Paid' : '✅ भुगतान पूरा',
+            due: lang==='en' ? '⏳ Due — Please pay' : '⏳ बकाया — कृपया भुगतान करें',
+            thank: lang==='en' ? 'Thank you for shopping — Crispy Khakra, Timeless Taste.' : 'खरीदारी के लिए धन्यवाद — कुरकुरा खखरा, शाश्वत स्वाद।'
+        };
+        return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${settings.businessName} – Bill #${billNo}</title><style>body { margin: 0; padding: 0; background: white; font-family: 'Times New Roman', Georgia, serif; } .nyt-container { max-width: 700px; margin: 0 auto; padding: 0.6in 0.5in; background: white; } .nyt-header { text-align: center; border-bottom: 2px solid #111; margin-bottom: 24px; } .nyt-header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 6px 0; font-family: 'Times New Roman', serif; } .nyt-header .shop-details { font-size: 12px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; } .nyt-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 28px; border-bottom: 1px solid #ddd; padding-bottom: 12px; } .bill-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; } .bill-table th { text-align: left; padding: 6px 4px; border-bottom: 1px solid #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; } .totals { text-align: right; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 16px; font-size: 14px; } .totals div { margin: 6px 0; } .grand-total { font-size: 20px; font-weight: 700; margin-top: 12px; } .footer-note { margin-top: 32px; text-align: center; font-size: 11px; color: #5c5c5c; border-top: 1px solid #ddd; padding-top: 20px; font-style: italic; } .expiry-note { background: #fef7e0; padding: 8px 12px; font-size: 10px; text-align: center; margin-top: 20px; }</style></head><body><div class="nyt-container"><div class="nyt-header"><h1>${settings.businessName}</h1><div class="shop-details">${settings.address || ''} ${settings.phone ? '· ' + settings.phone : ''}</div></div><div class="nyt-meta"><div><strong>${L.billNo}:</strong> ${billNo}<br><strong>${L.date}:</strong> ${date}</div><div><strong>${L.customer}:</strong> ${custName}<br>${custPhone ? `📞 ${custPhone}<br>` : ''}<strong>${L.rate}:</strong> ${customerTypeLabel(rateType)}</div></div><table class="bill-table"><thead><tr><th>#</th><th>${L.item}</th><th>${L.qty}</th><th>${L.amount}</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><div>${L.subtotal}: ${settings.currency}${subtotal.toFixed(2)}</div>${charges ? `<div>${L.other}: ${settings.currency}${charges.toFixed(2)}</div>` : ''}${discPct ? `<div>${L.discount} (${discPct}%): -${settings.currency}${discount.toFixed(2)}</div>` : ''}<div class="grand-total">${L.total}: ${settings.currency}${total.toFixed(2)}</div><div style="font-size: 12px;">${L.totalItems}: ${items.length} | ${L.totalQty}: ${totalQty}</div></div><div class="expiry-note">${L.expiryNote}</div>${(billData.status==='paid') ? `<div style="margin-top:8px;padding:10px;background:#d1fae5;border-radius:12px;text-align:center;font-weight:800;color:#065f46;font-size:14px;">${L.paid}</div>` : ((billData.status==='due') ? `<div style="margin-top:8px;padding:10px;background:#fee2e2;border-radius:12px;text-align:center;font-weight:800;color:#991b1b;font-size:14px;">${L.due}</div>` : '')}<div class="footer-note">${L.thank}</div></div></body></html>`;
     }
 
     // ================= PRINT / PDF =================
@@ -2011,6 +2435,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const doc = new jsPDF({ unit: 'mm', format: 'a4' });
         const pageW = 210, pageH = 297, margin = 15, curW = pageW - margin * 2;
         let y = 0;
+        const lang = (billData && billData.lang) ? billData.lang : getLang();
 
         // Header
         y = 22;
@@ -2027,16 +2452,35 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         // Meta
         const billNo = billData.billNo || (isSaved ? billData.billNo : billCounter);
         const rateType = normalizeCustomerType(billData.customerType);
-        const custName = billData.customerName || (rateType === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान');
+        const custName = billData.customerName || (rateType === 'trader' ? t('retailTraderFull') : t('walkinGuest'));
         const custPhone = billData.customerPhone || '';
-        const date = billData.dateTime ? new Date(billData.dateTime).toLocaleString('en-US', { hour12: true }) : new Date().toLocaleString();
+        const date = billData.dateTime ? new Date(billData.dateTime).toLocaleString(lang==='en' ? 'en-US' : 'en-IN', { hour12: true }) : new Date().toLocaleString();
+        const L = {
+            billNo: lang==='en' ? 'Bill No' : 'बिल संख्या',
+            customer: lang==='en' ? 'Customer' : 'ग्राहक',
+            date: lang==='en' ? 'Date' : 'दिनांक',
+            rate: lang==='en' ? 'Rate' : 'दर',
+            item: lang==='en' ? 'Item' : 'आइटम',
+            qty: lang==='en' ? 'Qty' : 'मात्रा',
+            amount: lang==='en' ? 'Amount' : 'राशि',
+            subtotal: lang==='en' ? 'Subtotal' : 'उप-योग',
+            other: lang==='en' ? 'Other Charges' : 'अन्य शुल्क',
+            discount: lang==='en' ? 'Discount' : 'छूट',
+            grand: lang==='en' ? 'GRAND TOTAL' : 'कुल राशि',
+            items: lang==='en' ? 'Items' : 'आइटम',
+            totalQty: lang==='en' ? 'Total Qty' : 'कुल मात्रा',
+            each: lang==='en' ? 'each' : 'प्रत्येक',
+            paid: lang==='en' ? 'Paid' : 'भुगतान पूरा',
+            due: lang==='en' ? 'Due' : 'बकाया',
+            thank: lang==='en' ? 'Thank you for shopping — Crispy Khakra, Timeless Taste.' : 'खरीदारी के लिए धन्यवाद — कुरकुरा खखरा, शाश्वत स्वाद।'
+        };
         doc.setFont('times', 'bold'); doc.setFontSize(10); doc.setTextColor(20);
-        doc.text('बिल संख्या: ' + billNo, margin, y);
-        doc.text('ग्राहक: ' + custName, margin + curW / 2, y);
+        doc.text(L.billNo + ': ' + billNo, margin, y);
+        doc.text(L.customer + ': ' + custName, margin + curW / 2, y);
         y += 5;
         doc.setFont('times', 'normal'); doc.setFontSize(9); doc.setTextColor(70);
-        doc.text('दिनांक: ' + date, margin, y);
-        doc.text('दर: ' + customerTypeLabel(rateType) + (custPhone ? '   PHONE: ' + custPhone : ''), margin + curW / 2, y);
+        doc.text(L.date + ': ' + date, margin, y);
+        doc.text(L.rate + ': ' + customerTypeLabel(rateType) + (custPhone ? '   PHONE: ' + custPhone : ''), margin + curW / 2, y);
         y += 9;
 
         // Table header
@@ -2044,9 +2488,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         y += 5;
         doc.setFont('times', 'bold'); doc.setFontSize(10); doc.setTextColor(20);
         doc.text('#', margin, y);
-        doc.text('आइटम', margin + 8, y);
-        doc.text('मात्रा', pageW - margin - 38, y);
-        doc.text('राशि', pageW - margin, y, { align: 'right' });
+        doc.text(L.item, margin + 8, y);
+        doc.text(L.qty, pageW - margin - 38, y);
+        doc.text(L.amount, pageW - margin, y, { align: 'right' });
         y += 4;
         doc.line(margin, y, pageW - margin, y);
         y += 6;
@@ -2056,7 +2500,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         doc.setFont('times', 'normal'); doc.setFontSize(10); doc.setTextColor(20);
         items.forEach((item, i) => {
             if (y > 268) { doc.addPage(); y = 20; }
-            const priceLine = item.product.unit + ' · ' + settings.currency + item.product.price.toFixed(2) + ' प्रत्येक' + (item.product.expiry ? ' · Exp: ' + item.product.expiry : '');
+            const priceLine = item.product.unit + ' · ' + settings.currency + item.product.price.toFixed(2) + ' ' + L.each + (item.product.expiry ? ' · Exp: ' + item.product.expiry : '');
             doc.text(String(i + 1), margin, y);
             doc.text(item.product.name, margin + 8, y);
             doc.text(String(item.quantity), pageW - margin - 38, y, { align: 'center' });
@@ -2077,23 +2521,23 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const discount = subtotal * discPct / 100;
         const total = subtotal - discount + charges;
         doc.setFont('times', 'normal'); doc.setFontSize(10); doc.setTextColor(20);
-        doc.text('उप-योग', margin, y); doc.text(settings.currency + subtotal.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5;
-        if (charges) { doc.text('अन्य शुल्क', margin, y); doc.text(settings.currency + charges.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
-        if (discPct) { doc.text('छूट (' + discPct + '%)', margin, y); doc.text('-' + settings.currency + discount.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
+        doc.text(L.subtotal, margin, y); doc.text(settings.currency + subtotal.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5;
+        if (charges) { doc.text(L.other, margin, y); doc.text(settings.currency + charges.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
+        if (discPct) { doc.text(L.discount + ' (' + discPct + '%)', margin, y); doc.text('-' + settings.currency + discount.toFixed(2), pageW - margin, y, { align: 'right' }); y += 5; }
         y += 2;
         doc.setFont('times', 'bold'); doc.setFontSize(14);
-        doc.text('GRAND TOTAL', margin, y);
+        doc.text(L.grand, margin, y);
         doc.text(settings.currency + total.toFixed(2), pageW - margin, y, { align: 'right' });
         y += 6;
         doc.setFont('times', 'normal'); doc.setFontSize(9); doc.setTextColor(80);
         const totalQty = items.reduce((s, i) => s + i.quantity, 0);
-        doc.text('Items: ' + items.length + '   |   कुल मात्रा: ' + totalQty, margin, y);
+        doc.text(L.items + ': ' + items.length + '   |   ' + L.totalQty + ': ' + totalQty, margin, y);
         doc.text('Best before / expiry dates are per product.', pageW - margin, y, { align: 'right' });
 
         // Status remark / watermark
         if (billData.status) {
             doc.setFont('times', 'bold'); doc.setFontSize(11);
-            const remark = billData.status === 'paid' ? '✅ भुगतान पूरा' : '⏳ बकाया';
+            const remark = billData.status === 'paid' ? '✅ ' + L.paid : '⏳ ' + L.due;
             const remarkColor = billData.status === 'paid' ? 13 : 180;
             doc.setTextColor(remarkColor, 0, 0);
             doc.text(remark, pageW - margin, 278, { align: 'right' });
@@ -2101,13 +2545,13 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         }
         // Footer
         doc.setFont('times', 'italic'); doc.setFontSize(9); doc.setTextColor(110);
-        doc.text('खरीदारी के लिए धन्यवाद — कुरकुरा खखरा, शाश्वत स्वाद।', pageW / 2, 285, { align: 'center' });
+        doc.text(L.thank, pageW / 2, 285, { align: 'center' });
         return doc;
     }
 
     function currentBillData() {
         const type = getCustomerType();
-        return { customerName: document.getElementById('customerName').value.trim() || (type === 'trader' ? 'खुदरा व्यापारी' : 'वॉक-इन मेहमान'), customerPhone: document.getElementById('customerPhone').value, dateTime: document.getElementById('billDateTime').value, billNo: billCounter, customerType: type };
+        return { customerName: document.getElementById('customerName').value.trim() || (type === 'trader' ? t('retailTraderFull') : t('walkinGuest')), customerPhone: document.getElementById('customerPhone').value, dateTime: document.getElementById('billDateTime').value, billNo: billCounter, customerType: type, lang: getLang() };
     }
 
     // Save (download) a bill as a PDF file.
@@ -2290,13 +2734,14 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         });
     }
     function buildWhatsAppText(billData, items) {
+        const lang = (billData && billData.lang) ? billData.lang : getLang();
         const shop = settings.businessName || 'Khakra Billing';
-        const custName = (billData.customerName || '').trim() || 'Customer';
+        const custName = (billData.customerName || '').trim() || (lang==='en' ? 'Customer' : 'ग्राहक');
         const billNo = billData.billNo || billCounter;
         const rawDate = billData.dateTime ? new Date(billData.dateTime) : new Date();
         const dateStr = isNaN(rawDate.getTime())
             ? String(billData.dateTime || '')
-            : rawDate.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+            : rawDate.toLocaleString(lang==='en' ? 'en-US' : 'en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
         const subtotal = billData.subtotal !== undefined ? billData.subtotal : items.reduce((s,i)=>s+(i.product.price*i.quantity),0);
         const charges = billData.charges !== undefined ? billData.charges : (parseFloat(document.getElementById('otherCharges') && document.getElementById('otherCharges').value)||0);
         const discPct = billData.discPct !== undefined ? billData.discPct : (parseFloat(document.getElementById('discountPercent') && document.getElementById('discountPercent').value)||0);
@@ -2306,36 +2751,42 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const lines = [];
         lines.push('*' + shop + '*');
         lines.push('━━━━━━━━━━━━━━');
-        lines.push('🧾 *Bill #' + billNo + '*');
+        lines.push((lang==='en' ? '🧾 *Bill #' : '🧾 *बिल #') + billNo + '*');
         lines.push('📅 ' + dateStr);
         lines.push('');
         const rateType = normalizeCustomerType(billData.customerType);
-        lines.push('Namaste *' + custName + '*!');
-        lines.push('Rate: *' + customerTypeLabel(rateType) + '*');
-        lines.push('Thank you for your purchase. Here is your bill:');
+        if (lang==='en') {
+            lines.push('Hello *' + custName + '*!');
+            lines.push('Rate: *' + customerTypeLabel(rateType) + '*');
+            lines.push('Thank you for your purchase. Here is your bill:');
+        } else {
+            lines.push('Namaste *' + custName + '*!');
+            lines.push('दर: *' + customerTypeLabel(rateType) + '*');
+            lines.push('खरीदारी के लिए धन्यवाद। आपका बिल:');
+        }
         lines.push('');
-        lines.push('*Items*');
+        lines.push(lang==='en' ? '*Items*' : '*आइटम*');
         items.forEach((item, i) => {
             const amt = item.product.price * item.quantity;
             lines.push((i + 1) + '. ' + item.product.name + ' × ' + item.quantity + ' = ' + formatMoney(amt));
         });
         lines.push('');
-        lines.push('उप-योग: ' + formatMoney(subtotal));
-        if (charges) lines.push('Other charges: ' + formatMoney(charges));
-        if (discPct) lines.push('छूट (' + discPct + '%): -' + formatMoney(discount));
-        lines.push('*GRAND TOTAL: ' + formatMoney(total) + '*');
+        lines.push((lang==='en' ? 'Subtotal: ' : 'उप-योग: ') + formatMoney(subtotal));
+        if (charges) lines.push((lang==='en' ? 'Other charges: ' : 'अन्य शुल्क: ') + formatMoney(charges));
+        if (discPct) lines.push((lang==='en' ? 'Discount' : 'छूट') + ' (' + discPct + '%): -' + formatMoney(discount));
+        lines.push((lang==='en' ? '*GRAND TOTAL: ' : '*कुल राशि: ') + formatMoney(total) + '*');
         if (billData.due !== undefined && billData.due > 0.009) {
-            lines.push('Paid: ' + formatMoney(billData.paid || 0));
-            lines.push('*Balance due: ' + formatMoney(billData.due) + '*');
+            lines.push((lang==='en' ? 'Paid: ' : 'भुगतान: ') + formatMoney(billData.paid || 0));
+            lines.push((lang==='en' ? '*Balance due: ' : '*बकाया: ') + formatMoney(billData.due) + '*');
         } else if (billData.paid !== undefined) {
-            lines.push('Paid in full');
+            lines.push(lang==='en' ? 'Paid in full' : 'पूरा भुगतान');
         }
-        if (billData.status === 'paid') lines.push('✅ *स्थिति: भुगतान पूरा*');
-        else if (billData.status === 'due') lines.push('⏳ *स्थिति: बकाया* — कृपया जल्द से जल्द भुगतान करें');
+        if (billData.status === 'paid') lines.push(lang==='en' ? '✅ *Status: Paid*' : '✅ *स्थिति: भुगतान पूरा*');
+        else if (billData.status === 'due') lines.push(lang==='en' ? '⏳ *Status: Due* — Please pay soon' : '⏳ *स्थिति: बकाया* — कृपया जल्द से जल्द भुगतान करें');
         lines.push('');
-        lines.push('📦 Items: ' + items.length + '  |  Qty: ' + totalQty);
+        lines.push((lang==='en' ? '📦 Items: ' : '📦 आइटम: ') + items.length + '  |  ' + (lang==='en' ? 'Qty: ' : 'मात्रा: ') + totalQty);
         lines.push('');
-        lines.push('Thank you! Visit again 🙏');
+        lines.push(lang==='en' ? 'Thank you! Visit again 🙏' : 'धन्यवाद! फिर पधारें 🙏');
         const footerBits = [settings.address, settings.phone].filter(Boolean);
         if (footerBits.length) lines.push(footerBits.join(' · '));
         return lines.join('\n');
@@ -2427,14 +2878,15 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         pendingWa = null;
     }
     function openAfterSaveModal(bill) {
+        const lang = getLang();
         const msg = document.getElementById('afterSaveMsg');
         const waBtn = document.getElementById('afterSaveWa');
         const digits = normalizeIndianMobile(bill.customer && bill.customer.phone);
         if (msg) {
-            const dueBit = (bill.due > 0.009) ? (' Due ' + (settings.currency||'₹') + bill.due.toFixed(2) + '.') : ' Paid in full.';
-            msg.textContent = 'Bill #' + bill.billNo + ' saved for ' + bill.customer.name + '.' + dueBit;
+            const dueBit = (bill.due > 0.009) ? (' ' + (lang==='en' ? 'Due ' : 'बकाया ') + (settings.currency||'₹') + bill.due.toFixed(2) + '.') : (lang==='en' ? ' Paid in full.' : ' पूरा भुगतान।');
+            msg.textContent = (lang==='en' ? 'Bill #' : 'बिल #') + bill.billNo + (lang==='en' ? ' saved for ' : ' सेव — ') + bill.customer.name + '.' + dueBit;
         }
-        if (waBtn) waBtn.textContent = isValidIndianMobile(digits) ? ('📱 WhatsApp +91 ' + digits) : '📱 Send on WhatsApp';
+        if (waBtn) waBtn.textContent = isValidIndianMobile(digits) ? ('📱 WhatsApp +91 ' + digits) : (lang==='en' ? '📱 Send on WhatsApp' : '📱 व्हाट्सएप भेजें');
         document.getElementById('afterSaveModal').classList.add('active');
     }
     function closeAfterSaveModal() {
