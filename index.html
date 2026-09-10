@@ -518,6 +518,73 @@
         .badge-due { background: #fee2e2; color: #991b1b; }
         .badge-partial { background: #fef3c7; color: #92400e; }
 
+        /* ============ 🔐 SURAKSHA SEAL (Bill Lock & Key) ============ */
+        .seal-preview {
+            margin-top: 14px;
+            border-radius: 18px;
+            padding: 14px 16px;
+            border: 2px dashed #cbd5e1;
+            background: #f8fafc;
+        }
+        .seal-preview.paid { border-color: #16a34a; background: #f0fdf4; }
+        .seal-preview.due { border-color: #f87171; background: #fff5f5; }
+        .seal-preview-head { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 13px; color: #0f172a; margin-bottom: 6px; }
+        .seal-preview.paid .seal-preview-head { color: #065f46; }
+        .seal-preview.due .seal-preview-head { color: #991b1b; }
+        .seal-code {
+            font-family: 'Courier New', ui-monospace, monospace;
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+            color: #0f172a;
+        }
+        .seal-preview.paid .seal-code { color: #065f46; }
+        .seal-preview.due .seal-code { color: #991b1b; }
+        .seal-sub { font-size: 11px; color: #64748b; margin-top: 6px; line-height: 1.5; }
+        .seal-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Courier New', ui-monospace, monospace;
+            font-size: 11px; font-weight: 800;
+            padding: 4px 10px; border-radius: 999px;
+            border: 1.5px solid #cbd5e1; background: #f8fafc; color: #334155;
+            white-space: nowrap;
+        }
+        .seal-chip.paid { border-color: #16a34a; background: #f0fdf4; color: #065f46; }
+        .seal-chip.due { border-color: #f87171; background: #fff5f5; color: #991b1b; }
+        .seal-mini-btn {
+            border: none; border-radius: 8px; padding: 2px 7px; cursor: pointer;
+            font-size: 11px; font-weight: 800; background: #e2e8f0; color: #0f172a;
+        }
+        .seal-chip.paid .seal-mini-btn { background: #bbf7d0; color: #065f46; }
+        .seal-chip.due .seal-mini-btn { background: #fecaca; color: #991b1b; }
+        .verify-result {
+            margin-top: 14px; border-radius: 18px; padding: 18px;
+            border: 2px solid #e2e8f0; background: #f8fafc; display: none;
+        }
+        .verify-result.show { display: block; }
+        .verify-result.ok { border-color: #16a34a; background: #f0fdf4; }
+        .verify-result.bad { border-color: #ef4444; background: #fff5f5; }
+        .verify-result.warn { border-color: #f59e0b; background: #fffbeb; }
+        .verify-big { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+        .verify-result.ok .verify-big { color: #065f46; }
+        .verify-result.bad .verify-big { color: #991b1b; }
+        .verify-result.warn .verify-big { color: #92400e; }
+        .verify-lines { font-size: 13px; color: #334155; line-height: 1.7; }
+        .verify-lines code { font-family: 'Courier New', monospace; font-weight: 800; }
+        .seal-pattern { border-radius: 10px; border: 1.5px solid #e2e8f0; background: #fff; }
+        .lock-key-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .lock-id-badge {
+            font-family: 'Courier New', monospace; font-weight: 900; font-size: 16px;
+            background: #1e293b; color: #fbbf24; padding: 6px 16px; border-radius: 12px; letter-spacing: 2px;
+        }
+        .seal-howto { font-size: 13px; color: #475569; line-height: 1.7; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px 16px; margin-top: 14px; }
+        .seal-howto b { color: #0f172a; }
+        @media (max-width: 640px) {
+            .seal-code { font-size: 13px; }
+            .mobile-nav-item span:last-child { font-size: 10px; }
+        }
+
         .ledger-search { margin-bottom: 12px; }
         .ledger-entry-debit { color: #b45309; font-weight: 600; }
         .ledger-entry-credit { color: #047857; font-weight: 600; }
@@ -853,6 +920,7 @@
         <div class="menu-item active" data-tab="billing" onclick="startNewBill()">📝 नया बिल</div>
         <div class="menu-item" data-tab="products" onclick="switchTab('products')">📦 उत्पाद</div>
         <div class="menu-item" data-tab="history" onclick="switchTab('history')">📜 इतिहास</div>
+        <div class="menu-item" data-tab="verify" onclick="switchTab('verify')">🔐 सत्यापित</div>
         <div class="menu-item" data-tab="reports" onclick="switchTab('reports')">📒 Ledger & Sales</div>
         <div class="menu-item" data-tab="settings" onclick="switchTab('settings')">⚙️ Settings</div>
     </div>
@@ -862,13 +930,13 @@
             <div class="billing-layout">
             <div class="billing-main">
             <div class="panel step-panel"><div class="panel-header">⚡ Easy as 1-2-3 — पहले ग्राहक प्रकार चुनें</div><div class="step-indicator"><span class="step-pill s1">1️⃣ ग्राहक प्रकार चुनें</span><span class="step-pill s2">2️⃣ उत्पाद टैप करें</span><span class="step-pill s3">3️⃣ Checkout</span></div><div class="field-label" style="margin:8px 0 8px;font-size:13px;color:#0f766e;font-weight:800;">STEP 1 — वॉक-इन या खुदरा व्यापारी चुनें — दरें तुरंत बदलेंगी</div><div class="ctype-row" id="customerTypeRow"><button type="button" class="ctype-chip active" id="ctypeWalkin" onclick="setCustomerType('walkin')"><span class="ctype-title">🚶 वॉक-इन ग्राहक</span><span class="ctype-sub">काउंटर / मेहमान — सभी उत्पादों पर वॉक-इन दर</span></button><button type="button" class="ctype-chip" id="ctypeTrader" onclick="setCustomerType('trader')"><span class="ctype-title">🏪 खुदरा व्यापारी</span><span class="ctype-sub">दुकान / थोक — सभी उत्पादों पर व्यापारी दर</span></button></div><div class="field-hint" style="margin-top:8px;color:#0f766e;font-weight:600;">👉 Walk-in या Retail Trader चुनें → STEP 2 में उत्पाद टैप करें। बिल में दरें उसी हिसाब से बदलेंगी।</div></div>
-            <div class="panel customer-panel"><div class="panel-header">🏷️ ग्राहक <span class="optional-tag">वैकल्पिक</span></div><div class="form-row"><div class="form-field"><label class="field-label">नाम <span class="optional-tag">वॉक-इन ठीक है</span></label><input id="customerName" class="field-input" autocomplete="name" placeholder="ग्राहक का नाम (वैकल्पिक)"></div><div class="form-field"><label class="field-label">मोबाइल नंबर <span class="optional-tag">वैकल्पिक</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल" autocomplete="tel" aria-label="Customer mobile number (optional)"></div><div class="field-hint">वैकल्पिक। इस बिल को एक टैप में व्हाट्सएप पर भेजने के लिए दर्ज करें।</div></div><div class="form-field"><label class="field-label">दिनांक और समय</label><input type="datetime-local" id="billDateTime" class="field-input"></div></div></div></div>
+            <div class="panel customer-panel"><div class="panel-header">🏷️ ग्राहक <span class="optional-tag">वैकल्पिक</span></div><div class="form-row"><div class="form-field"><label class="field-label">नाम <span class="optional-tag">वॉक-इन ठीक है</span></label><input id="customerName" class="field-input" autocomplete="name" placeholder="ग्राहक का नाम (वैकल्पिक)" oninput="try{renderSealPreview()}catch(e){}"></div><div class="form-field"><label class="field-label">मोबाइल नंबर <span class="optional-tag">वैकल्पिक</span></label><div class="phone-input-wrap" id="customerPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="customerPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल" autocomplete="tel" aria-label="Customer mobile number (optional)" oninput="try{renderSealPreview()}catch(e){}"></div><div class="field-hint">वैकल्पिक। इस बिल को एक टैप में व्हाट्सएप पर भेजने के लिए दर्ज करें।</div></div><div class="form-field"><label class="field-label">दिनांक और समय</label><input type="datetime-local" id="billDateTime" class="field-input" oninput="try{renderSealPreview()}catch(e){}"></div></div></div></div>
             <div class="panel quick-panel"><div class="panel-header">⚡ Quick Add</div><div class="form-row"><div class="form-field"><label>Product</label><select id="quickProduct" class="field-select"></select></div><div class="form-field"><label>Qty</label><input id="quickQty" class="field-input" type="number" value="1" min="1"></div><div><button class="btn btn-primary" onclick="quickAddProduct()" style="margin-top:24px;">+ जोड़ें</button></div></div></div>
             <div class="panel products-panel"><div class="panel-header">🍪 मेनू — जोड़ने के लिए टैप करें <span id="menuRateLabel" class="rate-badge">वॉक-इन दर</span></div><div id="catRow" class="cat-row"></div><div id="productGrid" class="product-grid"></div></div>
             </div>
             <div class="billing-side">
             <div class="panel"><div class="panel-header">🛒 वर्तमान बिल</div><div id="billList" class="bill-list"></div></div>
-            <div class="panel"><div class="panel-header">💰 सारांश</div><div class="form-row"><div class="form-field"><label>अन्य शुल्क (₹)</label><input id="otherCharges" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div><div class="form-field"><label>छूट (%)</label><input id="discountPercent" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div></div><div id="summaryBox" class="summary-box"></div>
+            <div class="panel"><div class="panel-header">💰 सारांश</div><div class="form-row"><div class="form-field"><label>अन्य शुल्क (₹)</label><input id="otherCharges" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div><div class="form-field"><label>छूट (%)</label><input id="discountPercent" class="field-input" value="0" step="0.01" oninput="calculateBill()"></div></div><div id="summaryBox" class="summary-box"></div><div id="sealPreviewBox"></div>
             <div class="pay-box">
                 <div class="field-label" style="margin-bottom:8px;">Payment <span class="optional-tag">track dues</span></div>
                 <div class="pay-chips">
@@ -891,7 +959,28 @@
             <div class="panel"><div class="panel-header">📋 उत्पाद सूची — वॉक-इन और व्यापारी दरें ठीक करें</div><div class="field-hint" style="margin:-8px 0 14px;color:#0f766e;">सभी नए उत्पादों में Settings में सेव की गई Walk-in और Retail दरें अपने आप लगती हैं। बिल में ग्राहक प्रकार के अनुसार सही दर उपयोग होती है।</div><table class="data-table"><thead><tr><th>नाम</th><th>वॉक-इन</th><th>खुदरा व्यापारी</th><th>इकाई</th><th>समाप्ति</th><th>कार्रवाई</th></tr></thead><tbody id="productTableBody"></tbody></table></div>
         </div>
         <!-- History Tab -->
-        <div id="history" class="content-pane"><div class="panel"><div class="panel-header">📜 बिल इतिहास</div><div class="btn-group" style="margin-bottom:16px;"><button class="btn btn-primary" onclick="loadHistory()">🔄 रिफ्रेश</button><button class="btn btn-success" onclick="exportCSV()">📊 CSV</button><button class="btn btn-success" onclick="exportJSON()">📁 JSON</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>बिल #</th><th>दिनांक</th><th>ग्राहक</th><th>मोबाइल</th><th>कुल</th><th>कार्रवाई</th></tr></thead><tbody id="historyTableBody"></tbody></table></div><div id="historyCards" class="history-cards"></div></div></div>
+        <div id="history" class="content-pane"><div class="panel"><div class="panel-header">📜 बिल इतिहास</div><div class="btn-group" style="margin-bottom:16px;"><button class="btn btn-primary" onclick="loadHistory()">🔄 रिफ्रेश</button><button class="btn btn-success" onclick="exportCSV()">📊 CSV</button><button class="btn btn-success" onclick="exportJSON()">📁 JSON</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>बिल #</th><th>दिनांक</th><th>ग्राहक</th><th>मोबाइल</th><th>कुल</th><th>🔐 Seal</th><th>कार्रवाई</th></tr></thead><tbody id="historyTableBody"></tbody></table></div><div id="historyCards" class="history-cards"></div></div></div>
+        <!-- Bill Seal Verify Tab -->
+        <div id="verify" class="content-pane">
+            <div class="panel">
+                <div class="panel-header">🔐 Bill Seal Verify — ताला-चाबी जाँच</div>
+                <div class="field-hint" style="margin:-8px 0 14px;">Customer ke bill par chhapa <b>Seal Code (चाबी)</b> yahan daalein — app ka <b>Lock</b> batayega bill <b>asli hai ya nakli / badla hua</b>. | Enter the Seal Code printed on the bill — the app lock will tell you if the bill is genuine or tampered.</div>
+                <div class="form-row">
+                    <div class="form-field"><label class="field-label">Bill No</label><input id="verifyBillNo" class="field-input" type="number" min="1" step="1" placeholder="e.g. 5"></div>
+                    <div class="form-field"><label class="field-label">Seal Code (key on bill)</label><input id="verifyCode" class="field-input" style="font-family:'Courier New',monospace;font-weight:700;" placeholder="SK-XXXX-P-XXXX-XXXX-XXXXX" autocomplete="off" autocapitalize="characters"></div>
+                    <div class="form-field"><label class="field-label">Total printed on paper (optional)</label><input id="verifyTotal" class="field-input" type="number" min="0" step="0.01" placeholder="₹ as shown on bill"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field"><label class="field-label">Or pick a saved bill (auto-fill)</label><select id="verifyBillPick" class="field-select" onchange="prefillVerifyFromPick()"><option value="">— Select bill —</option></select></div>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+                    <button class="btn btn-success" onclick="runBillVerification()">🔍 Verify Seal</button>
+                    <button class="btn btn-secondary" onclick="clearVerification()">Clear</button>
+                </div>
+                <div id="verifyResult" class="verify-result"></div>
+                <div class="seal-howto">🔒 <b>Lock &amp; Key:</b> aapki app me ek secret <b>Lock (ताला)</b> hai jo kabhi bill par nahi chhapta. Har bill par ek unique <b>Seal Code (चाबी)</b> banta hai jo bill number, items, total, paid aur due se HMAC-SHA256 se juda hota hai. <b>Paid</b> bill ki chabi <b style="color:#065f46;">हरी (P)</b>, <b>Due/Unpaid</b> ki <b style="color:#991b1b;">लाल (D)</b> hoti hai. Koi rakam ya item badlega to chabi taale me nahi lagegi — <b>Fake/Tampered</b> pakda jayega. Bina lock ke nakli code banana lagbhag namumkin hai (1 in 10¹⁸ guess).</div>
+            </div>
+        </div>
         <!-- Reports / Ledger Tab -->
         <div id="reports" class="content-pane">
             <div class="kpi-grid" id="kpiGrid"></div>
@@ -959,6 +1048,18 @@
                     </div>
                 </div>
                 <div class="field-hint" style="margin:-8px 0 16px;">Save both rates here once. They are applied to every product and synced live to all connected devices.</div>
+                <div class="panel" style="margin:16px 0;border:2px solid #f59e0b;background:#fffbeb;"><div class="panel-header" style="margin-bottom:12px;">🔐 Bill Seal Lock — दुकान का ताला</div>
+                    <div class="field-hint" style="margin:-8px 0 12px;color:#92400e;font-weight:600;">Ye <b>Lock</b> aapki dukaan ki pehchaan hai. Har Paid/Due bill ka <b>Seal Code (चाबी)</b> isi lock se banta hai. Lock ID bill par chhapta hai, lekin <b>secret key kabhi share / print nahi hoti</b>.</div>
+                    <div class="form-row">
+                        <div class="form-field"><label class="field-label">Lock ID (public — bills par chhapta hai)</label><div class="lock-key-row"><span class="lock-id-badge" id="sealLockId">••••</span><button class="btn btn-primary" style="min-height:36px;" onclick="copyLockId()">📋 Copy</button></div></div>
+                        <div class="form-field"><label class="field-label">Secret lock key (sirf backup ke liye)</label><div class="lock-key-row"><input id="sealSecretField" class="field-input" type="password" readonly style="font-family:monospace;flex:1;min-width:180px;" value=""><button class="btn btn-secondary" style="min-height:36px;" onclick="toggleSealSecret()">👁</button></div></div>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                        <button class="btn btn-secondary" onclick="copySealSecret()">💾 Copy backup key</button>
+                        <button class="btn btn-warning" onclick="resealAllBills()">🔄 Re-seal all bills</button>
+                        <button class="btn btn-danger" onclick="regenerateSealLock()">⚠️ New lock (regenerate)</button>
+                    </div>
+                </div>
                 <button class="btn btn-warning" onclick="openChangePin()">🔑 Change PIN</button> <button class="btn btn-secondary" onclick="lockApp()" style="margin-left:12px;">🔒 Lock Now</button> <button class="btn btn-danger" onclick="resetApp()">Reset All Data</button>
             </div>
         </div>
@@ -970,6 +1071,7 @@
     <button type="button" class="mobile-nav-item active" data-tab="billing" onclick="startNewBill()"><span class="ico">📝</span><span>बिल</span></button>
     <button type="button" class="mobile-nav-item" data-tab="products" onclick="switchTab('products')"><span class="ico">📦</span><span>Products</span></button>
     <button type="button" class="mobile-nav-item" data-tab="history" onclick="switchTab('history')"><span class="ico">📜</span><span>Bills</span></button>
+    <button type="button" class="mobile-nav-item" data-tab="verify" onclick="switchTab('verify')"><span class="ico">🔐</span><span>Verify</span></button>
     <button type="button" class="mobile-nav-item" data-tab="reports" onclick="switchTab('reports')"><span class="ico">📒</span><span>Ledger</span></button>
     <button type="button" class="mobile-nav-item" data-tab="settings" onclick="switchTab('settings')"><span class="ico">⚙️</span><span>More</span></button>
 </nav>
@@ -994,7 +1096,7 @@
 <div id="waPhoneModal" class="modal-overlay"><div class="modal-window" style="max-width:440px;"><div class="modal-title-bar"><span>📱 Send bill on WhatsApp</span><span class="modal-close" onclick="closeWaPhoneModal()">×</span></div><div class="modal-content"><p style="font-size:14px;color:#475569;margin-bottom:14px;line-height:1.45;">Mobile number is <strong>optional</strong>. Enter a 10-digit number to send directly, or leave it blank and pick a WhatsApp contact.</p><div class="form-field"><label class="field-label">Customer mobile</label><div class="phone-input-wrap" id="waPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="waPhoneInput" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile (optional)"></div></div><div class="btn-group" style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-whatsapp" onclick="confirmSendWhatsApp()">📱 Send on WhatsApp</button><button class="btn btn-secondary" onclick="closeWaPhoneModal()">Cancel</button></div></div></div></div>
 
 <!-- After save actions -->
-<div id="afterSaveModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>✅ बिल सहेज दिया गया</span><span class="modal-close" onclick="afterSaveDone()">×</span></div><div class="modal-content"><p id="afterSaveMsg" style="font-size:15px;color:#0f172a;margin-bottom:16px;font-weight:600;"></p><div class="after-save-actions"><button class="btn btn-whatsapp" id="afterSaveWa" onclick="afterSaveWhatsApp()">📱 व्हाट्सएप भेजें</button><button class="btn btn-primary" onclick="afterSavePrint()">🖨️ बिल प्रिंट करें</button><button class="btn btn-success" onclick="afterSaveDone()">➕ नया बिल</button></div></div></div></div>
+<div id="afterSaveModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span>✅ बिल सहेज दिया गया</span><span class="modal-close" onclick="afterSaveDone()">×</span></div><div class="modal-content"><p id="afterSaveMsg" style="font-size:15px;color:#0f172a;margin-bottom:12px;font-weight:600;"></p><div id="afterSaveSeal" style="margin-bottom:16px;"></div><div class="after-save-actions"><button class="btn btn-whatsapp" id="afterSaveWa" onclick="afterSaveWhatsApp()">📱 व्हाट्सएप भेजें</button><button class="btn btn-primary" onclick="afterSavePrint()">🖨️ बिल प्रिंट करें</button><button class="btn btn-success" onclick="afterSaveDone()">➕ नया बिल</button></div></div></div></div>
 
 <!-- New Bill Customer Type Modal -->
 <div id="newBillTypeModal" class="modal-overlay"><div class="modal-window" style="max-width:460px;"><div class="modal-title-bar"><span>🏷️ नया बिल — ग्राहक प्रकार चुनें (Easy as 1-2-3)</span><span class="modal-close" onclick="closeNewBillTypeModal()">×</span></div><div class="modal-content"><p style="font-size:15px;color:#0f172a;margin-bottom:8px;font-weight:700;">STEP 1 — बिल बनाने से पहले ग्राहक प्रकार चुनें:</p><p style="font-size:12px;color:#64748b;margin-bottom:16px;">वॉक-इन = Rate X सभी पर, खुदरा व्यापारी = Rate Y सभी पर। बाद में उत्पाद टैप करें।</p><div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;"><button class="btn btn-teal btn-xl" style="flex:1;" onclick="selectNewBillType('walkin')"><span>🚶 वॉक-इन<br><small id="modalWalkinRate" style="font-size:12px;opacity:0.9;">Rate X</small></span></button><button class="btn btn-orange btn-xl" style="flex:1;" onclick="selectNewBillType('trader')"><span>🏪 खुदरा व्यापारी<br><small id="modalTraderRate" style="font-size:12px;opacity:0.9;">Rate Y</small></span></button></div><div class="btn-group"><button class="btn btn-secondary" onclick="closeNewBillTypeModal()">रद्द करें</button></div></div></div></div>
@@ -1006,7 +1108,7 @@
 <div id="editBillModal" class="modal-overlay"><div class="modal-window" style="max-width: 950px;"><div class="modal-title-bar"><span>✏️ बिल संपादित करें (समाप्ति संपादनीय)</span><span class="modal-close" onclick="closeEditBillModal()">×</span></div><div class="modal-content"><div class="form-row"><div class="form-field"><label>ग्राहक</label><input id="editBillCustomer" class="field-input"></div><div class="form-field"><label>मोबाइल नंबर <span class="optional-tag">वैकल्पिक</span></label><div class="phone-input-wrap" id="editBillPhoneWrap"><span class="phone-prefix">🇮🇳 +91</span><input id="editBillPhone" class="field-input" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल" autocomplete="tel"></div></div><div class="form-field"><label>दिनांक/समय</label><input id="editBillDateTime" class="field-input" type="datetime-local"></div><div class="form-field"><label>ग्राहक प्रकार (दर)</label><select id="editBillCustomerType" class="field-select" onchange="setEditBillCustomerType(this.value)"><option value="walkin">वॉक-इन ग्राहक</option><option value="trader">खुदरा व्यापारी</option></select></div></div><div class="panel"><div class="panel-header">बिल आइटम (प्रत्येक आइटम की समाप्ति)</div><div id="editBillItemsList" class="bill-list" style="max-height: 280px;"></div><div style="margin-top: 12px; display: flex; gap: 10px; align-items: flex-end;"><select id="editBillProductSelect" class="field-select" style="flex:2"></select><input type="number" id="editBillQty" placeholder="Qty" value="1" style="width:80px; padding:8px;"><input type="date" id="editBillExpiry" class="field-input" style="width:140px;"><button class="btn btn-primary" onclick="addProductToEditBill()">+ जोड़ें</button></div></div><div class="form-row"><div class="form-field"><label>अन्य शुल्क</label><input id="editBillOtherCharges" class="field-input" value="0" step="0.01"></div><div class="form-field"><label>छूट %</label><input id="editBillDiscount" class="field-input" value="0" step="0.01"></div><div class="form-field"><label>प्राप्त राशि (₹)</label><input id="editBillPaid" class="field-input" type="number" min="0" step="0.01" value="0"></div></div><div class="btn-group"><button class="btn btn-success" onclick="saveBillEdit()">बिल परिवर्तन सहेजें</button><button class="btn btn-secondary" onclick="closeEditBillModal()">Cancel</button></div></div></div></div>
 
 <!-- Customer ledger detail -->
-<div id="ledgerModal" class="modal-overlay"><div class="modal-window" style="max-width:820px;"><div class="modal-title-bar"><span id="ledgerModalTitle">📒 ग्राहक लेज़र</span><span class="modal-close" onclick="closeLedgerModal()">×</span></div><div class="modal-content"><div id="ledgerModalKpis" class="kpi-grid" style="margin-bottom:14px;"></div><div class="btn-group" style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-warning" id="ledgerPayBtn" onclick="openPayForOpenCustomer()">💰 भुगतान रिकॉर्ड करें</button><button class="btn btn-whatsapp" id="ledgerWaBtn" onclick="whatsappOpenCustomer()">📱 व्हाट्सएप विवरण</button><button class="btn btn-secondary" onclick="closeLedgerModal()">बंद करें</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>दिनांक</th><th>विवरण</th><th>डेबिट</th><th>क्रेडिट</th><th>शेष</th></tr></thead><tbody id="ledgerDetailBody"></tbody></table></div></div></div></div>
+<div id="ledgerModal" class="modal-overlay"><div class="modal-window" style="max-width:820px;"><div class="modal-title-bar"><span id="ledgerModalTitle">📒 ग्राहक लेज़र</span><span class="modal-close" onclick="closeLedgerModal()">×</span></div><div class="modal-content"><div id="ledgerModalKpis" class="kpi-grid" style="margin-bottom:14px;"></div><div class="btn-group" style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-warning" id="ledgerPayBtn" onclick="openPayForOpenCustomer()">💰 भुगतान रिकॉर्ड करें</button><button class="btn btn-whatsapp" id="ledgerWaBtn" onclick="whatsappOpenCustomer()">📱 व्हाट्सएप विवरण</button><button class="btn btn-secondary" onclick="closeLedgerModal()">बंद करें</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>दिनांक</th><th>विवरण</th><th>�द करें</button></div><div class="history-table-wrap"><table class="data-table"><thead><tr><th>दिनांक</th><th>विवरण</th><th>डेबिट</th><th>क्रेडिट</th><th>शेष</th></tr></thead><tbody id="ledgerDetailBody"></tbody></table></div></div></div></div>
 
 <!-- Record payment -->
 <div id="payModal" class="modal-overlay"><div class="modal-window" style="max-width:420px;"><div class="modal-title-bar"><span id="payModalTitle">💰 भुगतान रिकॉर्ड करें</span><span class="modal-close" onclick="closePayModal()">×</span></div><div class="modal-content"><p id="payModalInfo" style="font-size:14px;color:#475569;margin-bottom:14px;"></p><div class="form-row"><div class="form-field"><label class="field-label">राशि (₹)</label><input id="payAmount" class="field-input" type="number" min="0" step="0.01"></div></div><div class="form-row"><div class="form-field"><label class="field-label">नोट <span class="optional-tag">वैकल्पिक</span></label><input id="payNote" class="field-input" placeholder="नकद / UPI / आंशिक भुगतान"></div></div><div class="btn-group" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-success" onclick="confirmPayment()">भुगतान सहेजें</button><button class="btn btn-secondary" onclick="closePayModal()">Cancel</button></div></div></div></div>
@@ -1511,6 +1613,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             history: '📜 इतिहास',
             ledger: '📒 Ledger & Sales',
             settings: '⚙️ Settings',
+            verifyTab: '🔐 सत्यापित',
             billing: 'बिल',
             more: 'More',
             easy123: '⚡ Easy as 1-2-3 — पहले ग्राहक प्रकार चुनें',
@@ -1640,6 +1743,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             history: '📜 History',
             ledger: '📒 Ledger & Sales',
             settings: '⚙️ Settings',
+            verifyTab: '🔐 Verify',
             billing: 'Billing',
             more: 'More',
             easy123: '⚡ Easy as 1-2-3 — Choose Customer Type First',
@@ -1798,6 +1902,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             if (tab === 'billing') el.textContent = t('newBill');
             else if (tab === 'products') el.textContent = t('products');
             else if (tab === 'history') el.textContent = t('history');
+            else if (tab === 'verify') el.textContent = t('verifyTab');
             else if (tab === 'reports') el.textContent = t('ledger');
             else if (tab === 'settings') el.textContent = t('settings');
         });
@@ -1808,6 +1913,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             if (tab === 'billing') span.textContent = t('billing');
             else if (tab === 'products') span.textContent = 'Products';
             else if (tab === 'history') span.textContent = 'Bills';
+            else if (tab === 'verify') span.textContent = 'Verify';
             else if (tab === 'reports') span.textContent = 'Ledger';
             else if (tab === 'settings') span.textContent = t('more');
         });
@@ -1961,6 +2067,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const bt = document.getElementById('bulkTraderRate');
         if (bw && !bw.value) bw.value = settings.walkinGlobalRate != null ? settings.walkinGlobalRate : '';
         if (bt && !bt.value) bt.value = settings.traderGlobalRate != null ? settings.traderGlobalRate : '';
+        try { refreshSealLockUI(); } catch(e){}
     }
     function loadStorage() {
         let p = localStorage.getItem('khakra_products');
@@ -1971,7 +2078,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         else settings = mergeSettings(settings);
         customerType = normalizeCustomerType(settings.defaultCustomerType);
         billHistory = localStorage.getItem('khakra_history') ? JSON.parse(localStorage.getItem('khakra_history')) : [];
-        billHistory = (billHistory || []).map(b => { try { return ensureBillPayments(b); } catch (e) { return b; } });
+        billHistory = (billHistory || []).map(b => { try { ensureBillPayments(b); ensureBillSeal(b); return b; } catch (e) { return b; } });
         billCounter = parseInt(localStorage.getItem('khakra_billCounter') || '1');
         applySettingsToUI();
         try { applyLanguage(); } catch(e){}
@@ -2043,7 +2150,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             const list = [];
             Object.keys(v).forEach(k => { if (k !== 'meta') list.push(v[k]); });
             list.sort((a, b) => (a.billNo || 0) - (b.billNo || 0));
-            billHistory = list.map(b => { try { return ensureBillPayments(b); } catch (e) { return b; } });
+            billHistory = list.map(b => { try { ensureBillPayments(b); ensureBillSeal(b); return b; } catch (e) { return b; } });
             localStorage.setItem('khakra_history', JSON.stringify(billHistory));
             loadHistory();
             updateStatusBar();
@@ -2061,6 +2168,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         if (pane) pane.classList.add('active');
         if (tabName === 'reports') renderReports();
         if (tabName === 'history') loadHistory();
+        if (tabName === 'verify') { try { refreshVerifyBillList(); } catch (e) {} }
         if (typeof updateReadyBar === 'function') updateReadyBar();
         try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
     }
@@ -2345,6 +2453,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         document.getElementById('summaryBox').innerHTML = `<div class="summary-row"><span>${t('rateCard')}</span><span><span class="rate-badge${type==='trader'?' trader':''}">${customerTypeLabel(type)}</span></span></div><div class="summary-row"><span>${t('subtotal')}</span><span>${settings.currency}${subtotal.toFixed(2)}</span></div><div class="summary-row"><span>${t('otherCharges')}</span><span>${settings.currency}${charges.toFixed(2)}</span></div><div class="summary-row"><span>${t('discount')} (${discPct}%)</span><span>-${settings.currency}${discount.toFixed(2)}</span></div><div class="quantity-info" style="background:#fef9e6; padding:10px; border-radius:20px; margin:10px 0;">📦 ${t('items')}: ${billItems.length} | ${t('totalQty')}: ${totalQty}</div><div class="summary-row summary-total"><span>${t('grandTotal')}</span><span>${settings.currency}${total.toFixed(2)}</span></div>`;
         syncAmountReceived(total);
         updateReadyBar(total);
+        try { renderSealPreview(); } catch(e){}
         return {subtotal,charges,discPct,discount,total,totalQty};
     }
     // Show/hide the floating "Bill Ready" bar and keep its total in sync.
@@ -2396,6 +2505,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const status = isPaid ? 'paid' : 'due';
         if (isPaid) { received = total; due = 0; }
         let bill = { billNo: billCounter, dateTime: document.getElementById('billDateTime').value||new Date().toISOString(), customerType: type, customer: { name, phone, type }, status, items: billItems.map(i=>({ product: {...i.product}, quantity: i.quantity, rateType: type })), subtotal, charges, discount, discPct, total, totalQty, paid: received, due, payments: (received>0 || status==='paid') ? [{ date: document.getElementById('billDateTime').value||new Date().toISOString(), amount: received, note: 'At billing' }] : [], lang: lang };
+        try { stampBillSeal(bill); } catch (e) {}
         billHistory.push(bill);
         billCounter++;
         lastSavedBill = bill;
@@ -2441,7 +2551,20 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             due: lang==='en' ? '⏳ Due — Please pay' : '⏳ बकाया — कृपया भुगतान करें',
             thank: lang==='en' ? 'Thank you for shopping — Crispy Khakra, Timeless Taste.' : 'खरीदारी के लिए धन्यवाद — कुरकुरा खखरा, शाश्वत स्वाद।'
         };
-        return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${settings.businessName} – Bill #${billNo}</title><style>body { margin: 0; padding: 0; background: white; font-family: 'Times New Roman', Georgia, serif; } .nyt-container { max-width: 700px; margin: 0 auto; padding: 0.6in 0.5in; background: white; } .nyt-header { text-align: center; border-bottom: 2px solid #111; margin-bottom: 24px; } .nyt-header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 6px 0; font-family: 'Times New Roman', serif; } .nyt-header .shop-details { font-size: 12px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; } .nyt-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 28px; border-bottom: 1px solid #ddd; padding-bottom: 12px; } .bill-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; } .bill-table th { text-align: left; padding: 6px 4px; border-bottom: 1px solid #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; } .totals { text-align: right; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 16px; font-size: 14px; } .totals div { margin: 6px 0; } .grand-total { font-size: 20px; font-weight: 700; margin-top: 12px; } .footer-note { margin-top: 32px; text-align: center; font-size: 11px; color: #5c5c5c; border-top: 1px solid #ddd; padding-top: 20px; font-style: italic; } .expiry-note { background: #fef7e0; padding: 8px 12px; font-size: 10px; text-align: center; margin-top: 20px; }</style></head><body><div class="nyt-container"><div class="nyt-header"><h1>${settings.businessName}</h1><div class="shop-details">${settings.address || ''} ${settings.phone ? '· ' + settings.phone : ''}</div></div><div class="nyt-meta"><div><strong>${L.billNo}:</strong> ${billNo}<br><strong>${L.date}:</strong> ${date}</div><div><strong>${L.customer}:</strong> ${custName}<br>${custPhone ? `📞 ${custPhone}<br>` : ''}<strong>${L.rate}:</strong> ${customerTypeLabel(rateType)}</div></div><table class="bill-table"><thead><tr><th>#</th><th>${L.item}</th><th>${L.qty}</th><th>${L.amount}</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><div>${L.subtotal}: ${settings.currency}${subtotal.toFixed(2)}</div>${charges ? `<div>${L.other}: ${settings.currency}${charges.toFixed(2)}</div>` : ''}${discPct ? `<div>${L.discount} (${discPct}%): -${settings.currency}${discount.toFixed(2)}</div>` : ''}<div class="grand-total">${L.total}: ${settings.currency}${total.toFixed(2)}</div><div style="font-size: 12px;">${L.totalItems}: ${items.length} | ${L.totalQty}: ${totalQty}</div></div><div class="expiry-note">${L.expiryNote}</div>${(billData.status==='paid') ? `<div style="margin-top:8px;padding:10px;background:#d1fae5;border-radius:12px;text-align:center;font-weight:800;color:#065f46;font-size:14px;">${L.paid}</div>` : ((billData.status==='due') ? `<div style="margin-top:8px;padding:10px;background:#fee2e2;border-radius:12px;text-align:center;font-weight:800;color:#991b1b;font-size:14px;">${L.due}</div>` : '')}<div class="footer-note">${L.thank}</div></div></body></html>`;
+        billData.subtotal = subtotal; billData.charges = charges; billData.discPct = discPct; billData.total = total;
+        let seal = null;
+        try { seal = sealForBillData(billData, items); } catch (e) { seal = null; }
+        const sealPaid = seal ? (seal.status === 'paid') : (billData.status === 'paid');
+        const sealCls = sealPaid ? 'paid' : 'due';
+        const sealAccent = sealPaid ? '#16a34a' : '#dc2626';
+        const sealBg = sealPaid ? '#f0fdf4' : '#fff5f5';
+        const sealTintStyle = sealPaid ? '' : ' style="background:#fff5f5;"';
+        const wmWord = sealPaid ? '★ PAID ★' : '★ DUE ★';
+        const _sealPaidAmt = (billData.paid != null) ? billData.paid : (sealPaid ? total : 0);
+        const _sealDueAmt = (billData.due != null) ? billData.due : (sealPaid ? 0 : total);
+        const sealStampHtml = `<div style="margin-top:14px;padding:10px;background:${sealAccent};border-radius:12px;text-align:center;font-weight:900;color:#ffffff;font-size:15px;letter-spacing:0.5px;">${sealPaid ? (L.paid + ' · ' + settings.currency + total.toFixed(2)) : (L.due + ' · ' + settings.currency + _sealDueAmt.toFixed(2))}</div>`;
+        const sealBoxHtml = seal ? `<div style="margin-top:10px;border:2px solid ${sealAccent};border-radius:14px;background:${sealBg};padding:12px 14px;display:flex;gap:12px;align-items:center;"><div style="flex-shrink:0;">${sealPatternSVG(seal.pattern, 62, seal.status)}</div><div style="flex:1;font-family:'Courier New',monospace;"><div style="font-size:11px;font-weight:700;color:${sealAccent};letter-spacing:1px;">🔐 BILL SEAL · ${sealPaid ? 'PAID (हरी चाबी)' : 'DUE (लाल चाबी)'}</div><div style="font-size:16px;font-weight:900;color:#0f172a;letter-spacing:0.3px;word-break:break-all;">${seal.code}</div><div style="font-size:10.5px;color:#334155;">Lock ${seal.lock} · Content #${seal.contentHash} · Total ${settings.currency}${total.toFixed(2)} · Paid ${settings.currency}${_sealPaidAmt.toFixed(2)} · Due ${settings.currency}${_sealDueAmt.toFixed(2)}</div><div style="font-size:10px;color:#64748b;">Tamper-proof: रकम/item बदलने पर ये code invalid। दुकान पर verify कराएँ।</div></div></div>` : '';
+        return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${settings.businessName} – Bill #${billNo}</title><style>body { margin: 0; padding: 0; background: white; font-family: 'Times New Roman', Georgia, serif; } .nyt-container { max-width: 700px; margin: 0 auto; padding: 0.6in 0.5in; background: white; position: relative; overflow: hidden; } .seal-wm { position: absolute; top: 44%; left: 50%; transform: translate(-50%, -50%) rotate(-28deg); font-size: 92px; font-weight: 900; letter-spacing: 8px; pointer-events: none; white-space: nowrap; z-index: 0; } .seal-wm.paid { color: rgba(22,163,74,0.10); } .seal-wm.due { color: rgba(220,38,38,0.10); } .nyt-container > *:not(.seal-wm) { position: relative; z-index: 1; } .nyt-header { text-align: center; border-bottom: 2px solid #111; margin-bottom: 24px; } .nyt-header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 6px 0; font-family: 'Times New Roman', serif; } .nyt-header .shop-details { font-size: 12px; color: #333; text-transform: uppercase; letter-spacing: 0.5px; } .nyt-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 28px; border-bottom: 1px solid #ddd; padding-bottom: 12px; } .bill-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; } .bill-table th { text-align: left; padding: 6px 4px; border-bottom: 1px solid #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; } .totals { text-align: right; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 16px; font-size: 14px; } .totals div { margin: 6px 0; } .grand-total { font-size: 20px; font-weight: 700; margin-top: 12px; } .footer-note { margin-top: 32px; text-align: center; font-size: 11px; color: #5c5c5c; border-top: 1px solid #ddd; padding-top: 20px; font-style: italic; } .expiry-note { background: #fef7e0; padding: 8px 12px; font-size: 10px; text-align: center; margin-top: 20px; }</style></head><body><div class="nyt-container"${sealTintStyle}><div class="seal-wm ${sealCls}">${wmWord}</div><div class="nyt-header"><h1>${settings.businessName}</h1><div class="shop-details">${settings.address || ''} ${settings.phone ? '· ' + settings.phone : ''}</div></div><div class="nyt-meta"><div><strong>${L.billNo}:</strong> ${billNo}<br><strong>${L.date}:</strong> ${date}</div><div><strong>${L.customer}:</strong> ${custName}<br>${custPhone ? `📞 ${custPhone}<br>` : ''}<strong>${L.rate}:</strong> ${customerTypeLabel(rateType)}</div></div><table class="bill-table"><thead><tr><th>#</th><th>${L.item}</th><th>${L.qty}</th><th>${L.amount}</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="totals"><div>${L.subtotal}: ${settings.currency}${subtotal.toFixed(2)}</div>${charges ? `<div>${L.other}: ${settings.currency}${charges.toFixed(2)}</div>` : ''}${discPct ? `<div>${L.discount} (${discPct}%): -${settings.currency}${discount.toFixed(2)}</div>` : ''}<div class="grand-total">${L.total}: ${settings.currency}${total.toFixed(2)}</div><div style="font-size: 12px;">${L.totalItems}: ${items.length} | ${L.totalQty}: ${totalQty}</div></div><div class="expiry-note">${L.expiryNote}</div>${sealStampHtml}${sealBoxHtml}<div class="footer-note">${L.thank}</div></div></body></html>`;
     }
 
     // ================= PRINT / PDF =================
@@ -2457,6 +2580,18 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const pageW = 210, pageH = 297, margin = 15, curW = pageW - margin * 2;
         let y = 0;
         const lang = (billData && billData.lang) ? billData.lang : getLang();
+
+        // 🔐 Seal watermark behind content (paid = green, due = soft red page)
+        var _sPaid = billData.paid, _sDue = billData.due;
+        if (_sPaid == null || _sDue == null) { if (billData.status === 'paid') { _sPaid = 1; _sDue = 0; } else { _sPaid = 0; _sDue = 1; } }
+        var _sIsPaid = !(_sDue > 0.009);
+        if (!_sIsPaid) { try { doc.setFillColor(255, 245, 245); doc.rect(0, 0, pageW, pageH, 'F'); } catch (e) {} }
+        try {
+            doc.setFont('times', 'bold'); doc.setFontSize(76);
+            if (_sIsPaid) doc.setTextColor(205, 235, 205); else doc.setTextColor(250, 205, 205);
+            doc.text(_sIsPaid ? 'PAID' : 'DUE', pageW / 2, 150, { align: 'center', angle: 30 });
+            doc.setTextColor(20, 20, 20);
+        } catch (e) { try { doc.setTextColor(20, 20, 20); } catch (e2) {} }
 
         // Header
         y = 22;
@@ -2555,24 +2690,69 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         doc.text(L.items + ': ' + items.length + '   |   ' + L.totalQty + ': ' + totalQty, margin, y);
         doc.text('Best before / expiry dates are per product.', pageW - margin, y, { align: 'right' });
 
-        // Status remark / watermark
-        if (billData.status) {
-            doc.setFont('times', 'bold'); doc.setFontSize(11);
-            const remark = billData.status === 'paid' ? '✅ ' + L.paid : '⏳ ' + L.due;
-            const remarkColor = billData.status === 'paid' ? 13 : 180;
-            doc.setTextColor(remarkColor, 0, 0);
-            doc.text(remark, pageW - margin, 278, { align: 'right' });
+        // ---- 🔐 Seal stamp + Suraksha Seal box ----
+        var _seal = null;
+        try { billData.subtotal = subtotal; billData.charges = charges; billData.discPct = discPct; billData.total = total; _seal = sealForBillData(billData, items); } catch (e) { _seal = null; }
+        var _paidB = _seal ? (_seal.status === 'paid') : _sIsPaid;
+        var _sp = (billData.paid != null) ? billData.paid : (_paidB ? total : 0);
+        var _sd = (billData.due != null) ? billData.due : (_paidB ? 0 : total);
+        var _cur = settings.currency || 'Rs.';
+        y += 8;
+        if (y > 232) { doc.addPage(); if (!_paidB) { try { doc.setFillColor(255, 245, 245); doc.rect(0, 0, pageW, pageH, 'F'); } catch (e) {} } y = 20; }
+        try {
+            if (_paidB) doc.setFillColor(22, 163, 74); else doc.setFillColor(220, 38, 38);
+            doc.roundedRect(margin, y, curW, 10, 2, 2, 'F');
+            doc.setFont('courier', 'bold'); doc.setFontSize(11); doc.setTextColor(255, 255, 255);
+            doc.text(_paidB ? ('PAID IN FULL  ' + _cur + total.toFixed(2)) : ('DUE  ' + _cur + _sd.toFixed(2) + '  (Paid ' + _cur + _sp.toFixed(2) + ')'), pageW / 2, y + 6.8, { align: 'center' });
             doc.setTextColor(20, 20, 20);
+        } catch (e) {}
+        y += 15;
+        if (_seal) {
+            try {
+                var boxH = 36;
+                if (_paidB) { doc.setDrawColor(22, 163, 74); doc.setFillColor(240, 253, 244); } else { doc.setDrawColor(220, 38, 38); doc.setFillColor(255, 245, 245); }
+                doc.setLineWidth(0.7);
+                doc.roundedRect(margin, y, curW, boxH, 3, 3, 'FD');
+                var bx = margin + 5, by = y + 8;
+                var _bits = [];
+                (_seal.pattern || []).forEach(function (bb) { for (var kk = 7; kk >= 0; kk--) _bits.push((bb >> kk) & 1); });
+                while (_bits.length < 15) _bits.push(0);
+                var _cs = 3.2;
+                for (var _rr = 0; _rr < 5; _rr++) for (var _cc = 0; _cc < 5; _cc++) {
+                    var _mm = _cc < 3 ? _cc : 4 - _cc;
+                    if (_bits[_rr * 3 + _mm]) { if (_paidB) doc.setFillColor(22, 163, 74); else doc.setFillColor(220, 38, 38); }
+                    else if (_paidB) doc.setFillColor(220, 252, 231); else doc.setFillColor(254, 226, 226);
+                    doc.rect(bx + _cc * _cs, by + _rr * _cs, _cs - 0.25, _cs - 0.25, 'F');
+                }
+                var _tx = bx + 5 * _cs + 5;
+                doc.setFont('courier', 'bold'); doc.setFontSize(8);
+                if (_paidB) doc.setTextColor(6, 95, 70); else doc.setTextColor(153, 27, 27);
+                doc.text(_paidB ? 'BILL SEAL - PAID (green key)' : 'BILL SEAL - DUE (red key)', _tx, by - 1);
+                doc.setFont('courier', 'bold'); doc.setFontSize(11); doc.setTextColor(15, 23, 42);
+                doc.text(_seal.code, _tx, by + 6.5);
+                doc.setFont('courier', 'normal'); doc.setFontSize(8); doc.setTextColor(51, 65, 85);
+                doc.text('Lock ' + _seal.lock + '  Content #' + _seal.contentHash, _tx, by + 12.5);
+                doc.text('Total ' + _cur + total.toFixed(2) + '  Paid ' + _cur + _sp.toFixed(2) + '  Due ' + _cur + _sd.toFixed(2), _tx, by + 18);
+                doc.setFontSize(7); doc.setTextColor(100, 116, 139);
+                doc.text('Tamper-proof: any change breaks this code. Verify at shop.', _tx, by + 23.5);
+                doc.setTextColor(20, 20, 20);
+                y += boxH + 6;
+            } catch (e) {}
         }
         // Footer
         doc.setFont('times', 'italic'); doc.setFontSize(9); doc.setTextColor(110);
-        doc.text(L.thank, pageW / 2, 285, { align: 'center' });
+        doc.text(L.thank, pageW / 2, Math.min(y + 4, 288), { align: 'center' });
         return doc;
     }
 
     function currentBillData() {
         const type = getCustomerType();
-        return { customerName: document.getElementById('customerName').value.trim() || (type === 'trader' ? t('retailTraderFull') : t('walkinGuest')), customerPhone: document.getElementById('customerPhone').value, dateTime: document.getElementById('billDateTime').value, billNo: billCounter, customerType: type, lang: getLang() };
+        let m = null;
+        try { m = currentSealCalc(); } catch (e) { m = null; }
+        const d = { customerName: document.getElementById('customerName').value.trim() || (type === 'trader' ? t('retailTraderFull') : t('walkinGuest')), customerPhone: '', dateTime: document.getElementById('billDateTime').value, billNo: billCounter, customerType: type, lang: getLang() };
+        try { d.customerPhone = normalizeIndianMobile(document.getElementById('customerPhone').value.trim()); } catch (e) { d.customerPhone = document.getElementById('customerPhone').value; }
+        if (m) { d.subtotal = m.subtotal; d.charges = m.charges; d.discPct = m.discPct; d.discount = m.discount; d.total = m.total; d.totalQty = m.totalQty; d.paid = m.paid; d.due = m.due; try { d.status = sealStatusOf(m.paid, m.due); } catch (e) {} }
+        return d;
     }
 
     // Save (download) a bill as a PDF file.
@@ -2608,13 +2788,19 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     }
     function printSavedBill(idx) {
         const b = billHistory[idx]; if (!b) return;
-        const data = { customerName: b.customer.name, customerPhone: b.customer.phone, dateTime: b.dateTime, billNo: b.billNo, subtotal: b.subtotal, charges: b.charges, discPct: b.discPct, customerType: b.customerType || (b.customer && b.customer.type) };
+        try { ensureBillSeal(b); } catch (e) {}
+        const data = { customerName: b.customer.name, customerPhone: b.customer.phone, dateTime: b.dateTime, billNo: b.billNo, subtotal: b.subtotal, charges: b.charges, discPct: b.discPct, discount: b.discount, total: b.total, totalQty: b.totalQty, paid: b.paid, due: b.due, customerType: b.customerType || (b.customer && b.customer.type) };
+        try { data.status = sealStatusOf(b.paid, b.due); } catch (e) {}
         printBill(data, b.items, true);
+        try { markBillShared(b.billNo); } catch (e) {}
     }
     function downloadSavedBill(idx) {
         const b = billHistory[idx]; if (!b) return;
-        const data = { customerName: b.customer.name, customerPhone: b.customer.phone, dateTime: b.dateTime, billNo: b.billNo, subtotal: b.subtotal, charges: b.charges, discPct: b.discPct, customerType: b.customerType || (b.customer && b.customer.type) };
+        try { ensureBillSeal(b); } catch (e) {}
+        const data = { customerName: b.customer.name, customerPhone: b.customer.phone, dateTime: b.dateTime, billNo: b.billNo, subtotal: b.subtotal, charges: b.charges, discPct: b.discPct, discount: b.discount, total: b.total, totalQty: b.totalQty, paid: b.paid, due: b.due, customerType: b.customerType || (b.customer && b.customer.type) };
+        try { data.status = sealStatusOf(b.paid, b.due); } catch (e) {}
         saveBillPDFFile(data, b.items, true);
+        try { markBillShared(b.billNo); } catch (e) {}
     }
 
     // History & edit bill (no GST)
@@ -2635,7 +2821,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             const badge = st==='paid' ? '<span class="badge badge-paid">भुगतान किया गया</span>' : (st==='partial' ? '<span class="badge badge-partial">आंशिक</span>' : '<span class="badge badge-due">बकाया</span>');
             const payBtn = b.due>0.009 ? ` <button class="btn btn-warning" style="padding:4px 8px;min-height:32px;" onclick="openPayForBill(${idx})">Pay</button>` : '';
             const typeBadge = `<span class="rate-badge${(b.customerType|| (b.customer && b.customer.type))==='trader'?' trader':''}">${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}</span>`;
-            return `<tr><td>#${b.billNo}</td><td>${new Date(b.dateTime).toLocaleString()}</td><td>${escapeHtml(b.customer.name)} ${badge} ${typeBadge}</td><td>${escapeHtml(phone)}</td><td>${settings.currency}${b.total.toFixed(2)}${b.due>0.009?`<br><small style="color:#b91c1c;">Due ${settings.currency}${b.due.toFixed(2)}</small>`:''}</td><td style="white-space:nowrap;"><button class="btn btn-whatsapp" style="padding:4px 8px;min-height:32px;" onclick="sendSavedBillWhatsApp(${idx})">WhatsApp</button>${payBtn} <button class="btn btn-primary" style="padding:4px 8px;min-height:32px;" onclick="editBill(${idx})">Edit</button> <button class="btn btn-success" style="padding:4px 8px;min-height:32px;" onclick="printSavedBill(${idx})">Print</button> <button class="btn btn-primary" style="padding:4px 8px;min-height:32px;" onclick="downloadSavedBill(${idx})">PDF</button> <button class="btn btn-danger" style="padding:4px 8px;min-height:32px;" onclick="deleteBill(${idx})">Del</button></td></tr>`;
+            return `<tr><td>#${b.billNo}</td><td>${new Date(b.dateTime).toLocaleString()}</td><td>${escapeHtml(b.customer.name)} ${badge} ${typeBadge}</td><td>${escapeHtml(phone)}</td><td>${settings.currency}${b.total.toFixed(2)}${b.due>0.009?`<br><small style="color:#b91c1c;">Due ${settings.currency}${b.due.toFixed(2)}</small>`:''}</td><td>${historySealChip(b)}</td><td style="white-space:nowrap;"><button class="btn btn-whatsapp" style="padding:4px 8px;min-height:32px;" onclick="sendSavedBillWhatsApp(${idx})">WhatsApp</button>${payBtn} <button class="btn btn-primary" style="padding:4px 8px;min-height:32px;" onclick="editBill(${idx})">Edit</button> <button class="btn btn-success" style="padding:4px 8px;min-height:32px;" onclick="printSavedBill(${idx})">Print</button> <button class="btn btn-primary" style="padding:4px 8px;min-height:32px;" onclick="downloadSavedBill(${idx})">PDF</button> <button class="btn btn-danger" style="padding:4px 8px;min-height:32px;" onclick="deleteBill(${idx})">Del</button></td></tr>`;
         }).join('');
         if (cards) {
             cards.innerHTML = billHistory.slice().reverse().map((b,i) => {
@@ -2646,7 +2832,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
                 const badge = st==='paid' ? '<span class="badge badge-paid">भुगतान किया गया</span>' : (st==='partial' ? '<span class="badge badge-partial">आंशिक</span>' : '<span class="badge badge-due">बकाया</span>');
                 const payBtn = b.due>0.009 ? `<button class="btn btn-warning" onclick="openPayForBill(${idx})">💰 Pay</button>` : '';
                 const typeBadge = `<span class="rate-badge${(b.customerType|| (b.customer && b.customer.type))==='trader'?' trader':''}">${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}</span>`;
-                return `<div class="history-card"><div class="history-card-top"><div><strong>Bill #${b.billNo}</strong> ${badge} ${typeBadge}<div class="history-card-meta">${escapeHtml(b.customer.name)} · ${escapeHtml(phone)}<br>${new Date(b.dateTime).toLocaleString()}${b.due>0.009?`<br><span style="color:#b91c1c;font-weight:700;">Due ${settings.currency}${b.due.toFixed(2)}</span>`:''}</div></div><div style="font-weight:700;color:#b45309;">${settings.currency}${b.total.toFixed(2)}</div></div><div class="history-card-actions"><button class="btn btn-whatsapp" onclick="sendSavedBillWhatsApp(${idx})">📱 WhatsApp</button>${payBtn}<button class="btn btn-primary" onclick="editBill(${idx})">Edit</button><button class="btn btn-success" onclick="printSavedBill(${idx})">Print</button><button class="btn btn-primary" onclick="downloadSavedBill(${idx})">PDF</button><button class="btn btn-danger" onclick="deleteBill(${idx})">Del</button></div></div>`;
+                return `<div class="history-card"><div class="history-card-top"><div><strong>Bill #${b.billNo}</strong> ${badge} ${typeBadge}<div class="history-card-meta">${escapeHtml(b.customer.name)} · ${escapeHtml(phone)}<br>${new Date(b.dateTime).toLocaleString()}${b.due>0.009?`<br><span style="color:#b91c1c;font-weight:700;">Due ${settings.currency}${b.due.toFixed(2)}</span>`:''}</div></div><div style="font-weight:700;color:#b45309;">${settings.currency}${b.total.toFixed(2)}</div></div>${historySealBlock(b)}<div class="history-card-actions"><button class="btn btn-whatsapp" onclick="sendSavedBillWhatsApp(${idx})">📱 WhatsApp</button>${payBtn}<button class="btn btn-primary" onclick="editBill(${idx})">Edit</button><button class="btn btn-success" onclick="printSavedBill(${idx})">Print</button><button class="btn btn-primary" onclick="downloadSavedBill(${idx})">PDF</button><button class="btn btn-danger" onclick="deleteBill(${idx})">Del</button></div></div>`;
             }).join('');
         }
     }
@@ -2674,7 +2860,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function removeEditBillItem(i) { editingBillCopy.items.splice(i,1); renderEditBillItems(); }
     function populateProductSelectForEdit() { let sel = document.getElementById('editBillProductSelect'); const t = editingBillCopy ? normalizeCustomerType(editingBillCopy.customerType) : getCustomerType(); sel.innerHTML = products.map((p,i)=>`<option value="${i}">${p.name} (${settings.currency}${getActivePrice(p, t).toFixed(2)} · ${customerTypeLabel(t)})</option>`).join(''); }
     function addProductToEditBill() { let idx = document.getElementById('editBillProductSelect').value; let qty = parseInt(document.getElementById('editBillQty').value)||1; let expiryManual = document.getElementById('editBillExpiry').value; if(idx==='') return; let i = parseInt(idx); const type = normalizeCustomerType(editingBillCopy.customerType); let newProduct = pricedProductCopy(products[i], type); if(expiryManual) newProduct.expiry = expiryManual; let existing = editingBillCopy.items.find(item=>item.product.name === newProduct.name && item.product.price === newProduct.price); if(existing) existing.quantity += qty; else editingBillCopy.items.push({ product: newProduct, quantity: qty, rateType: type }); renderEditBillItems(); }
-    function saveBillEdit() { let newName = document.getElementById('editBillCustomer').value.trim(); if(!newName) return notify('ग्राहक का नाम आवश्यक है','error'); if(!editingBillCopy.items.length) return notify('कम से कम एक आइटम','error'); let newPhoneRaw = document.getElementById('editBillPhone').value.trim(); let newPhone = normalizeIndianMobile(newPhoneRaw); if (newPhoneRaw && !isValidIndianMobile(newPhone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let newDateTime = document.getElementById('editBillDateTime').value; let newCharges = parseFloat(document.getElementById('editBillOtherCharges').value)||0; let newDiscPct = parseFloat(document.getElementById('editBillDiscount').value)||0; let subtotal = editingBillCopy.items.reduce((s,i)=>s+(i.product.price*i.quantity),0); let discount = subtotal*newDiscPct/100; let total = subtotal - discount + newCharges; let totalQty = editingBillCopy.items.reduce((s,i)=>s+i.quantity,0); const type = normalizeCustomerType((document.getElementById('editBillCustomerType') && document.getElementById('editBillCustomerType').value) || editingBillCopy.customerType); editingBillCopy.customerType = type; editingBillCopy.customer = { name: newName, phone: newPhone, type }; editingBillCopy.dateTime = newDateTime; editingBillCopy.charges = newCharges; editingBillCopy.discPct = newDiscPct; editingBillCopy.discount = discount; editingBillCopy.subtotal = subtotal; editingBillCopy.total = total; editingBillCopy.totalQty = totalQty; let newPaid = parseFloat(document.getElementById('editBillPaid').value); if (isNaN(newPaid)) newPaid = (typeof editingBillCopy.paid === 'number' ? editingBillCopy.paid : total); newPaid = Math.max(0, Math.min(newPaid, total)); newPaid = Math.round(newPaid*100)/100; editingBillCopy.paid = newPaid; editingBillCopy.due = Math.round((total-newPaid)*100)/100; if (!Array.isArray(editingBillCopy.payments)) editingBillCopy.payments = []; billHistory[editBillIndex] = editingBillCopy; saveAll(); loadHistory(); updateStatusBar(); closeEditBillModal(); notify('बिल अपडेट कर दिया गया','success'); }
+    function saveBillEdit() { let newName = document.getElementById('editBillCustomer').value.trim(); if(!newName) return notify('ग्राहक का नाम आवश्यक है','error'); if(!editingBillCopy.items.length) return notify('कम से कम एक आइटम','error'); let newPhoneRaw = document.getElementById('editBillPhone').value.trim(); let newPhone = normalizeIndianMobile(newPhoneRaw); if (newPhoneRaw && !isValidIndianMobile(newPhone)) return notify('Mobile is optional — leave blank or enter a valid 10-digit number','error'); let newDateTime = document.getElementById('editBillDateTime').value; let newCharges = parseFloat(document.getElementById('editBillOtherCharges').value)||0; let newDiscPct = parseFloat(document.getElementById('editBillDiscount').value)||0; let subtotal = editingBillCopy.items.reduce((s,i)=>s+(i.product.price*i.quantity),0); let discount = subtotal*newDiscPct/100; let total = subtotal - discount + newCharges; let totalQty = editingBillCopy.items.reduce((s,i)=>s+i.quantity,0); const type = normalizeCustomerType((document.getElementById('editBillCustomerType') && document.getElementById('editBillCustomerType').value) || editingBillCopy.customerType); editingBillCopy.customerType = type; editingBillCopy.customer = { name: newName, phone: newPhone, type }; editingBillCopy.dateTime = newDateTime; editingBillCopy.charges = newCharges; editingBillCopy.discPct = newDiscPct; editingBillCopy.discount = discount; editingBillCopy.subtotal = subtotal; editingBillCopy.total = total; editingBillCopy.totalQty = totalQty; let newPaid = parseFloat(document.getElementById('editBillPaid').value); if (isNaN(newPaid)) newPaid = (typeof editingBillCopy.paid === 'number' ? editingBillCopy.paid : total); newPaid = Math.max(0, Math.min(newPaid, total)); newPaid = Math.round(newPaid*100)/100; editingBillCopy.paid = newPaid; editingBillCopy.due = Math.round((total-newPaid)*100)/100; if (!Array.isArray(editingBillCopy.payments)) editingBillCopy.payments = []; try { stampBillSeal(editingBillCopy); } catch (e) {} billHistory[editBillIndex] = editingBillCopy; saveAll(); loadHistory(); updateStatusBar(); closeEditBillModal(); notify('बिल अपडेट कर दिया गया','success'); }
     function closeEditBillModal() { document.getElementById('editBillModal').classList.remove('active'); editBillIndex = -1; editingBillCopy = null; }
 
     function saveSettings() {
@@ -2705,7 +2891,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         notify('Settings saved — both rates applied to all products and synced','success');
     }
     function exportJSON() { let data = {products, settings, billHistory, billCounter}; let blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_backup_${new Date().toISOString().slice(0,10)}.json`; a.click(); notify('JSON exported','success'); }
-    function exportCSV() { if(!billHistory.length) return notify('कोई बिल नहीं','error'); let csv = 'Bill No,Date,Customer,Phone,Customer Type,Total,Paid,Due,Items\n'; billHistory.forEach(b=>{ ensureBillPayments(b); csv+=`${b.billNo},${new Date(b.dateTime).toLocaleString()},"${b.customer.name}","${b.customer.phone||''}","${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}",${b.total},${b.paid},${b.due},"${b.items.map(i=>i.product.name).join('; ')}"\n`; }); let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_bills_${new Date().toISOString().slice(0,10)}.csv`; a.click(); notify('CSV exported','success'); }
+    function exportCSV() { if(!billHistory.length) return notify('कोई बिल नहीं','error'); let csv = 'Bill No,Date,Customer,Phone,Customer Type,Total,Paid,Due,Seal,Items\n'; billHistory.forEach(b=>{ ensureBillPayments(b); try{ensureBillSeal(b);}catch(e){} csv+=`${b.billNo},${new Date(b.dateTime).toLocaleString()},"${b.customer.name}","${b.customer.phone||''}","${customerTypeLabel(b.customerType || (b.customer && b.customer.type))}",${b.total},${b.paid},${b.due},"${(b.seal&&b.seal.code)||''}","${b.items.map(i=>i.product.name).join('; ')}"\n`; }); let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`khakra_bills_${new Date().toISOString().slice(0,10)}.csv`; a.click(); notify('CSV exported','success'); }
     function resetApp() { if(confirm('DELETE ALL DATA? Cannot undo')){ localStorage.clear(); location.reload(); } }
     function updateStatusBar() {
         const el = document.getElementById('statusInfo');
@@ -2716,6 +2902,469 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function notify(msg,type) { let n=document.createElement('div'); n.className=`notification`; n.style.borderLeftColor = type==='success' ? '#10b981' : (type==='info' ? '#2563eb' : '#ef4444'); n.innerHTML=`<span>${msg}</span>`; document.body.appendChild(n); setTimeout(()=>n.remove(),3200); }
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
+
+    // ================= 🔐 SURAKSHA SEAL — Bill Lock & Key =================
+    // The app holds a secret LOCK (sealSecret — never printed, never shared).
+    // Every Paid/Due bill gets a unique Seal Code (KEY) = HMAC-SHA256(lock,
+    // canonical bill). Change any amount/item/date and the key stops fitting
+    // the lock. Paid keys are GREEN (P), Due/Unpaid keys are soft-RED (D).
+    var SEAL_VERSION = 'SK1';
+    var SEAL_B32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; // Crockford — no I,L,O,U
+
+    function _utf8ToBytes(s) {
+        s = String(s == null ? '' : s);
+        if (typeof TextEncoder !== 'undefined') return Array.prototype.slice.call(new TextEncoder().encode(s));
+        var b = [], i, c; // manual UTF-8 fallback for very old browsers
+        for (i = 0; i < s.length; i++) {
+            c = s.charCodeAt(i);
+            if (c < 0x80) b.push(c);
+            else if (c < 0x800) b.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
+            else if (c >= 0xd800 && c <= 0xdbff && i + 1 < s.length) {
+                var d = s.charCodeAt(i + 1);
+                if (d >= 0xdc00 && d <= 0xdfff) { var cp = 0x10000 + ((c - 0xd800) << 10) + (d - 0xdc00); b.push(0xf0 | (cp >> 18), 0x80 | ((cp >> 12) & 0x3f), 0x80 | ((cp >> 6) & 0x3f), 0x80 | (cp & 0x3f)); i++; continue; }
+                b.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+            } else b.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+        }
+        return b;
+    }
+    function _sealRandomHex(nBytes) {
+        try {
+            if (window.crypto && crypto.getRandomValues) return _bytesToHex(crypto.getRandomValues(new Uint8Array(nBytes)));
+        } catch (e) {}
+        var h = '';
+        for (var i = 0; i < nBytes; i++) h += ('0' + Math.floor(Math.random() * 256).toString(16)).slice(-2);
+        return h;
+    }
+    function _b32encode(bytes) {
+        var out = '', bits = 0, val = 0;
+        for (var i = 0; i < bytes.length; i++) {
+            val = (val << 8) | (bytes[i] & 255); bits += 8;
+            while (bits >= 5) { out += SEAL_B32[(val >>> (bits - 5)) & 31]; bits -= 5; }
+        }
+        if (bits > 0) out += SEAL_B32[(val << (5 - bits)) & 31];
+        return out;
+    }
+    function _b32val(ch) { return SEAL_B32.indexOf(ch); }
+    function _paise(n) { return Math.round((Number(n) || 0) * 100); }
+
+    // ---- The LOCK: 256-bit shop secret, created once, synced to shop devices ----
+    function getSealSecret() {
+        if (settings && typeof settings.sealSecret === 'string' && /^[0-9a-f]{32,}$/i.test(settings.sealSecret)) return settings.sealSecret.toLowerCase();
+        var s = _sealRandomHex(32);
+        try {
+            settings.sealSecret = s;
+            localStorage.setItem('khakra_settings', JSON.stringify(settings));
+            if (typeof saveAll === 'function') saveAll(); // propagate lock to shop devices
+        } catch (e) { try { settings.sealSecret = s; } catch (e2) {} }
+        return s;
+    }
+    function getPrevSealSecret() {
+        if (settings && typeof settings.sealPrevSecret === 'string' && /^[0-9a-f]{32,}$/i.test(settings.sealPrevSecret)) return settings.sealPrevSecret.toLowerCase();
+        return '';
+    }
+    function getLockId(secretHex) {
+        try {
+            var h = _sha256(_utf8ToBytes('SK-LOCK|' + (secretHex || getSealSecret())));
+            return _b32encode(_hexToBytes(h)).slice(0, 4);
+        } catch (e) { return '----'; }
+    }
+    // Numbers decide the truth — labels can lie, money cannot.
+    function sealStatusOf(paid, due) {
+        return (Number(due) > 0.009) ? 'due' : 'paid';
+    }
+    function sealItemsPart(items) {
+        return (items || []).map(function (it) {
+            var nm = it.product ? it.product.name : (it.name || '');
+            var pr = it.product ? it.product.price : it.price;
+            var q = (it.quantity != null) ? it.quantity : (it.qty || 0);
+            return String(nm || '').trim() + '|' + _paise(pr) + '|' + (Number(q) || 0) + '|' + (it.rateType || it.rate || '');
+        }).join(';');
+    }
+    function sealCanonical(inp) {
+        return [SEAL_VERSION, inp.billNo, inp.dateTime || '', String(inp.name || '').trim(), inp.phone || '', inp.ctype || 'walkin',
+            sealItemsPart(inp.items), _paise(inp.sub), _paise(inp.chg), Math.round((Number(inp.disc) || 0) * 100),
+            _paise(inp.tot), _paise(inp.paid), _paise(inp.due), inp.status].join('|');
+    }
+    // ---- The KEY: deterministic HMAC seal. Same bill => same code, always. ----
+    function computeBillSeal(inp, secretHex) {
+        if (typeof _sha256 !== 'function' || typeof _hmacSha256 !== 'function') return null;
+        var sec = secretHex || getSealSecret();
+        if (!sec) return null;
+        var status = sealStatusOf(inp.paid, inp.due);
+        var canon = sealCanonical(Object.assign({}, inp, { status: status }));
+        var mac = _hexToBytes(_hmacSha256(_hexToBytes(sec), _utf8ToBytes(canon)));
+        var auth12 = _b32encode(mac.slice(0, 8)).slice(0, 12); // 60-bit tag ≈ 1 in 10^18 guess
+        var chk = 0;
+        for (var i = 0; i < 12; i++) chk = (chk + _b32val(auth12[i]) * (i + 1)) % 32;
+        var g = auth12 + SEAL_B32[chk]; // 13th char = typo-catching checksum
+        var lock = getLockId(sec);
+        var letter = status === 'paid' ? 'P' : 'D';
+        var code = 'SK-' + lock + '-' + letter + '-' + g.slice(0, 4) + '-' + g.slice(4, 8) + '-' + g.slice(8, 13);
+        var contentHash = '';
+        try { contentHash = _sha256(_utf8ToBytes('SK-CONTENT|' + sealItemsPart(inp.items) + '|' + _paise(inp.tot))).slice(0, 8).toUpperCase(); } catch (e) {}
+        return { code: code, lock: lock, letter: letter, status: status, tag: auth12, check: SEAL_B32[chk], contentHash: contentHash, pattern: mac.slice(8, 14) };
+    }
+    function sealInputsFromSaved(b) {
+        try { ensureBillPayments(b); } catch (e) {}
+        return {
+            billNo: b.billNo, dateTime: b.dateTime,
+            name: (b.customer && b.customer.name) || '', phone: (b.customer && b.customer.phone) || '',
+            ctype: normalizeCustomerType(b.customerType || (b.customer && b.customer.type)),
+            items: b.items || [], sub: b.subtotal, chg: b.charges, disc: b.discPct,
+            tot: b.total, paid: b.paid, due: b.due
+        };
+    }
+    function currentSealCalc() {
+        var sub = (billItems || []).reduce(function (s, i) { return s + (i.product.price * i.quantity); }, 0);
+        var chg = 0, disc = 0;
+        try { chg = parseFloat(document.getElementById('otherCharges').value) || 0; } catch (e) {}
+        try { disc = parseFloat(document.getElementById('discountPercent').value) || 0; } catch (e) {}
+        var total = sub - (sub * disc / 100) + chg;
+        var paid = total;
+        try { var r = parseFloat(document.getElementById('amountReceived').value); paid = isNaN(r) ? total : Math.max(0, Math.min(r, total)); } catch (e) {}
+        paid = Math.round(paid * 100) / 100;
+        var qty = (billItems || []).reduce(function (s, i) { return s + (Number(i.quantity) || 0); }, 0);
+        return { subtotal: sub, charges: chg, discPct: disc, discount: sub * disc / 100, total: total, paid: paid, due: Math.round((total - paid) * 100) / 100, totalQty: qty };
+    }
+    function sealInputsCurrent() {
+        var c = currentSealCalc();
+        var type = getCustomerType();
+        var nm = '', ph = '', dt = '';
+        try { nm = document.getElementById('customerName').value.trim() || (type === 'trader' ? t('retailTraderFull') : t('walkinGuest')); } catch (e) {}
+        try { ph = normalizeIndianMobile(document.getElementById('customerPhone').value.trim()); } catch (e) {}
+        try { dt = document.getElementById('billDateTime').value; } catch (e) {}
+        return { billNo: billCounter, dateTime: dt, name: nm, phone: ph, ctype: type, items: billItems, sub: c.subtotal, chg: c.charges, disc: c.discPct, tot: c.total, paid: c.paid, due: c.due };
+    }
+    // Build seal inputs from whatever a bill renderer is about to PRINT, so the
+    // code binds to EXACTLY the numbers on the paper/PDF/WhatsApp message.
+    function sealForBillData(billData, items) {
+        items = items || [];
+        var sub = (billData.subtotal !== undefined && billData.subtotal !== null) ? billData.subtotal : items.reduce(function (s, i) { return s + (i.product.price * i.quantity); }, 0);
+        var chg = (billData.charges !== undefined && billData.charges !== null) ? billData.charges : 0;
+        var disc = (billData.discPct !== undefined && billData.discPct !== null) ? billData.discPct : 0;
+        var tot = (billData.total !== undefined && billData.total !== null) ? billData.total : (sub - (sub * disc / 100) + chg);
+        var paid = billData.paid, due = billData.due;
+        if (paid == null || due == null) {
+            if (billData.status === 'paid') { paid = tot; due = 0; }
+            else { paid = 0; due = tot; } // conservative: DUE unless proven paid
+        }
+        return computeBillSeal({ billNo: billData.billNo || billCounter, dateTime: billData.dateTime || '', name: billData.customerName || '', phone: billData.customerPhone || '', ctype: normalizeCustomerType(billData.customerType), items: items, sub: sub, chg: chg, disc: disc, tot: tot, paid: paid, due: due });
+    }
+    // Stamp (or re-stamp) a saved bill — called on save, edit, payment, share.
+    function stampBillSeal(b) {
+        try {
+            var s = computeBillSeal(sealInputsFromSaved(b));
+            if (!s) return (b && b.seal) || null;
+            if (b.seal && b.seal.code && b.seal.code !== s.code) {
+                if (!Array.isArray(b.sealHistory)) b.sealHistory = [];
+                b.sealHistory.push({ code: b.seal.code, status: b.seal.status, at: b.seal.at || '' });
+                if (b.sealHistory.length > 6) b.sealHistory = b.sealHistory.slice(-6);
+            }
+            b.seal = { code: s.code, lock: s.lock, status: s.status, total: Math.round((Number(b.total) || 0) * 100) / 100, paid: Math.round((Number(b.paid) || 0) * 100) / 100, due: Math.round((Number(b.due) || 0) * 100) / 100, content: s.contentHash, at: new Date().toISOString() };
+            return b.seal;
+        } catch (e) { return (b && b.seal) || null; }
+    }
+    // Heal-on-read: missing, foreign-lock, or drifted seals get re-stamped.
+    function ensureBillSeal(b) {
+        if (!b) return null;
+        try {
+            var cur = getLockId(getSealSecret());
+            var ps = getPrevSealSecret(), prv = ps ? getLockId(ps) : '';
+            if (!b.seal || !b.seal.code || (b.seal.lock && b.seal.lock !== cur && b.seal.lock !== prv)) return stampBillSeal(b);
+            var tot = Math.round((Number(b.total) || 0) * 100) / 100;
+            var pd = Math.round((Number(b.paid) || 0) * 100) / 100;
+            var du = Math.round((Number(b.due) || 0) * 100) / 100;
+            if (Math.abs((Number(b.seal.total) || 0) - tot) > 0.009 || Math.abs((Number(b.seal.paid) || 0) - pd) > 0.009 || Math.abs((Number(b.seal.due) || 0) - du) > 0.009) return stampBillSeal(b);
+            if (b.seal.status !== sealStatusOf(pd, du)) return stampBillSeal(b);
+            return b.seal;
+        } catch (e) { return (b && b.seal) || null; }
+    }
+    function markBillShared(billNo) {
+        try {
+            var idx = findBillIndexByNo(billNo);
+            if (idx < 0) return;
+            var b = billHistory[idx];
+            try { ensureBillSeal(b); } catch (e) {}
+            b.shares = (Number(b.shares) || 0) + 1;
+            b.lastSharedAt = new Date().toISOString();
+            localStorage.setItem('khakra_history', JSON.stringify(billHistory));
+            if (typeof fb_db !== 'undefined' && fb_db) { try { fb_db.ref('bills/' + b.billNo).set(b); } catch (e) {} }
+        } catch (e) {}
+    }
+    // ---- Verify: does this KEY fit the LOCK for this bill? ----
+    function normalizeSealCode(raw) { return String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+    function parseSealCode(raw) {
+        var n = normalizeSealCode(raw);
+        if (n.length !== 20 || n.slice(0, 2) !== 'SK') return { ok: false, norm: n, error: 'format' };
+        var lock = n.slice(2, 6), letter = n.slice(6, 7), tag = n.slice(7, 19), chk = n.slice(19, 20);
+        if (letter !== 'P' && letter !== 'D') return { ok: false, norm: n, error: 'format' };
+        for (var i = 0; i < tag.length; i++) if (_b32val(tag[i]) < 0) return { ok: false, norm: n, error: 'chars' };
+        if (_b32val(chk) < 0) return { ok: false, norm: n, error: 'chars' };
+        var c = 0;
+        for (var j = 0; j < 12; j++) c = (c + _b32val(tag[j]) * (j + 1)) % 32;
+        if (SEAL_B32[c] !== chk) return { ok: false, norm: n, error: 'checksum', lock: lock, letter: letter };
+        return { ok: true, norm: n, lock: lock, letter: letter, tag: tag, check: chk, pretty: 'SK-' + lock + '-' + letter + '-' + tag.slice(0, 4) + '-' + tag.slice(4, 8) + '-' + tag.slice(8, 12) + chk };
+    }
+    function verifyBillCode(billNo, rawCode, claimedTotal) {
+        var no = parseInt(billNo, 10);
+        if (!(no > 0)) return { verdict: 'unknown', reason: 'no-billno' };
+        var p = parseSealCode(rawCode);
+        var idx = (typeof findBillIndexByNo === 'function') ? findBillIndexByNo(no) : -1;
+        var b = idx >= 0 ? billHistory[idx] : null;
+        if (!b) return { verdict: 'unknown', billNo: no, parsed: p, reason: 'no-bill' };
+        try { ensureBillPayments(b); } catch (e) {}
+        var inp = sealInputsFromSaved(b);
+        var curLock = getLockId(getSealSecret());
+        var expCur = computeBillSeal(inp, getSealSecret());
+        var expPrev = null, prevLock = '';
+        var ps = getPrevSealSecret();
+        if (ps) { try { expPrev = computeBillSeal(inp, ps); prevLock = getLockId(ps); } catch (e) {} }
+        var res = { verdict: 'fake', billNo: no, bill: b, parsed: p, lock: curLock, expected: expCur, prevLock: prevLock };
+        if (!p.ok) { res.reason = p.error; return res; }
+        var matchCur = expCur && normalizeSealCode(expCur.code) === p.norm;
+        var matchPrev = !matchCur && expPrev && normalizeSealCode(expPrev.code) === p.norm;
+        if (!matchCur && !matchPrev) {
+            res.reason = 'mismatch';
+            res.lockMatch = (p.lock === curLock || (!!prevLock && p.lock === prevLock));
+            res.statusMatch = (expCur && p.letter === expCur.letter);
+            return res;
+        }
+        res.matched = matchPrev ? expPrev : expCur;
+        res.usedPrevLock = !!matchPrev;
+        if (claimedTotal !== '' && claimedTotal != null && !isNaN(Number(claimedTotal))) {
+            var ct = Number(claimedTotal);
+            if (Math.abs(ct - (Number(b.total) || 0)) > 0.009) { res.verdict = 'tampered-amount'; res.claimedTotal = ct; return res; }
+        }
+        res.verdict = matchPrev ? 'ok-prev' : 'ok';
+        return res;
+    }
+    // ---- Visual seal pattern: deterministic identicon, printed on every bill ----
+    function sealPatternSVG(patternBytes, size, status) {
+        size = size || 54;
+        var bits = [];
+        (patternBytes || []).forEach(function (by) { for (var k = 7; k >= 0; k--) bits.push((by >> k) & 1); });
+        while (bits.length < 15) bits.push(0);
+        var c1 = status === 'paid' ? '#16a34a' : '#dc2626';
+        var c0 = status === 'paid' ? '#dcfce7' : '#fee2e2';
+        var cell = size / 5, s = '';
+        for (var r = 0; r < 5; r++) for (var col = 0; col < 5; col++) {
+            var mirror = col < 3 ? col : 4 - col;
+            var on = bits[r * 3 + mirror];
+            s += '<rect x="' + (col * cell).toFixed(1) + '" y="' + (r * cell).toFixed(1) + '" width="' + (cell - 0.6).toFixed(1) + '" height="' + (cell - 0.6).toFixed(1) + '" rx="1.5" fill="' + (on ? c1 : c0) + '"/>';
+        }
+        return '<svg class="seal-pattern" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" xmlns="http://www.w3.org/2000/svg">' + s + '</svg>';
+    }
+    // ---- Clipboard ----
+    function fallbackCopy(text) {
+        try {
+            var ta = document.createElement('textarea');
+            ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            ta.remove();
+        } catch (e) {}
+    }
+    function copySealCode(text, ev) {
+        if (ev) { try { ev.stopPropagation(); ev.preventDefault(); } catch (e) {} }
+        text = String(text || '');
+        if (!text) return;
+        function done() { notify('📋 Seal copied: ' + text, 'success'); }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+        else { fallbackCopy(text); done(); }
+    }
+    // ---- Live seal preview on the billing screen ----
+    function renderSealPreview() {
+        var box = document.getElementById('sealPreviewBox');
+        if (!box) return;
+        var lang = getLang();
+        if (!billItems || !billItems.length) {
+            box.innerHTML = '<div class="seal-preview"><div class="seal-preview-head">🔐 ' + (lang === 'en' ? 'Bill Seal' : 'बिल सील') + '</div><div class="seal-sub">' + (lang === 'en' ? 'Add items — a unique Paid/Due seal code is generated automatically on save, PDF & WhatsApp.' : 'आइटम जोड़ें — Save, PDF और WhatsApp पर अपने आप unique Paid/Due सील कोड बनेगा।') + '</div></div>';
+            return;
+        }
+        try {
+            var s = computeBillSeal(sealInputsCurrent());
+            if (!s) { box.innerHTML = ''; return; }
+            var paidB = s.status === 'paid';
+            var c = currentSealCalc();
+            box.innerHTML = '<div class="seal-preview ' + s.status + '">'
+                + '<div class="seal-preview-head">🔐 ' + (paidB ? (lang === 'en' ? 'PAID Seal — green key' : 'PAID सील — हरी चाबी') : (lang === 'en' ? 'DUE Seal — red key' : 'DUE सील — लाल चाबी'))
+                + '<button type="button" class="seal-mini-btn" style="margin-left:auto;" onclick="copySealCode(\'' + s.code + '\', event)">📋 ' + (lang === 'en' ? 'Copy' : 'कॉपी') + '</button></div>'
+                + '<div class="seal-code">' + s.code + '</div>'
+                + '<div class="seal-sub">' + formatMoney(c.total) + ' • ' + (lang === 'en' ? 'Paid ' : 'भुगतान ') + formatMoney(c.paid) + ' • ' + (lang === 'en' ? 'Due ' : 'बकाया ') + formatMoney(c.due)
+                + '<br>' + (lang === 'en' ? 'Provisional — final code is stamped on Save. Prints on PDF/print/WhatsApp with watermark.' : 'अस्थायी — फाइनल कोड Save पर लगेगा। PDF/प्रिंट/WhatsApp पर watermark के साथ जाएगा।') + '</div></div>';
+        } catch (e) { try { box.innerHTML = ''; } catch (e2) {} }
+    }
+    // ---- History chips ----
+    function historySealChip(b) {
+        try {
+            var s = ensureBillSeal(b);
+            if (!s || !s.code) return '<span style="color:#94a3b8;">—</span>';
+            var paidB = s.status === 'paid';
+            var parts = String(s.code).split('-');
+            var shortG = parts.length ? parts[parts.length - 1] : '';
+            return '<span class="seal-chip ' + s.status + '" title="' + s.code + '">🔐 ' + (paidB ? 'P' : 'D') + '·…' + shortG
+                + ' <button type="button" class="seal-mini-btn" title="Copy seal" onclick="copySealCode(\'' + s.code + '\', event)">📋</button>'
+                + '<button type="button" class="seal-mini-btn" title="Verify seal" onclick="openVerifyFor(' + b.billNo + ')">✓</button></span>';
+        } catch (e) { return '<span style="color:#94a3b8;">—</span>'; }
+    }
+    function historySealBlock(b) {
+        try {
+            var s = ensureBillSeal(b);
+            if (!s || !s.code) return '';
+            var paidB = s.status === 'paid';
+            var lang = getLang();
+            return '<div class="seal-preview ' + s.status + '" style="margin:0 0 10px;padding:10px 12px;">'
+                + '<div class="seal-preview-head" style="font-size:12px;">🔐 ' + (paidB ? (lang === 'en' ? 'PAID Seal' : 'PAID सील') : (lang === 'en' ? 'DUE Seal' : 'DUE सील'))
+                + '<span style="margin-left:auto;display:inline-flex;gap:6px;"><button type="button" class="seal-mini-btn" onclick="copySealCode(\'' + s.code + '\', event)">📋</button>'
+                + '<button type="button" class="seal-mini-btn" onclick="openVerifyFor(' + b.billNo + ')">✓ Verify</button></span></div>'
+                + '<div class="seal-code" style="font-size:12px;">' + s.code + '</div></div>';
+        } catch (e) { return ''; }
+    }
+    // ---- Verify tab ----
+    function refreshVerifyBillList() {
+        var sel = document.getElementById('verifyBillPick');
+        if (!sel) return;
+        var cur = sel.value;
+        var opts = '<option value="">— Select bill —</option>';
+        (billHistory || []).slice().reverse().slice(0, 80).forEach(function (b) {
+            try { ensureBillSeal(b); } catch (e) {}
+            opts += '<option value="' + b.billNo + '">#' + b.billNo + ' · ' + escapeHtml((b.customer && b.customer.name) || '') + ' · ' + money(b.total) + '</option>';
+        });
+        sel.innerHTML = opts;
+        if (cur) sel.value = cur;
+    }
+    function prefillVerifyFromPick() {
+        var sel = document.getElementById('verifyBillPick');
+        var no = sel ? parseInt(sel.value, 10) : NaN;
+        if (!(no > 0)) return;
+        var idx = findBillIndexByNo(no);
+        if (idx < 0) return;
+        var b = billHistory[idx];
+        try { ensureBillSeal(b); } catch (e) {}
+        document.getElementById('verifyBillNo').value = b.billNo;
+        document.getElementById('verifyCode').value = (b.seal && b.seal.code) || '';
+        document.getElementById('verifyTotal').value = '';
+    }
+    function openVerifyFor(billNo) {
+        switchTab('verify');
+        setTimeout(function () {
+            try {
+                refreshVerifyBillList();
+                var sel = document.getElementById('verifyBillPick');
+                if (sel) sel.value = String(billNo);
+                prefillVerifyFromPick();
+                runBillVerification();
+            } catch (e) {}
+        }, 80);
+    }
+    function clearVerification() {
+        document.getElementById('verifyBillNo').value = '';
+        document.getElementById('verifyCode').value = '';
+        document.getElementById('verifyTotal').value = '';
+        var sel = document.getElementById('verifyBillPick');
+        if (sel) sel.value = '';
+        var box = document.getElementById('verifyResult');
+        box.className = 'verify-result';
+        box.innerHTML = '';
+    }
+    function runBillVerification() {
+        var box = document.getElementById('verifyResult');
+        var noEl = document.getElementById('verifyBillNo');
+        var codeEl = document.getElementById('verifyCode');
+        var totEl = document.getElementById('verifyTotal');
+        var claimed = (totEl && totEl.value !== '') ? parseFloat(totEl.value) : null;
+        var r = verifyBillCode(noEl ? noEl.value : '', codeEl ? codeEl.value : '', claimed);
+        var lang = getLang();
+        var cls = 'warn', big = '', lines = [];
+        function L(en, hi) { return lang === 'en' ? en : hi; }
+        if (r.verdict === 'ok' || r.verdict === 'ok-prev') {
+            cls = (r.verdict === 'ok-prev') ? 'warn' : 'ok';
+            big = '✅ ' + L('GENUINE — Seal fits the lock', 'असली — चाबी ताले में फिट');
+            lines.push('🧾 <b>Bill #' + r.billNo + '</b> · ' + escapeHtml((r.bill.customer && r.bill.customer.name) || ''));
+            lines.push((r.matched && r.matched.status === 'paid' ? '🟢 <b>PAID</b> ' + L('(green key)', '(हरी चाबी)') : '🔴 <b>DUE ' + money(r.bill.due) + '</b> ' + L('(red key)', '(लाल चाबी)')) + ' · ' + L('Total', 'कुल') + ' <code>' + money(r.bill.total) + '</code> · ' + L('Paid', 'भुगतान') + ' <code>' + money(r.bill.paid) + '</code>');
+            lines.push('🔐 <code>' + (r.parsed.pretty || '') + '</code>');
+            if (r.claimedTotal == null && claimed == null) lines.push('<span style="color:#64748b;">' + L('Tip: also enter the total printed on paper to catch amount tampering.', 'टिप: कागज़ पर छपी कुल रकम भी डालें — रकम से छेड़छाड़ पकड़ी जाएगी।') + '</span>');
+            if (r.verdict === 'ok-prev') lines.push('⚠️ ' + L('Issued under your PREVIOUS lock. Ask for a fresh bill print to get the new-lock code.', 'पुराने ताले का कोड है। नया प्रिंट लेकर नया कोड लें।'));
+            if (r.matched) lines.push('<div style="margin-top:6px;display:flex;gap:10px;align-items:center;">' + sealPatternSVG(r.matched.pattern, 46, r.matched.status) + '<span style="font-size:12px;color:#64748b;">' + L('Pattern must match the one printed on the bill.', 'ये डिज़ाइन बिल पर छपे डिज़ाइन से मिलना चाहिए।') + '</span></div>');
+        } else if (r.verdict === 'tampered-amount') {
+            cls = 'bad';
+            big = '🚨 ' + L('TAMPERED — amounts do not match', 'छेड़छाड़ — रकम मेल नहीं खा रही');
+            lines.push('🔐 ' + L('Code is valid for', 'कोड सही है') + ' <b>Bill #' + r.billNo + '</b>, ' + L('but the paper shows a DIFFERENT total:', 'लेकिन कागज़ पर अलग कुल रकम है:'));
+            lines.push(L('On paper:', 'कागज़ पर:') + ' <code>' + money(r.claimedTotal) + '</code> &nbsp;≠&nbsp; ' + L('In app lock:', 'ऐप ताले में:') + ' <code>' + money(r.bill.total) + '</code>');
+            lines.push('⚠️ ' + L('Someone edited the amounts after sealing. Treat this bill as FAKE.', 'सील के बाद रकम बदली गई है। इस बिल को नकली मानें।'));
+        } else if (r.verdict === 'unknown') {
+            cls = 'warn'; big = '❓ ' + L('Bill not found', 'बिल नहीं मिला');
+            if (r.reason === 'no-billno') lines.push(L('Enter a bill number.', 'बिल नंबर डालें।'));
+            else lines.push(L('No Bill #', 'कोई बिल #') + (r.billNo || '') + L(' in this app. It may belong to another shop/lock, or the number is wrong.', ' इस ऐप में नहीं है। ये किसी और दुकान का हो सकता है, या नंबर गलत है।'));
+        } else {
+            cls = 'bad'; big = '❌ ' + L('FAKE / TAMPERED — key does not fit', 'नकली / छेड़छाड़ — चाबी ताले में नहीं लगी');
+            if (r.reason === 'format' || r.reason === 'chars') {
+                lines.push('⌨️ ' + L('Code format is wrong. It should look like:', 'कोड का format गलत है। ऐसा दिखना चाहिए:') + ' <code>SK-' + (r.bill ? getLockId(getSealSecret()) : 'XXXX') + '-P-XXXX-XXXX-XXXXX</code>');
+                lines.push(L('Check every character and try again.', 'हर अक्षर जाँचकर दोबारा डालें।'));
+            } else if (r.reason === 'checksum') {
+                lines.push('⌨️ ' + L('One or more characters look mistyped (checksum failed). Re-enter carefully.', 'कोई अक्षर गलत टाइप हुआ लगता है। ध्यान से दोबारा डालें।'));
+            } else {
+                lines.push('🧾 <b>Bill #' + r.billNo + '</b> · ' + escapeHtml((r.bill.customer && r.bill.customer.name) || ''));
+                if (!r.lockMatch) lines.push('🔒 ' + L('Lock ID does not match this shop. Code was made for a different lock/shop — or fully forged.', 'Lock ID इस दुकान से मेल नहीं खाता। कोड किसी और दुकान/ताले का है — या पूरी तरह जाली है।'));
+                else if (!r.statusMatch) lines.push('💰 ' + L('Status letter is wrong: this bill is', 'Status अक्षर गलत है: ये बिल') + ' <b>' + ((r.expected && r.expected.status === 'paid') ? 'PAID (P)' : 'DUE (D)') + '</b> ' + L('in the app lock.', 'ऐप ताले में है।') + ' ' + L('A DUE code can never pass as PAID.', 'DUE कोड कभी PAID बनकर नहीं चलेगा।'));
+                else lines.push('🔍 ' + L('Code signature mismatch — items, amounts, date or customer were altered after sealing, or the code is forged.', 'Code हस्ताक्षर मेल नहीं खाता — सील के बाद item/रकम/तारीख/ग्राहक बदला गया, या कोड जाली है।'));
+                if (r.expected) lines.push(L('App-lock code for this bill:', 'इस बिल का ऐप-ताला कोड:') + ' <code>' + r.expected.code + '</code>');
+            }
+        }
+        box.className = 'verify-result show ' + cls;
+        box.innerHTML = '<div class="verify-big">' + big + '</div><div class="verify-lines">' + lines.join('<br>') + '</div>';
+    }
+    // ---- Lock management (Settings) ----
+    function refreshSealLockUI() {
+        try {
+            var idEl = document.getElementById('sealLockId');
+            var keyEl = document.getElementById('sealSecretField');
+            if (idEl) idEl.textContent = getLockId(getSealSecret());
+            if (keyEl && !keyEl.dataset.touched) keyEl.value = getSealSecret();
+            else if (keyEl && keyEl.type !== 'password') keyEl.value = getSealSecret();
+        } catch (e) {}
+    }
+    function toggleSealSecret() {
+        var keyEl = document.getElementById('sealSecretField');
+        if (!keyEl) return;
+        try { keyEl.value = getSealSecret(); } catch (e) {}
+        keyEl.type = (keyEl.type === 'password') ? 'text' : 'password';
+    }
+    function copyLockId() {
+        var id = '';
+        try { id = getLockId(getSealSecret()); } catch (e) {}
+        if (!id) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(id).then(function () { notify('📋 Lock ID copied: ' + id, 'success'); }, function () { fallbackCopy(id); notify('📋 Lock ID: ' + id, 'success'); });
+        else { fallbackCopy(id); notify('📋 Lock ID: ' + id, 'success'); }
+    }
+    function copySealSecret() {
+        var s = '';
+        try { s = getSealSecret(); } catch (e) {}
+        if (!s) return;
+        if (!confirm(getLang() === 'en' ? 'Copy SECRET backup key? Keep it private — anyone with it can forge seals. Continue?' : 'SECRET backup key कॉपी करें? इसे private रखें — जिसके पास ये होगी वो सील बना सकेगा। जारी रखें?')) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(s).then(function () { notify('💾 Secret backup key copied — keep it private', 'success'); }, function () { fallbackCopy(s); notify('💾 Secret backup key copied — keep it private', 'success'); });
+        else { fallbackCopy(s); notify('💾 Secret backup key copied — keep it private', 'success'); }
+    }
+    function resealAllBills() {
+        var n = 0;
+        (billHistory || []).forEach(function (b) { try { stampBillSeal(b); n++; } catch (e) {} });
+        saveAll(); loadHistory();
+        try { renderSealPreview(); } catch (e) {}
+        notify('🔄 ' + n + ' bills re-sealed with current lock', 'success');
+    }
+    function regenerateSealLock() {
+        var lang = getLang();
+        if (!confirm(lang === 'en' ? 'Generate a NEW shop lock? Old bill codes stay verifiable (old lock), and all bills will be re-sealed with the new lock. Continue?' : 'नया दुकान-ताला बनाएँ? पुराने कोड भी verify होते रहेंगे (पुराना lock), और सभी बिल नए lock से re-seal होंगे। जारी रखें?')) return;
+        var cur = '';
+        try { cur = getSealSecret(); } catch (e) {}
+        settings.sealPrevSecret = cur;
+        settings.sealSecret = _sealRandomHex(32);
+        var n = 0;
+        (billHistory || []).forEach(function (b) { try { stampBillSeal(b); n++; } catch (e) {} });
+        saveAll(); loadHistory(); refreshSealLockUI();
+        try { renderSealPreview(); } catch (e) {}
+        notify(lang === 'en' ? ('🔐 New lock active. Re-sealed ' + n + ' bills.') : ('🔐 नया ताला चालू। ' + n + ' बिल re-seal हुए।'), 'success');
+    }
 
     // ================= WHATSAPP BILL + OPTIONAL MOBILE =================
     let lastSavedBill = null;
@@ -2807,6 +3456,21 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         }
         if (billData.status === 'paid') lines.push(lang==='en' ? '✅ *Status: Paid*' : '✅ *स्थिति: भुगतान पूरा*');
         else if (billData.status === 'due') lines.push(lang==='en' ? '⏳ *Status: Due* — Please pay soon' : '⏳ *स्थिति: बकाया* — कृपया जल्द से जल्द भुगतान करें');
+        billData.subtotal = subtotal; billData.charges = charges; billData.discPct = discPct; billData.discount = discount; billData.total = total; billData.totalQty = totalQty;
+        try {
+            var _seal = sealForBillData(billData, items);
+            if (_seal) {
+                var _paidB = _seal.status === 'paid';
+                var _sp = (billData.paid != null && billData.due != null) ? billData.paid : (_paidB ? total : 0);
+                var _sd = (billData.paid != null && billData.due != null) ? billData.due : (_paidB ? 0 : total);
+                lines.push('');
+                lines.push(_paidB ? '🔐 *PAID Seal — हरी चाबी:*' : '🔒 *DUE Seal — लाल चाबी:*');
+                lines.push('`' + _seal.code + '`');
+                lines.push('Lock ' + _seal.lock + ' · Content #' + _seal.contentHash);
+                lines.push('*Sealed:* Total ' + formatMoney(total) + ' · Paid ' + formatMoney(_sp) + ' · Due ' + formatMoney(_sd));
+                lines.push(lang==='en' ? '_Any change breaks this code. Verify at shop._' : '_रकम/item बदला तो code invalid। दुकान पर verify कराएँ।_');
+            }
+        } catch (e) {}
         lines.push('');
         lines.push((lang==='en' ? '📦 Items: ' : '📦 आइटम: ') + items.length + '  |  ' + (lang==='en' ? 'Qty: ' : 'मात्रा: ') + totalQty);
         lines.push('');
@@ -2846,6 +3510,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     }
     function sendWhatsAppFromSaved(b) {
         if (!b || !b.items || !b.items.length) return notify('No items on this bill', 'error');
+        try { ensureBillSeal(b); } catch (e) {}
         const data = {
             customerName: b.customer && b.customer.name,
             customerPhone: b.customer && b.customer.phone,
@@ -2859,13 +3524,15 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             total: b.total,
             totalQty: b.totalQty,
             paid: b.paid,
-            due: b.due
+            due: b.due,
+            status: sealStatusOf(b.paid, b.due)
         };
         const digits = normalizeIndianMobile(data.customerPhone);
         if (isValidIndianMobile(digits)) {
             openWhatsApp(digits, buildWhatsAppText(data, b.items));
+            try { markBillShared(b.billNo); } catch (e) {}
         } else {
-            pendingWa = { data, items: b.items, phone: data.customerPhone || '' };
+            pendingWa = { data, items: b.items, phone: data.customerPhone || '', savedBillNo: b.billNo };
             openWaPhoneModal();
         }
     }
@@ -2899,6 +3566,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         pendingWa.data.customerPhone = digits;
         closeWaPhoneModal();
         openWhatsApp(isValidIndianMobile(digits) ? digits : '', buildWhatsAppText(pendingWa.data, pendingWa.items));
+        try { if (pendingWa.savedBillNo) markBillShared(pendingWa.savedBillNo); } catch (e) {}
         pendingWa = null;
     }
     function openAfterSaveModal(bill) {
@@ -2911,6 +3579,18 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             msg.textContent = (lang==='en' ? 'Bill #' : 'बिल #') + bill.billNo + (lang==='en' ? ' saved for ' : ' सेव — ') + bill.customer.name + '.' + dueBit;
         }
         if (waBtn) waBtn.textContent = isValidIndianMobile(digits) ? ('📱 WhatsApp +91 ' + digits) : (lang==='en' ? '📱 Send on WhatsApp' : '📱 व्हाट्सएप भेजें');
+        var sealBox = document.getElementById('afterSaveSeal');
+        if (sealBox) {
+            try {
+                var _s = ensureBillSeal(bill) || {};
+                var _paidB = (Number(bill.due) || 0) <= 0.009;
+                sealBox.innerHTML = '<div class="seal-preview ' + (_paidB ? 'paid' : 'due') + '" style="margin-top:0;">'
+                    + '<div class="seal-preview-head">🔐 ' + (_paidB ? (lang==='en' ? 'PAID Seal — green key' : 'PAID सील — हरी चाबी') : (lang==='en' ? 'DUE Seal — red key' : 'DUE सील — लाल चाबी'))
+                    + '<button type="button" class="seal-mini-btn" style="margin-left:auto;" onclick="copySealCode(\'' + (_s.code || '') + '\', event)">📋</button></div>'
+                    + '<div class="seal-code">' + (_s.code || '—') + '</div>'
+                    + '<div class="seal-sub">' + (lang==='en' ? 'Unique code stamped. Prints on PDF & WhatsApp with watermark.' : 'Unique code लग गया। PDF और WhatsApp पर watermark के साथ जाएगा।') + '</div></div>';
+            } catch (e) { sealBox.innerHTML = ''; }
+        }
         document.getElementById('afterSaveModal').classList.add('active');
     }
     function closeAfterSaveModal() {
@@ -2924,6 +3604,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     function afterSavePrint() {
         if (!lastSavedBill) return;
         const b = lastSavedBill;
+        try { ensureBillSeal(b); } catch (e) {}
+        let st = 'due';
+        try { st = sealStatusOf(b.paid, b.due); } catch (e) {}
         printBill({
             customerName: b.customer.name,
             customerPhone: b.customer.phone,
@@ -2932,8 +3615,15 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
             subtotal: b.subtotal,
             charges: b.charges,
             discPct: b.discPct,
+            discount: b.discount,
+            total: b.total,
+            totalQty: b.totalQty,
+            paid: b.paid,
+            due: b.due,
+            status: st,
             customerType: b.customerType || (b.customer && b.customer.type)
         }, b.items, true);
+        try { markBillShared(b.billNo); } catch (e) {}
     }
     function afterSaveDone() {
         closeAfterSaveModal();
@@ -3040,6 +3730,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         const due = round2(total - rec);
         el.textContent = money(due);
         el.classList.toggle('has-due', due > 0.009);
+        try { renderSealPreview(); } catch(e){}
     }
 
     function totalsTillToday() {
@@ -3306,6 +3997,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
         b.paid = round2(b.paid + take);
         b.due = round2(b.total - b.paid);
         b.payments.push({ date: new Date().toISOString().slice(0,16), amount: take, note: note || 'Payment' });
+        try { stampBillSeal(b); } catch (e) {}
         return take;
     }
     function applyCustomerPayment(key, amount, note) {
@@ -3585,4 +4277,53 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     setTimeout(() => { if (window.fb_db && !firebaseReady) try { setupRealtimeSync(); } catch (e) { console.error(e); } }, 1500);
 </script>
 <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2fb087aeae98606',t:'MTc4NzQ5NzcxMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>al').classList.add('active'); }
+    function closeChangePin() { document.getElementById('changePinModal').classList.remove('active'); }
+    async function saveNewPin() {
+        const cur = document.getElementById('chgCur').value.trim();
+        const nw  = document.getElementById('chgNew').value.trim();
+        const nw2 = document.getElementById('chgNew2').value.trim();
+        if (!/^\d{4,8}$/.test(nw)) return notify('New PIN must be 4–8 digits','error');
+        if (nw !== nw2) return notify('New PINs do not match','error');
+        if (!(await verifyPin(cur))) return notify('Current PIN incorrect','error');
+        const salt = _bytesToHex(crypto.getRandomValues(new Uint8Array(16)));
+        const hash = await hashPin(nw, salt);
+        localStorage.setItem('khakra_pin', JSON.stringify({ salt, hash, len: nw.length }));
+        closeChangePin();
+        notify('PIN updated successfully','success');
+    }
+
+    // ---- Boot: enforce lock on load (unlock persisted for the session only) ----
+    function initLock() {
+        if (sessionStorage.getItem('khakra_unlocked') === '1') {
+            document.getElementById('lockOverlay').classList.add('hidden');
+        }
+    }
+
+    loadStorage(); setDateTime(); renderAll(); updateSyncStatus('connecting'); initLock();
+    renderLockDots(); setupLockKeyboard(); bindPhoneInputs();
+    window.setupRealtimeSync = setupRealtimeSync;
+    // Start Firebase (compat SDK). If it isn't loaded yet (slow network), retry briefly.
+    window.initFirebase = initFirebase;
+    try { initFirebase(); } catch (e) { console.error(e); }
+    setTimeout(() => { if (window.fb_db && !firebaseReady) try { setupRealtimeSync(); } catch (e) { console.error(e); } }, 1500);
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2fb087aeae98606',t:'MTc4NzQ5NzcxMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
+</html> if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
+</html>(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
+</html>yTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
+</html>></body>
+</html>/html>}}})();</script></body>
+</html> if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
+</html>(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
+</html>yTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
+</html>'loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>/html>}}})();</script></body>
 </html>
